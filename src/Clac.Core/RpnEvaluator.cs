@@ -1,10 +1,9 @@
-﻿namespace Clac.Core
+﻿namespace Clac.Core;
+
+public class RpnEvaluator
 {
-    public class RpnEvaluator
+    public double Evaluate(string expression)
     {
-        public double Evaluate(string expression)
-        {
-            // Implementation of RPN evaluation
-        }
+        // Implementation of RPN evaluation
     }
 }
