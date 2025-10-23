@@ -7,6 +7,11 @@ obj/
 *.user
 *.suo
 
+# vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
 # OS files
 .DS_Store
 Thumbs.db
