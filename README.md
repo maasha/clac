@@ -1,3 +1,3 @@
 # CLAC
 
-A reverse-Polish notation calculater written in C#
+A reverse-Polish notation calculator written in C#
