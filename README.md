@@ -32,3 +32,10 @@ dotnet add Clac.Tests/Clac.Tests.csproj reference ../src/Clac.Core/Clac.Core.csp
 cd ..
 dotnet run --project src/Clac.UI
 dotnet test
+
+
+###
+
+For Result<T> instead of throw:
+
+dotnet add package DotNext
