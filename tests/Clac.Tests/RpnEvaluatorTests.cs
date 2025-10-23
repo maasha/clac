@@ -1,6 +1,7 @@
+namespace Clac.Tests;
+
 using Xunit;
 using Clac.Core;
-
 
 public class RpnEvaluatorTests
 {
