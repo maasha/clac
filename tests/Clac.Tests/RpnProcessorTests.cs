@@ -38,5 +38,14 @@ public class RpnProcessorTests
     }
 
 
-    // public void Process_OperatorToken_ShouldPopTwoNumbersAndPushResult() {}
+    [Fact]
+    public void Process_OperatorToken_ShouldPopTwoNumbersAndPushResult()
+    {
+        var processor = new RpnProcessor();
+        var tokens = RpnParser.Parse("1 2 +").Value;
+        var result = processor.Process(tokens);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(1, processor.Stack.Count);
+        Assert.Equal(3, processor.Stack.Peek().Value);
+    }
 }
