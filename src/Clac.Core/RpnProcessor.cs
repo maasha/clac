@@ -30,7 +30,10 @@ public class RpnProcessor
     {
         foreach (var token in tokens)
         {
-
+            if (token is Token.NumberToken numberToken)
+            {
+                _stack.Push(numberToken.Value);
+            }
         }
 
         return new Result<double>(0);

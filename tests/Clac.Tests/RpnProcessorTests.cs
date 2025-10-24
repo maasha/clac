@@ -6,12 +6,6 @@ using Clac.Core;
 public class RpnProcessorTests
 {
     [Fact]
-    public void TestDummy()
-    {
-        Assert.True(true);
-    }
-
-    [Fact]
     public void Process_EmptyTokenList_ShouldNotUpdateStack()
     {
         var processor = new RpnProcessor();
@@ -20,5 +14,16 @@ public class RpnProcessorTests
         var result = processor.Process(tokens);
         Assert.True(result.IsSuccessful);
         Assert.Equal(stackLength, processor.Stack.Count);
+    }
+
+    [Fact]
+    public void Process_NumberToken_ShouldPushOntoStack()
+    {
+        var processor = new RpnProcessor();
+        var tokens = RpnParser.Parse("1 2 3").Value;
+        var result = processor.Process(tokens);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(3, processor.Stack.Count);
+        Assert.Equal([1, 2, 3], processor.Stack.ToArray());
     }
 }
