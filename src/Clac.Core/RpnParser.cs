@@ -12,12 +12,12 @@ public class RpnParser
     /// </summary>
     /// <param name="input">The input string to parse.</param>
     /// <returns>A list of tokens.</returns>
-    /// <exception cref="ArgumentException">Thrown when the input is invalid.</exception>
+    /// <remarks>Returns a failed result with an error if the input contains invalid tokens.</remarks>
     public static Result<List<Token>> Parse(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {
-            return new Result<List<Token>>([.. Array.Empty<Token>()]);
+            return new Result<List<Token>>([]);
         }
 
         var inputItems = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -44,7 +44,7 @@ public class RpnParser
                     "-" => OperatorSymbol.Subtract,
                     "*" => OperatorSymbol.Multiply,
                     "/" => OperatorSymbol.Divide,
-                    _ => throw new InvalidOperationException($"Unknown operator: {item}")
+                    _ => throw new InvalidOperationException($"Unreachable: validation failed for '{item}'")
                 };
                 tokens.Add(Token.CreateOperator(operatorSymbol));
             }
@@ -59,7 +59,7 @@ public class RpnParser
     /// </summary>
     /// <param name="input">The input array of strings to validate.</param>
     /// <returns>A result containing the validated input array or an error if the input is invalid.</returns>
-    /// <exception cref="ArgumentException">Thrown when the input is invalid.</exception>
+    /// <remarks>Returns a failed result with an error message if the input contains invalid tokens.</remarks>
     private static Result<string[]> ValidateInput(string[] input)
     {
         var errors = new List<string>();

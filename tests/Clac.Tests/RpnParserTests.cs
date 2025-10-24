@@ -47,4 +47,15 @@ public class RpnParserTests
 
         Assert.Equal(expected, result.Value);
     }
+
+    [Theory]
+    [InlineData("1e10")]
+    [InlineData("1E-5")]
+    [InlineData("2.5e3")]
+    public void Parse_ScientificNotation_ShouldParseCorrectly(string input)
+    {
+        var result = RpnParser.Parse(input);
+        Assert.True(result.IsSuccessful);
+        Assert.Single(result.Value);
+    }
 }

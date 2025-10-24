@@ -27,4 +27,3 @@ public abstract record Token
     /// </summary>
     public static Token CreateOperator(OperatorSymbol symbol) => new OperatorToken(symbol);
 }
-
