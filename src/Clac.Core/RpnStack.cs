@@ -20,7 +20,7 @@ public class RpnStack
     /// Returns the stack as an array.
     /// </summary>
     /// <returns>The stack as an array.</returns>
-    public double[] ToArray() => _stack.ToArray();
+    public double[] ToArray() => [.. _stack];
 
     /// <summary>
     /// Returns the last element on the stack without removing it.
