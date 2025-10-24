@@ -5,15 +5,16 @@ A reverse-Polish notation calculator written in C#
 
 ## Tech Stack
 
-dotnet
-Avalonia UI
-xunit
+- dotnet
+- Avalonia UI
+- xunit
 
 
 ## Boiler plate
 
 Commands for setting up boiler plate project
 
+```bash
 brew install dotnet-sdk
 dotnet --version
 cd ~/src/clac
@@ -32,10 +33,13 @@ dotnet add Clac.Tests/Clac.Tests.csproj reference ../src/Clac.Core/Clac.Core.csp
 cd ..
 dotnet run --project src/Clac.UI
 dotnet test
+```
 
 
 ###
 
 For Result<T> instead of throw:
 
+```bash
 dotnet add package DotNext
+```
