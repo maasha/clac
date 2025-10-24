@@ -26,4 +26,17 @@ public class RpnProcessorTests
         Assert.Equal(3, processor.Stack.Count);
         Assert.Equal([1, 2, 3], processor.Stack.ToArray());
     }
+
+    [Fact]
+    public void Process_OperatorTokenWithLessThanTwoNumbers_ShouldReturnError()
+    {
+        var processor = new RpnProcessor();
+        var tokens = RpnParser.Parse("1 +").Value;
+        var result = processor.Process(tokens);
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Stack has less than two numbers", result.Error.Message);
+    }
+
+
+    // public void Process_OperatorToken_ShouldPopTwoNumbersAndPushResult() {}
 }

@@ -34,6 +34,25 @@ public class RpnProcessor
             {
                 _stack.Push(numberToken.Value);
             }
+            else if (token is Token.OperatorToken operatorToken)
+            {
+                var numberToken1 = _stack.Pop();
+                var numberToken2 = _stack.Pop();
+
+                if (!numberToken1.IsSuccessful || !numberToken2.IsSuccessful)
+                {
+                    return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
+                }
+
+                var result = RpnEvaluator.Evaluate(numberToken1.Value, numberToken2.Value, operatorToken.Symbol);
+
+                if (!result.IsSuccessful)
+                {
+                    return result;
+                }
+
+                _stack.Push(result.Value);
+            }
         }
 
         return new Result<double>(0);
