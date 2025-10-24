@@ -64,4 +64,10 @@ public class RpnStack
         _stack.RemoveAt(_stack.Count - 1);
         return new Result<double>(value);
     }
+
+    /// <summary>
+    /// Returns the number of elements on the stack.
+    /// </summary>
+    /// <returns>The number of elements on the stack.</returns>
+    public int Count => _stack.Count;
 }

@@ -61,4 +61,13 @@ public class RpnStackTests
         Assert.True(result.IsSuccessful);
         Assert.Equal(1, result.Value);
     }
+
+    [Fact]
+    public void Count_ShouldReturnTheNumberOfElementsOnTheStack()
+    {
+        var stack = new RpnStack();
+        stack.Push(1);
+        stack.Push(2);
+        Assert.Equal(2, stack.Count);
+    }
 }
