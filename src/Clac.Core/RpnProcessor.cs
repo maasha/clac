@@ -4,7 +4,8 @@ namespace Clac.Core;
 
 /// <summary>
 /// Class for processing the parsed input, performing evaluations and updating
-/// the stack.
+/// the stack. The processor maintains state and that multiple calls to Process
+/// accumulate values on the stack.
 /// </summary>
 public class RpnProcessor
 {
@@ -37,15 +38,15 @@ public class RpnProcessor
             }
             else if (token is Token.OperatorToken operatorToken)
             {
-                var numberToken2 = _stack.Pop();
                 var numberToken1 = _stack.Pop();
+                var numberToken2 = _stack.Pop();
 
                 if (!numberToken1.IsSuccessful || !numberToken2.IsSuccessful)
                 {
                     return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
                 }
 
-                var result = RpnEvaluator.Evaluate(numberToken1.Value, numberToken2.Value, operatorToken.Symbol);
+                var result = RpnEvaluator.Evaluate(numberToken2.Value, numberToken1.Value, operatorToken.Symbol);
 
                 if (!result.IsSuccessful)
                 {
