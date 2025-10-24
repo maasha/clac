@@ -13,35 +13,44 @@ public class RpnParser
     /// <param name="input">The input string to parse.</param>
     /// <returns>A list of tokens.</returns>
     /// <exception cref="ArgumentException">Thrown when the input is invalid.</exception>
-    public static Result<List<TokenType>> Parse(string input)
+    public static Result<List<Token>> Parse(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {
-            return new Result<List<TokenType>>([.. Array.Empty<TokenType>()]);
+            return new Result<List<Token>>([.. Array.Empty<Token>()]);
         }
 
         var inputItems = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         var validationResult = ValidateInput(inputItems);
+
         if (!validationResult.IsSuccessful)
         {
-            return new Result<List<TokenType>>(validationResult.Error);
+            return new Result<List<Token>>(validationResult.Error);
         }
 
-        var tokenTypes = new List<TokenType>();
+        var tokens = new List<Token>();
 
         foreach (var item in validationResult.Value)
         {
-            if (double.TryParse(item, out _))
+            if (double.TryParse(item, out var number))
             {
-                tokenTypes.Add(TokenType.Number);
+                tokens.Add(Token.CreateNumber(number));
             }
             else
             {
-                tokenTypes.Add(TokenType.Operator);
+                var operatorSymbol = item switch
+                {
+                    "+" => OperatorSymbol.Add,
+                    "-" => OperatorSymbol.Subtract,
+                    "*" => OperatorSymbol.Multiply,
+                    "/" => OperatorSymbol.Divide,
+                    _ => throw new InvalidOperationException($"Unknown operator: {item}")
+                };
+                tokens.Add(Token.CreateOperator(operatorSymbol));
             }
         }
 
-        return new Result<List<TokenType>>(tokenTypes);
+        return new Result<List<Token>>(tokens);
     }
 
     /// <summary>
