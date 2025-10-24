@@ -17,6 +17,12 @@ public class RpnStack
     private readonly List<double> _stack = [];
 
     /// <summary>
+    /// Returns the stack as an array.
+    /// </summary>
+    /// <returns>The stack as an array.</returns>
+    public double[] ToArray() => _stack.ToArray();
+
+    /// <summary>
     /// Returns the last element on the stack without removing it.
     /// </summary>
     /// <returns>The last element on the stack.</returns>

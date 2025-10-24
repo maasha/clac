@@ -70,4 +70,13 @@ public class RpnStackTests
         stack.Push(2);
         Assert.Equal(2, stack.Count);
     }
+
+    [Fact]
+    public void ToArray_ShouldReturnTheStackAsAnArray()
+    {
+        var stack = new RpnStack();
+        stack.Push(1);
+        stack.Push(2);
+        Assert.Equal([1, 2], stack.ToArray());
+    }
 }
