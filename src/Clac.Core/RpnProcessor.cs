@@ -11,9 +11,10 @@ public class RpnProcessor
     private readonly RpnStack _stack = new();
 
     /// <summary>
-    /// Gets the RPN stack.
+    /// Gets a clone of the RPN stack.
     /// </summary>
-    public RpnStack Stack => _stack;
+    public RpnStack Stack => CloneStack();
+
 
     /// <summary>
     /// Processes the list of tokens, performing evaluations and updating the stack.
@@ -36,8 +37,8 @@ public class RpnProcessor
             }
             else if (token is Token.OperatorToken operatorToken)
             {
-                var numberToken1 = _stack.Pop();
                 var numberToken2 = _stack.Pop();
+                var numberToken1 = _stack.Pop();
 
                 if (!numberToken1.IsSuccessful || !numberToken2.IsSuccessful)
                 {
@@ -55,6 +56,25 @@ public class RpnProcessor
             }
         }
 
-        return new Result<double>(0);
+        var finalResult = _stack.Peek();
+        return finalResult.IsSuccessful
+            ? finalResult
+            : new Result<double>(new InvalidOperationException("No result on stack"));
+    }
+
+    /// <summary>
+    /// Clones the RPN stack to prevent external modification of the stack.
+    /// </summary>
+    /// <returns>A clone of the RPN stack.</returns>
+    private RpnStack CloneStack()
+    {
+        var copy = new RpnStack();
+
+        foreach (var value in _stack.ToArray())
+        {
+            copy.Push(value);
+        }
+
+        return copy;
     }
 }

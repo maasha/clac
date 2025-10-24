@@ -12,7 +12,8 @@ public class RpnProcessorTests
         var tokens = new List<Token>();
         var stackLength = processor.Stack.Count;
         var result = processor.Process(tokens);
-        Assert.True(result.IsSuccessful);
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("No result on stack", result.Error.Message);
         Assert.Equal(stackLength, processor.Stack.Count);
     }
 
@@ -47,5 +48,35 @@ public class RpnProcessorTests
         Assert.True(result.IsSuccessful);
         Assert.Equal(1, processor.Stack.Count);
         Assert.Equal(3, processor.Stack.Peek().Value);
+    }
+
+    [Fact]
+    public void Process_SimpleAddition_ShouldReturnCorrectResult()
+    {
+        var processor = new RpnProcessor();
+        var tokens = RpnParser.Parse("2 3 +").Value;
+        var result = processor.Process(tokens);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(5, result.Value);
+    }
+
+    [Fact]
+    public void Process_ComplexExpression_ShouldReturnCorrectResult()
+    {
+        var processor = new RpnProcessor();
+        var tokens = RpnParser.Parse("5 3 - 2 *").Value; // (5-3)*2 = 4
+        var result = processor.Process(tokens);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(4, result.Value);
+    }
+
+    [Fact]
+    public void Process_DivisionByZero_ShouldReturnError()
+    {
+        var processor = new RpnProcessor();
+        var tokens = RpnParser.Parse("5 0 /").Value;
+        var result = processor.Process(tokens);
+        Assert.False(result.IsSuccessful);
+        Assert.IsType<DivideByZeroException>(result.Error);
     }
 }
