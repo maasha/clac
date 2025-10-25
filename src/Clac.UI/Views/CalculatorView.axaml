@@ -4,6 +4,9 @@
              x:Class="Clac.UI.Views.CalculatorView">
 
     <DockPanel>
+        <!-- Keyboard at top -->
+        <views:KeyboardView DockPanel.Dock="Bottom" />
+        
         <!-- Input at bottom -->
         <views:InputView DockPanel.Dock="Bottom" />
         
