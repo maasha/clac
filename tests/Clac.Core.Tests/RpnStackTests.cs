@@ -1,4 +1,4 @@
-namespace Clac.Tests;
+namespace Clac.Core.Tests;
 
 using Xunit;
 using Clac.Core;
