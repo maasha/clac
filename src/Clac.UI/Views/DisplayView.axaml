@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Clac.UI.ViewModels"
+             x:Class="Clac.UI.Views.DisplayView"
+             x:DataType="vm:CalculatorViewModel">
+    
+    <UserControl.Styles>
+        <Style Selector="TextBlock.stack-line">
+            <Setter Property="FontFamily" Value="Courier New, monospace"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="MinHeight" Value="35"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style Selector="TextBlock.line-number">
+            <Setter Property="Foreground" Value="Gray"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <Border BorderBrush="Gray" BorderThickness="2" Background="#F5F5F5" MinHeight="150">
+        <StackPanel>
+            <!-- Line 4 -->
+            <TextBlock Classes="stack-line" Name="Line4" Text="4: [dummy]"/>
+            
+            <!-- Line 3 -->
+            <TextBlock Classes="stack-line" Name="Line3" Text="3: [dummy]"/>
+            
+            <!-- Line 2 -->
+            <TextBlock Classes="stack-line" Name="Line2" Text="2: [dummy]"/>
+            
+            <!-- Line 1 (top of stack) -->
+            <TextBlock Classes="stack-line" Name="Line1" Text="1: [dummy]"/>
+        </StackPanel>
+    </Border>
+</UserControl>

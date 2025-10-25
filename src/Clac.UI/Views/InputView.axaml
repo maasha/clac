@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Clac.UI.ViewModels"
+             x:Class="Clac.UI.Views.InputView"
+             x:DataType="vm:CalculatorViewModel">
+    
+    <UserControl.Styles>
+        <Style Selector="TextBox.input-box">
+            <Setter Property="FontFamily" Value="Courier New, monospace"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style Selector="TextBlock.error">
+            <Setter Property="Foreground" Value="Red"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Background" Value="#FFE6E6"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <StackPanel>
+        <!-- Error message -->
+        <TextBlock Classes="error"
+                   Text="{Binding ErrorMessage}"
+                   IsVisible="{Binding HasError}"/>
+        
+        <!-- Input box -->
+        <TextBox Classes="input-box"
+                 Text="{Binding CurrentInput}"
+                 Watermark="Enter number or operator (+, -, *, /)"
+                 KeyDown="OnInputKeyDown"/>
+    </StackPanel>
+</UserControl>
