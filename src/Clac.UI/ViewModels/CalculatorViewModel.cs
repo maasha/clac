@@ -1,11 +1,13 @@
 namespace Clac.UI.ViewModels;
 
+using System.ComponentModel;
 using System.Linq;
 using Clac.Core;
 
 
-public class CalculatorViewModel
+public class CalculatorViewModel : INotifyPropertyChanged
 {
+    public event PropertyChangedEventHandler? PropertyChanged;
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
@@ -55,5 +57,19 @@ public class CalculatorViewModel
 
         _errorMessage = null;
         _currentInput = "";
+
+        OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(nameof(StackDisplay));
+        OnPropertyChanged(nameof(HasError));
+        OnPropertyChanged(nameof(ErrorMessage));
+    }
+
+    /// <summary>
+    /// Raises the PropertyChanged event.
+    /// </summary>
+    /// <param name="propertyName"></param>
+    protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
