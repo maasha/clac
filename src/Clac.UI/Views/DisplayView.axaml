@@ -17,7 +17,7 @@
         </Style>
     </UserControl.Styles>
     
-    <Border BorderBrush="Gray" BorderThickness="2" Background="#F5F5F5" MinHeight="150">
+    <Border BorderBrush="Gray" BorderThickness="2" Background="White" MinHeight="150">
         <StackPanel>
             <!-- Line 4 -->
             <TextBlock Classes="stack-line" Name="Line4" Text="4: [dummy]"/>

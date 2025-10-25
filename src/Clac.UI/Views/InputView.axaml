@@ -12,6 +12,13 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
+        <Style Selector="TextBox.input-box:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+        </Style>
+        <Style Selector="TextBox.input-box:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="White"/>
+        </Style>
         <Style Selector="TextBlock.error">
             <Setter Property="Foreground" Value="Red"/>
             <Setter Property="Padding" Value="10,5"/>
@@ -20,7 +27,7 @@
         </Style>
     </UserControl.Styles>
     
-    <StackPanel>
+    <StackPanel Background="White">
         <!-- Error message -->
         <TextBlock Classes="error"
                    Text="{Binding ErrorMessage}"
