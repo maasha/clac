@@ -1,12 +1,14 @@
 namespace Clac.UI.Tests;
 
 using Xunit;
+using Clac.UI.ViewModels;
 
 public class CalculatorViewModelTests
 {
     [Fact]
-    public void DummyTest()
+    public void Constructor_ShouldInitializeWithEmptyStackDisplay()
     {
-        Assert.True(true);
+        var viewModel = new CalculatorViewModel();
+        Assert.Empty(viewModel.StackDisplay);
     }
 }
