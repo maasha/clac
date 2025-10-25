@@ -20,16 +20,16 @@
     <Border BorderBrush="Gray" BorderThickness="2" Background="White" MinHeight="150">
         <StackPanel>
             <!-- Line 4 -->
-            <TextBlock Classes="stack-line" Name="Line4" Text="4: [dummy]"/>
+            <TextBlock Classes="stack-line" Name="Line4" Text="4:"/>
             
             <!-- Line 3 -->
-            <TextBlock Classes="stack-line" Name="Line3" Text="3: [dummy]"/>
+            <TextBlock Classes="stack-line" Name="Line3" Text="3:"/>
             
             <!-- Line 2 -->
-            <TextBlock Classes="stack-line" Name="Line2" Text="2: [dummy]"/>
+            <TextBlock Classes="stack-line" Name="Line2" Text="2:"/>
             
             <!-- Line 1 (top of stack) -->
-            <TextBlock Classes="stack-line" Name="Line1" Text="1: [dummy]"/>
+            <TextBlock Classes="stack-line" Name="Line1" Text="1:"/>
         </StackPanel>
     </Border>
 </UserControl>
