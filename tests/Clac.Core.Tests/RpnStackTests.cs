@@ -79,4 +79,14 @@ public class RpnStackTests
         stack.Push(2);
         Assert.Equal([1, 2], stack.ToArray());
     }
+
+    [Fact]
+    public void Swap_WithLessThanTwoElements_ShouldReturnError()
+    {
+        var stack = new RpnStack();
+        stack.Push(1);
+        var result = stack.Swap();
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Stack has less than two elements", result.Error.Message);
+    }
 }

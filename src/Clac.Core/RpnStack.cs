@@ -26,7 +26,7 @@ public class RpnStack
     /// Returns the last element on the stack without removing it.
     /// </summary>
     /// <returns>The last element on the stack.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the stack is empty.</exception>
+    /// <remarks>Returns a failed result with an error if the stack is empty.</remarks>
     public Result<double> Peek()
     {
         if (_stack.Count == 0)
@@ -58,7 +58,7 @@ public class RpnStack
     /// Removes and returns the last element from the stack.
     /// </summary>
     /// <returns>The last element on the stack.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the stack is empty.</exception>
+    /// <remarks>Returns a failed result with an error if the stack is empty.</remarks>
     public Result<double> Pop()
     {
         if (_stack.Count == 0)
@@ -69,6 +69,25 @@ public class RpnStack
         var value = _stack[^1];
         _stack.RemoveAt(_stack.Count - 1);
         return new Result<double>(value);
+    }
+
+    /// <summary>
+    /// Swaps the last two elements of the stack.
+    /// </summary>
+    /// <returns>The the new last element on the stack.</returns>
+    /// <remarks>Returns a failed result with an error if the stack has less than two elements.</remarks>
+    public Result<double> Swap()
+    {
+        if (_stack.Count < 2)
+        {
+            return new Result<double>(new InvalidOperationException("Stack has less than two elements"));
+        }
+
+        var last = _stack[^1];
+        var secondLast = _stack[^2];
+        _stack[^1] = secondLast;
+        _stack[^2] = last;
+        return new Result<double>(secondLast);
     }
 
     /// <summary>

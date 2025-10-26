@@ -36,7 +36,7 @@ public class RpnParser
             {
                 tokens.Add(Token.CreateNumber(number));
             }
-            else if (item is "clear()" or "pop()")
+            else if (item is "clear()" or "pop()" or "swap()")
             {
                 tokens.Add(Token.CreateCommand(item[..^2]));
             }
@@ -72,7 +72,7 @@ public class RpnParser
         {
             bool isNumber = double.TryParse(item, out _);
             bool isOperator = item is "+" or "-" or "*" or "/";
-            bool isCommand = item is "clear()" or "pop()";
+            bool isCommand = item is "clear()" or "pop()" or "swap()";
 
             if (!isNumber && !isOperator && !isCommand)
             {

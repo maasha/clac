@@ -77,6 +77,11 @@ public class RpnProcessor
                     commandResult = result.Value;
                     commandExecuted = true;
                 }
+                else if (commandToken.Command == "swap")
+                {
+                    var result = _stack.Swap();
+                    commandExecuted = true;
+                }
             }
         }
 
