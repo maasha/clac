@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Clac.UI.ViewModels"
+             xmlns:views="using:Clac.UI.Views"
              x:Class="Clac.UI.Views.DisplayView"
              x:DataType="vm:CalculatorViewModel">
     
@@ -10,6 +11,7 @@
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="MinHeight" Value="35"/>
+            <Setter Property="Height" Value="35"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
         <Style Selector="TextBlock.line-number">
@@ -17,34 +19,30 @@
         </Style>
     </UserControl.Styles>
     
-    <Border BorderBrush="Gray" BorderThickness="2" Background="White" MinHeight="150">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="60"/>   <!-- Line numbers -->
-                <ColumnDefinition Width="Auto"/> <!-- Values -->
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
-            </Grid.RowDefinitions>
-            
-            <!-- Line 4 -->
-            <TextBlock Classes="stack-line line-number" Name="LineNumber4" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
-            <TextBlock Classes="stack-line" Name="Line4" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"/>
-            
-            <!-- Line 3 -->
-            <TextBlock Classes="stack-line line-number" Name="LineNumber3" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
-            <TextBlock Classes="stack-line" Name="Line3" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
-            
-            <!-- Line 2 -->
-            <TextBlock Classes="stack-line line-number" Name="LineNumber2" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
-            <TextBlock Classes="stack-line" Name="Line2" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
-            
-            <!-- Line 1 (top of stack) -->
-            <TextBlock Classes="stack-line line-number" Name="LineNumber1" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"/>
-            <TextBlock Classes="stack-line" Name="Line1" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
-        </Grid>
+    <Border BorderBrush="Gray" BorderThickness="2" Background="White" Height="140">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl Name="StackItemsControl">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="views:StackLineItem">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>   <!-- Line numbers -->
+                                <ColumnDefinition Width="Auto"/> <!-- Values -->
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Classes="stack-line line-number" 
+                                       Text="{Binding LineNumber}" 
+                                       Grid.Column="0" 
+                                       HorizontalAlignment="Right"/>
+                            <TextBlock Classes="stack-line" 
+                                       Text="{Binding FormattedValue}" 
+                                       Grid.Column="1" 
+                                       HorizontalAlignment="Left"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Border>
 </UserControl>

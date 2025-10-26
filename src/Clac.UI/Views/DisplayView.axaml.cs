@@ -3,8 +3,18 @@ using Clac.UI.ViewModels;
 using Clac.UI.Helpers;
 using System.ComponentModel;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Clac.UI.Views;
+
+/// <summary>
+/// Represents a single line item in the stack display.
+/// </summary>
+public class StackLineItem
+{
+    public string LineNumber { get; set; } = "";
+    public string FormattedValue { get; set; } = "";
+}
 
 /// <summary>
 /// View for displaying the stack in the display.
@@ -30,13 +40,11 @@ public partial class DisplayView : UserControl
 
     private void OnDataContextChanged(object? sender, System.EventArgs e)
     {
-        // Unsubscribe from old ViewModel
         if (_viewModel != null)
         {
             _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
         }
 
-        // Subscribe to new ViewModel
         if (DataContext is CalculatorViewModel viewModel)
         {
             _viewModel = viewModel;
@@ -64,35 +72,24 @@ public partial class DisplayView : UserControl
     /// <param name="stack">The new stack.</param>
     private void UpdateDisplay(string[] stack)
     {
-        // Get the last 4 items from the stack (or fewer if stack is smaller)
-        var displayItems = stack.TakeLast(4).ToArray();
-        int stackSize = stack.Length;
-
-        // Get non-empty values for calculating max integer part length
-        var visibleValues = displayItems.Where(v => !string.IsNullOrEmpty(v)).ToArray();
+        var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
         int maxIntegerPartLength = visibleValues.Length > 0
             ? DisplayFormatter.GetMaxIntegerPartLength(visibleValues)
             : 0;
 
-        // HP48 style: Line 1 is top of stack, Line 4 is 4th from top
-        SetLine(LineNumber1, Line1, 1, stackSize, displayItems.Length >= 1 ? displayItems[^1] : null, maxIntegerPartLength);
-        SetLine(LineNumber2, Line2, 2, stackSize, displayItems.Length >= 2 ? displayItems[^2] : null, maxIntegerPartLength);
-        SetLine(LineNumber3, Line3, 3, stackSize, displayItems.Length >= 3 ? displayItems[^3] : null, maxIntegerPartLength);
-        SetLine(LineNumber4, Line4, 4, stackSize, displayItems.Length >= 4 ? displayItems[^4] : null, maxIntegerPartLength);
-    }
+        var items = new List<StackLineItem>();
+        int stackSize = stack.Length;
 
-    /// <summary>
-    /// Sets the line number and value for a display line.
-    /// </summary>
-    /// <param name="lineNumberBlock">The TextBlock for the line number.</param>
-    /// <param name="valueBlock">The TextBlock for the value.</param>
-    /// <param name="lineNum">The line number.</param>
-    /// <param name="maxLineNum">The maximum line number (stack size).</param>
-    /// <param name="value">The value to display.</param>
-    /// <param name="maxIntegerPartLength">The maximum integer part length.</param>
-    private void SetLine(TextBlock lineNumberBlock, TextBlock valueBlock, int lineNum, int maxLineNum, string? value, int maxIntegerPartLength)
-    {
-        lineNumberBlock.Text = DisplayFormatter.FormatLineNumber(lineNum, maxLineNum);
-        valueBlock.Text = value != null ? DisplayFormatter.FormatValue(value, maxIntegerPartLength) : "";
+        for (int i = 0; i < stackSize; i++)
+        {
+            int lineNum = stackSize - i;
+            items.Add(new StackLineItem
+            {
+                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, stackSize),
+                FormattedValue = DisplayFormatter.FormatValue(stack[i], maxIntegerPartLength)
+            });
+        }
+
+        StackItemsControl.ItemsSource = items;
     }
 }
