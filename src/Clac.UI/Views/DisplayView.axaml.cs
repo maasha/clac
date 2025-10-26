@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Threading;
 using Clac.UI.ViewModels;
 using Clac.UI.Helpers;
 using System.ComponentModel;
@@ -91,5 +92,11 @@ public partial class DisplayView : UserControl
         }
 
         StackItemsControl.ItemsSource = items;
+
+        // Scroll to bottom to show the top of stack (Line 1)
+        Dispatcher.UIThread.Post(() =>
+        {
+            StackScrollViewer.ScrollToEnd();
+        }, DispatcherPriority.Loaded);
     }
 }

@@ -20,7 +20,8 @@
     </UserControl.Styles>
     
     <Border BorderBrush="Gray" BorderThickness="2" Background="White" Height="140">
-        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+        <ScrollViewer Name="StackScrollViewer"
+                      VerticalScrollBarVisibility="Auto" 
                       HorizontalScrollBarVisibility="Disabled">
             <ItemsControl Name="StackItemsControl">
                 <ItemsControl.ItemTemplate>
