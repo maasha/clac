@@ -103,4 +103,17 @@ public class RpnProcessorTests
         Assert.True(result.IsSuccessful);
         Assert.Equal(0, processor.Stack.Count);
     }
+
+    [Fact]
+    public void Process_PopCommand_ShouldPopLastElementFromStack()
+    {
+        var processor = new RpnProcessor();
+        processor.Process(RpnParser.Parse("1 2 3").Value);
+        Assert.Equal(3, processor.Stack.Count);
+        var result = processor.Process(RpnParser.Parse("pop()").Value);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(2, processor.Stack.Count);
+        Assert.Equal(3, result.Value);
+        Assert.Equal([1, 2], processor.Stack.ToArray());
+    }
 }

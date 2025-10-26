@@ -33,6 +33,7 @@ public class RpnProcessor
     public Result<double> Process(List<Token> tokens)
     {
         bool commandExecuted = false;
+        double commandResult = 0;
 
         foreach (var token in tokens)
         {
@@ -66,13 +67,23 @@ public class RpnProcessor
                     _stack.Clear();
                     commandExecuted = true;
                 }
+                else if (commandToken.Command == "pop")
+                {
+                    var result = _stack.Pop();
+                    if (!result.IsSuccessful)
+                    {
+                        return result;
+                    }
+                    commandResult = result.Value;
+                    commandExecuted = true;
+                }
             }
         }
 
-        // If a command was executed, return success with 0 as the result
+        // If a command was executed, return success with the command result
         if (commandExecuted)
         {
-            return new Result<double>(0);
+            return new Result<double>(commandResult);
         }
 
         var finalResult = _stack.Peek();
