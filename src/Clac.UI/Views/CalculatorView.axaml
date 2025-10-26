@@ -1,17 +1,18 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="using:Clac.UI.Views"
-             x:Class="Clac.UI.Views.CalculatorView">
+             x:Class="Clac.UI.Views.CalculatorView"
+             Background="White">
 
-    <DockPanel>
-        <!-- Keyboard at top -->
-        <views:KeyboardView DockPanel.Dock="Bottom" />
+    <DockPanel Background="White">
+        <!-- Display at top with fixed height -->
+        <views:DisplayView DockPanel.Dock="Top" />
         
-        <!-- Input at bottom -->
-        <views:InputView DockPanel.Dock="Bottom" />
+        <!-- Input below display -->
+        <views:InputView DockPanel.Dock="Top" />
         
-        <!-- Display fills remaining space -->
-        <views:DisplayView />
+        <!-- Keyboard fills remaining space -->
+        <views:KeyboardView />
     </DockPanel>
 
 </UserControl>

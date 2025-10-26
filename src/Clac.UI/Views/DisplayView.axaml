@@ -3,15 +3,15 @@
              xmlns:vm="using:Clac.UI.ViewModels"
              xmlns:views="using:Clac.UI.Views"
              x:Class="Clac.UI.Views.DisplayView"
-             x:DataType="vm:CalculatorViewModel">
+             x:DataType="vm:CalculatorViewModel"
+             VerticalAlignment="Top">
     
     <UserControl.Styles>
         <Style Selector="TextBlock.stack-line">
             <Setter Property="FontFamily" Value="Courier New, monospace"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="MinHeight" Value="35"/>
-            <Setter Property="Height" Value="35"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
         <Style Selector="TextBlock.line-number">
@@ -19,10 +19,11 @@
         </Style>
     </UserControl.Styles>
     
-    <Border BorderBrush="Gray" BorderThickness="2" Background="White" Height="140">
+    <Border BorderBrush="Gray" BorderThickness="2" Background="White" Height="120">
         <ScrollViewer Name="StackScrollViewer"
                       VerticalScrollBarVisibility="Auto" 
-                      HorizontalScrollBarVisibility="Disabled">
+                      HorizontalScrollBarVisibility="Disabled"
+                      AllowAutoHide="False">
             <ItemsControl Name="StackItemsControl">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="views:StackLineItem">
