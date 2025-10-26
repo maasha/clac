@@ -24,12 +24,16 @@ public class RpnProcessor
     /// - If the token is a number, push it onto the stack.
     /// - If the token is an operator, pop the last two numbers from the stack,
     ///   perform the evaluation, and push the result back onto the stack.
+    /// - If the token is a command, run that command and return success with 0
+    ///   as the result. The command is executed and the stack is cleared.
     /// </summary>
     /// <param name="tokens">The list of tokens to process.</param>
     /// <returns>The result of the evaluation.</returns>
     /// <remarks>Returns a failed result with an error if pop fails.</remarks>
     public Result<double> Process(List<Token> tokens)
     {
+        bool commandExecuted = false;
+
         foreach (var token in tokens)
         {
             if (token is Token.NumberToken numberToken)
@@ -55,6 +59,20 @@ public class RpnProcessor
 
                 _stack.Push(result.Value);
             }
+            else if (token is Token.CommandToken commandToken)
+            {
+                if (commandToken.Command == "clear")
+                {
+                    _stack.Clear();
+                    commandExecuted = true;
+                }
+            }
+        }
+
+        // If a command was executed, return success with 0 as the result
+        if (commandExecuted)
+        {
+            return new Result<double>(0);
         }
 
         var finalResult = _stack.Peek();

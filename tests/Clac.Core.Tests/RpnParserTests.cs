@@ -58,4 +58,13 @@ public class RpnParserTests
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
     }
+
+    [Fact]
+    public void Parse_ClearCommand_ShouldReturnCommandToken()
+    {
+        var result = RpnParser.Parse("clear()");
+        Assert.True(result.IsSuccessful);
+        Assert.Single(result.Value);
+        Assert.IsType<Token.CommandToken>(result.Value[0]);
+    }
 }

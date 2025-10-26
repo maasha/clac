@@ -36,6 +36,10 @@ public class RpnParser
             {
                 tokens.Add(Token.CreateNumber(number));
             }
+            else if (item is "clear()")
+            {
+                tokens.Add(Token.CreateCommand("clear"));
+            }
             else
             {
                 var operatorSymbol = item switch
@@ -55,7 +59,7 @@ public class RpnParser
 
     /// <summary>
     /// Validates the input and returns a list of errors with all input items
-    /// that are not a number or an operator symbol.
+    /// that are not a number, an operator symbol, or a command.
     /// </summary>
     /// <param name="input">The input array of strings to validate.</param>
     /// <returns>A result containing the validated input array or an error if the input is invalid.</returns>
@@ -68,8 +72,9 @@ public class RpnParser
         {
             bool isNumber = double.TryParse(item, out _);
             bool isOperator = item is "+" or "-" or "*" or "/";
+            bool isCommand = item is "clear()";
 
-            if (!isNumber && !isOperator)
+            if (!isNumber && !isOperator && !isCommand)
             {
                 errors.Add(item);
             }

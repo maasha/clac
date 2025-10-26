@@ -26,4 +26,14 @@ public abstract record Token
     /// Creates a new operator token with the specified symbol.
     /// </summary>
     public static Token CreateOperator(OperatorSymbol symbol) => new OperatorToken(symbol);
+
+    /// <summary>
+    /// Represents a command token with its command.
+    /// </summary>
+    public sealed record CommandToken(string Command) : Token;
+
+    /// <summary>
+    /// Creates a new command token with the specified command.
+    /// </summary>
+    public static Token CreateCommand(string command) => new CommandToken(command);
 }
