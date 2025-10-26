@@ -18,18 +18,33 @@
     </UserControl.Styles>
     
     <Border BorderBrush="Gray" BorderThickness="2" Background="White" MinHeight="150">
-        <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>   <!-- Line numbers -->
+                <ColumnDefinition Width="Auto"/> <!-- Values -->
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+            
             <!-- Line 4 -->
-            <TextBlock Classes="stack-line" Name="Line4" Text="4:"/>
+            <TextBlock Classes="stack-line line-number" Name="LineNumber4" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
+            <TextBlock Classes="stack-line" Name="Line4" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"/>
             
             <!-- Line 3 -->
-            <TextBlock Classes="stack-line" Name="Line3" Text="3:"/>
+            <TextBlock Classes="stack-line line-number" Name="LineNumber3" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
+            <TextBlock Classes="stack-line" Name="Line3" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
             
             <!-- Line 2 -->
-            <TextBlock Classes="stack-line" Name="Line2" Text="2:"/>
+            <TextBlock Classes="stack-line line-number" Name="LineNumber2" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
+            <TextBlock Classes="stack-line" Name="Line2" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
             
             <!-- Line 1 (top of stack) -->
-            <TextBlock Classes="stack-line" Name="Line1" Text="1:"/>
-        </StackPanel>
+            <TextBlock Classes="stack-line line-number" Name="LineNumber1" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"/>
+            <TextBlock Classes="stack-line" Name="Line1" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
+        </Grid>
     </Border>
 </UserControl>

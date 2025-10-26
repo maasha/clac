@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Clac.UI.ViewModels;
+using Clac.UI.Helpers;
 using System.ComponentModel;
 using System.Linq;
 
@@ -65,22 +66,33 @@ public partial class DisplayView : UserControl
     {
         // Get the last 4 items from the stack (or fewer if stack is smaller)
         var displayItems = stack.TakeLast(4).ToArray();
+        int stackSize = stack.Length;
+
+        // Get non-empty values for calculating max integer part length
+        var visibleValues = displayItems.Where(v => !string.IsNullOrEmpty(v)).ToArray();
+        int maxIntegerPartLength = visibleValues.Length > 0
+            ? DisplayFormatter.GetMaxIntegerPartLength(visibleValues)
+            : 0;
 
         // HP48 style: Line 1 is top of stack, Line 4 is 4th from top
-        Line1.Text = FormatLine(1, displayItems.Length >= 1 ? displayItems[^1] : null);
-        Line2.Text = FormatLine(2, displayItems.Length >= 2 ? displayItems[^2] : null);
-        Line3.Text = FormatLine(3, displayItems.Length >= 3 ? displayItems[^3] : null);
-        Line4.Text = FormatLine(4, displayItems.Length >= 4 ? displayItems[^4] : null);
+        SetLine(LineNumber1, Line1, 1, stackSize, displayItems.Length >= 1 ? displayItems[^1] : null, maxIntegerPartLength);
+        SetLine(LineNumber2, Line2, 2, stackSize, displayItems.Length >= 2 ? displayItems[^2] : null, maxIntegerPartLength);
+        SetLine(LineNumber3, Line3, 3, stackSize, displayItems.Length >= 3 ? displayItems[^3] : null, maxIntegerPartLength);
+        SetLine(LineNumber4, Line4, 4, stackSize, displayItems.Length >= 4 ? displayItems[^4] : null, maxIntegerPartLength);
     }
 
     /// <summary>
-    /// Formats a line of the display.
+    /// Sets the line number and value for a display line.
     /// </summary>
-    /// <param name="lineNumber">The line number.</param>
-    /// <param name="value">The value to format.</param>
-    /// <returns>The formatted line.</returns>
-    private string FormatLine(int lineNumber, string? value)
+    /// <param name="lineNumberBlock">The TextBlock for the line number.</param>
+    /// <param name="valueBlock">The TextBlock for the value.</param>
+    /// <param name="lineNum">The line number.</param>
+    /// <param name="maxLineNum">The maximum line number (stack size).</param>
+    /// <param name="value">The value to display.</param>
+    /// <param name="maxIntegerPartLength">The maximum integer part length.</param>
+    private void SetLine(TextBlock lineNumberBlock, TextBlock valueBlock, int lineNum, int maxLineNum, string? value, int maxIntegerPartLength)
     {
-        return value != null ? $"{lineNumber}: {value}" : $"{lineNumber}:";
+        lineNumberBlock.Text = DisplayFormatter.FormatLineNumber(lineNum, maxLineNum);
+        valueBlock.Text = value != null ? DisplayFormatter.FormatValue(value, maxIntegerPartLength) : "";
     }
 }
