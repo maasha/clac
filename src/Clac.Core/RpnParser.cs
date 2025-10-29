@@ -9,6 +9,9 @@ public class RpnParser
 {
     /// <summary>
     /// Parses the input string into a list of tokens.
+    /// 
+    /// Note that validation takes place before parsing to allow the user to 
+    /// correct the input.
     /// </summary>
     /// <param name="input">The input string to parse.</param>
     /// <returns>A list of tokens.</returns>
