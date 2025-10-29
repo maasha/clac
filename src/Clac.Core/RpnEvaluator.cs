@@ -14,6 +14,8 @@ public class RpnEvaluator
     /// <param name="number2">The second operand.</param>
     /// <param name="op">The operator symbol (Add, Subtract, Multiply, Divide).</param> operator, e.g., "+", "-", "*", "/".</param>
     /// <returns>A Result containing the evaluation result or an error if the operator is invalid.</returns>
+    /// <remarks>Returns a failed result with an error if the operator is invalid.</remarks>
+    /// <remarks>Returns a failed result with an error if the division by zero is attempted.</remarks>
     public static Result<double> Evaluate(double number1, double number2, OperatorSymbol op)
     {
         return op switch
