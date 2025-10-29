@@ -1,7 +1,8 @@
 namespace Clac.Core;
 
 /// <summary>
-/// Represents a token in the RPN calculator, which can be either a number or an operator.
+/// Represents a token in the RPN calculator, which can be either a number or an
+/// operator or a command.
 /// </summary>
 public abstract record Token
 {
