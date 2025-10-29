@@ -1,6 +1,6 @@
-﻿namespace Clac.Core;
+﻿using DotNext;
 
-using DotNext;
+namespace Clac.Core;
 
 /// <summary>
 /// Class for evaluating reverse-Polish notation expressions.
