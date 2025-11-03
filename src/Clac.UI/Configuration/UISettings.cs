@@ -10,5 +10,11 @@ public class UISettings
     /// Default is 6 lines.
     /// </summary>
     public int DisplayLines { get; set; } = 6;
+
+    /// <summary>
+    /// Gets or sets the height of each line in the display in pixels.
+    /// Default is 30 pixels.
+    /// </summary>
+    public int LineHeight { get; set; } = 30;
 }
 

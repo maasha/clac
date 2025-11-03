@@ -8,7 +8,6 @@ namespace Clac.UI.Views;
 /// </summary>
 public partial class DisplayView : UserControl
 {
-    private const int LineHeight = 30;
     private const int DisplayBorderThickness = 4; // 2px top + 2px bottom
 
     /// <summary>
@@ -18,8 +17,9 @@ public partial class DisplayView : UserControl
     {
         InitializeComponent();
 
-        // Set display height based on configured number of lines
+        // Set display height based on configured number of lines and line height
         int displayLines = SettingsManager.UI.DisplayLines;
-        DisplayBorder.Height = (displayLines * LineHeight) + DisplayBorderThickness;
+        int lineHeight = SettingsManager.UI.LineHeight;
+        DisplayBorder.Height = (displayLines * lineHeight) + DisplayBorderThickness;
     }
 }
