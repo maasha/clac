@@ -29,11 +29,11 @@
         </Style>
         <!-- Error state styles -->
         <Style Selector="TextBox.input-box:error /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderBrush" Value="#d32f2f"/>
             <Setter Property="BorderThickness" Value="2"/>
         </Style>
         <Style Selector="TextBox.input-box:error:focus /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderBrush" Value="#d32f2f"/>
             <Setter Property="BorderThickness" Value="2"/>
         </Style>
         <Style Selector="TextBox.input-box /template/ TextBlock#PART_Watermark">
@@ -80,7 +80,7 @@
                     <ItemsControl ItemsSource="{Binding}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding}" Foreground="Red"/>
+                                <TextBlock Text="{Binding}" Foreground="#d32f2f"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
