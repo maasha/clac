@@ -4,21 +4,13 @@ using Avalonia.Threading;
 using Clac.UI.ViewModels;
 using Clac.UI.Helpers;
 using Clac.UI.Configuration;
+using Clac.UI.Models;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.Generic;
 
 namespace Clac.UI.Views;
-
-/// <summary>
-/// Represents a single line item in the stack display.
-/// </summary>
-public class StackLineItem
-{
-    public string LineNumber { get; set; } = "";
-    public string FormattedValue { get; set; } = "";
-}
 
 /// <summary>
 /// View for displaying the stack in the display.
@@ -90,7 +82,7 @@ public partial class DisplayView : UserControl
             : 0;
 
         var items = new List<StackLineItem>();
-        
+
         // Determine how many lines to show: at least displayLines, or all stack items if more
         int totalLines = Math.Max(displayLines, stack.Length);
 

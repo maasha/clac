@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Clac.UI.ViewModels"
-             xmlns:views="using:Clac.UI.Views"
+             xmlns:models="using:Clac.UI.Models"
              x:Class="Clac.UI.Views.DisplayView"
              x:DataType="vm:CalculatorViewModel"
              VerticalAlignment="Top">
@@ -27,7 +27,7 @@
                       AllowAutoHide="False">
             <ItemsControl Name="StackItemsControl">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="views:StackLineItem">
+                    <DataTemplate x:DataType="models:StackLineItem">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40"/>   <!-- Line numbers -->
