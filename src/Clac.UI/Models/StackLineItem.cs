@@ -6,13 +6,24 @@ namespace Clac.UI.Models;
 public class StackLineItem
 {
     /// <summary>
-    /// Gets or sets the line number text (e.g., "1:", "2:").
+    /// Initializes a new instance of the StackLineItem class.
     /// </summary>
-    public string LineNumber { get; set; } = "";
+    /// <param name="lineNumber">The line number text (e.g., "1:", "2:").</param>
+    /// <param name="formattedValue">The formatted value to display.</param>
+    public StackLineItem(string lineNumber, string formattedValue)
+    {
+        LineNumber = lineNumber;
+        FormattedValue = formattedValue;
+    }
 
     /// <summary>
-    /// Gets or sets the formatted value to display.
+    /// Gets the line number text (e.g., "1:", "2:").
     /// </summary>
-    public string FormattedValue { get; set; } = "";
+    public string LineNumber { get; }
+
+    /// <summary>
+    /// Gets the formatted value to display.
+    /// </summary>
+    public string FormattedValue { get; }
 }
 

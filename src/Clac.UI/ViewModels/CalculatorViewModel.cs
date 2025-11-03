@@ -108,11 +108,7 @@ public class CalculatorViewModel : INotifyPropertyChanged
 
         for (int lineNum = displayLines; lineNum >= 1; lineNum--)
         {
-            DisplayItems.Add(new StackLineItem
-            {
-                LineNumber = $"{lineNum}:",
-                FormattedValue = ""
-            });
+            DisplayItems.Add(new StackLineItem($"{lineNum}:", ""));
         }
     }
 
@@ -140,13 +136,12 @@ public class CalculatorViewModel : INotifyPropertyChanged
             int stackIndex = stack.Length - lineNum;
             string value = stackIndex >= 0 ? stack[stackIndex] : "";
 
-            DisplayItems.Add(new StackLineItem
-            {
-                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, totalLines),
-                FormattedValue = string.IsNullOrEmpty(value)
-                    ? ""
-                    : DisplayFormatter.FormatValue(value, maxIntegerPartLength)
-            });
+            string lineNumber = DisplayFormatter.FormatLineNumber(lineNum, totalLines);
+            string formattedValue = string.IsNullOrEmpty(value)
+                ? ""
+                : DisplayFormatter.FormatValue(value, maxIntegerPartLength);
+
+            DisplayItems.Add(new StackLineItem(lineNumber, formattedValue));
         }
 
         // Show scrollbar only if stack has more values than display lines
