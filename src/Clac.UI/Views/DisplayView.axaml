@@ -22,10 +22,10 @@
     
     <Border Name="DisplayBorder" BorderBrush="Gray" BorderThickness="2" Background="#e6e6e6">
         <ScrollViewer Name="StackScrollViewer"
-                      VerticalScrollBarVisibility="Auto" 
+                      VerticalScrollBarVisibility="{Binding ScrollBarVisibility}" 
                       HorizontalScrollBarVisibility="Disabled"
                       AllowAutoHide="False">
-            <ItemsControl Name="StackItemsControl">
+            <ItemsControl ItemsSource="{Binding DisplayItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="models:StackLineItem">
                         <Grid>
