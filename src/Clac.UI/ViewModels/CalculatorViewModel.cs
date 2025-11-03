@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Avalonia.Controls.Primitives;
 using Clac.Core;
 using Clac.UI.Configuration;
 using Clac.UI.Helpers;
@@ -21,6 +22,23 @@ public class CalculatorViewModel : INotifyPropertyChanged
     /// Gets the collection of items to display in the stack view.
     /// </summary>
     public ObservableCollection<StackLineItem> DisplayItems { get; }
+
+    private ScrollBarVisibility _scrollBarVisibility = ScrollBarVisibility.Hidden;
+    /// <summary>
+    /// Gets the scrollbar visibility for the display.
+    /// </summary>
+    public ScrollBarVisibility ScrollBarVisibility
+    {
+        get => _scrollBarVisibility;
+        private set
+        {
+            if (_scrollBarVisibility != value)
+            {
+                _scrollBarVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     public CalculatorViewModel()
     {
@@ -130,6 +148,11 @@ public class CalculatorViewModel : INotifyPropertyChanged
                     : DisplayFormatter.FormatValue(value, maxIntegerPartLength)
             });
         }
+
+        // Show scrollbar only if stack has more values than display lines
+        ScrollBarVisibility = stack.Length > displayLines
+            ? ScrollBarVisibility.Auto
+            : ScrollBarVisibility.Hidden;
     }
 
     /// <summary>
