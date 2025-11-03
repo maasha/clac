@@ -1,8 +1,13 @@
 namespace Clac.UI.ViewModels;
 
+using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Clac.Core;
+using Clac.UI.Configuration;
+using Clac.UI.Helpers;
+using Clac.UI.Models;
 
 
 public class CalculatorViewModel : INotifyPropertyChanged
@@ -12,6 +17,16 @@ public class CalculatorViewModel : INotifyPropertyChanged
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
 
+    /// <summary>
+    /// Gets the collection of items to display in the stack view.
+    /// </summary>
+    public ObservableCollection<StackLineItem> DisplayItems { get; }
+
+    public CalculatorViewModel()
+    {
+        DisplayItems = new ObservableCollection<StackLineItem>();
+        InitializeDisplayItems();
+    }
 
     public string[] StackDisplay => _processor.Stack.ToArray()
     .Select(x => x.ToString())
@@ -58,10 +73,63 @@ public class CalculatorViewModel : INotifyPropertyChanged
         _errorMessage = null;
         _currentInput = "";
 
+        UpdateDisplayItems();
         OnPropertyChanged(nameof(CurrentInput));
         OnPropertyChanged(nameof(StackDisplay));
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
+    }
+
+    /// <summary>
+    /// Initializes the display items with empty lines based on configured display lines.
+    /// </summary>
+    private void InitializeDisplayItems()
+    {
+        int displayLines = SettingsManager.UI.DisplayLines;
+        DisplayItems.Clear();
+
+        for (int lineNum = displayLines; lineNum >= 1; lineNum--)
+        {
+            DisplayItems.Add(new StackLineItem
+            {
+                LineNumber = $"{lineNum}:",
+                FormattedValue = ""
+            });
+        }
+    }
+
+    /// <summary>
+    /// Updates the display items to reflect the current stack state.
+    /// </summary>
+    private void UpdateDisplayItems()
+    {
+        var stack = StackDisplay;
+        int displayLines = SettingsManager.UI.DisplayLines;
+
+        var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
+        int maxIntegerPartLength = visibleValues.Length > 0
+            ? DisplayFormatter.GetMaxIntegerPartLength(visibleValues)
+            : 0;
+
+        // Determine how many lines to show: at least displayLines, or all stack items if more
+        int totalLines = Math.Max(displayLines, stack.Length);
+
+        DisplayItems.Clear();
+
+        for (int lineNum = totalLines; lineNum >= 1; lineNum--)
+        {
+            // Calculate which stack position this line should display
+            int stackIndex = stack.Length - lineNum;
+            string value = stackIndex >= 0 ? stack[stackIndex] : "";
+
+            DisplayItems.Add(new StackLineItem
+            {
+                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, totalLines),
+                FormattedValue = string.IsNullOrEmpty(value)
+                    ? ""
+                    : DisplayFormatter.FormatValue(value, maxIntegerPartLength)
+            });
+        }
     }
 
     /// <summary>
