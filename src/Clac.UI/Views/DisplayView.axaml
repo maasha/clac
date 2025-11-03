@@ -16,7 +16,7 @@
             <Setter Property="Foreground" Value="Black"/>
         </Style>
         <Style Selector="TextBlock.line-number">
-            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Foreground" Value="Black"/>
         </Style>
     </UserControl.Styles>
     
