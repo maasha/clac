@@ -21,7 +21,7 @@ public partial class DisplayView : UserControl
         int displayLines = SettingsManager.UI.DisplayLines;
         int lineHeight = SettingsManager.UI.LineHeight;
         int borderThickness = SettingsManager.UI.BorderThickness;
-        DisplayBorder.Height = (displayLines * lineHeight) + (borderThickness * 2); // top + bottom border
+        DisplayBorder.Height = (displayLines * lineHeight) + borderThickness; // only top border
 
         // Subscribe to DataContext changes to wire up auto-scroll
         DataContextChanged += OnDataContextChanged;

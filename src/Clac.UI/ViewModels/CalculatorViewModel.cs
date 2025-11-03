@@ -77,6 +77,9 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (string.IsNullOrWhiteSpace(_currentInput))
             return;
 
+        // Clear previous errors before attempting new input
+        ClearErrors(nameof(CurrentInput));
+
         var tokens = RpnParser.Parse(_currentInput);
 
         if (!tokens.IsSuccessful)
@@ -94,9 +97,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             AddError(nameof(CurrentInput), result.Error.Message);
             return;
         }
-
-        // Clear errors on successful input
-        ClearErrors(nameof(CurrentInput));
 
         _errorMessage = null;
         _currentInput = "";

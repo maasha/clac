@@ -13,19 +13,28 @@
             <Setter Property="Background" Value="#e6e6e6"/>
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="CornerRadius" Value="0"/>
-            <Setter Property="BorderThickness" Value="2,0,2,2"/>
+            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="Gray"/>
         </Style>
         <Style Selector="TextBox.input-box:focus /template/ Border#PART_BorderElement">
             <Setter Property="Background" Value="#e6e6e6"/>
             <Setter Property="BorderBrush" Value="Gray"/>
-            <Setter Property="BorderThickness" Value="2,0,2,2"/>
+            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="CornerRadius" Value="0"/>
         </Style>
         <Style Selector="TextBox.input-box:pointerover /template/ Border#PART_BorderElement">
             <Setter Property="Background" Value="#e6e6e6"/>
-            <Setter Property="BorderThickness" Value="2,0,2,2"/>
+            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <!-- Error state styles -->
+        <Style Selector="TextBox.input-box:error /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        <Style Selector="TextBox.input-box:error:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="2"/>
         </Style>
         <Style Selector="TextBox.input-box /template/ TextBlock#PART_Watermark">
             <Setter Property="Foreground" Value="Black"/>
@@ -40,24 +49,15 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontWeight" Value="Normal"/>
         </Style>
-        <Style Selector="TextBlock.error">
-            <Setter Property="Foreground" Value="Red"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="Background" Value="#FFE6E6"/>
-        </Style>
     </UserControl.Styles>
     
     <StackPanel Background="White">
-        <!-- Error message -->
-        <TextBlock Classes="error"
-                   Text="{Binding ErrorMessage}"
-                   IsVisible="{Binding HasError}"/>
-        
-        <!-- Input box -->
-        <TextBox Classes="input-box"
-                 Text="{Binding CurrentInput}"
-                 Watermark="Enter number or operator"
-                 KeyDown="OnInputKeyDown"/>
+        <!-- Input box with DataValidation -->
+        <DataValidationErrors>
+            <TextBox Classes="input-box"
+                     Text="{Binding CurrentInput}"
+                     Watermark="Enter number or operator"
+                     KeyDown="OnInputKeyDown"/>
+        </DataValidationErrors>
     </StackPanel>
 </UserControl>
