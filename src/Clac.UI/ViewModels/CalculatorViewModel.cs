@@ -1,6 +1,8 @@
 namespace Clac.UI.ViewModels;
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -11,12 +13,15 @@ using Clac.UI.Helpers;
 using Clac.UI.Models;
 
 
-public class CalculatorViewModel : INotifyPropertyChanged
+public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 {
     public event PropertyChangedEventHandler? PropertyChanged;
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
+    private readonly Dictionary<string, List<string>> _errors = new();
 
     /// <summary>
     /// Gets the collection of items to display in the stack view.
@@ -77,6 +82,7 @@ public class CalculatorViewModel : INotifyPropertyChanged
         if (!tokens.IsSuccessful)
         {
             _errorMessage = tokens.Error.Message;
+            AddError(nameof(CurrentInput), tokens.Error.Message);
             return;
         }
 
@@ -85,8 +91,12 @@ public class CalculatorViewModel : INotifyPropertyChanged
         if (!result.IsSuccessful)
         {
             _errorMessage = result.Error.Message;
+            AddError(nameof(CurrentInput), result.Error.Message);
             return;
         }
+
+        // Clear errors on successful input
+        ClearErrors(nameof(CurrentInput));
 
         _errorMessage = null;
         _currentInput = "";
@@ -148,6 +158,57 @@ public class CalculatorViewModel : INotifyPropertyChanged
         ScrollBarVisibility = stack.Length > displayLines
             ? ScrollBarVisibility.Auto
             : ScrollBarVisibility.Hidden;
+    }
+
+    /// <summary>
+    /// Gets whether the view model has validation errors.
+    /// </summary>
+    public bool HasErrors => _errors.Any();
+
+    /// <summary>
+    /// Gets the validation errors for a specified property.
+    /// </summary>
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
+            return Enumerable.Empty<string>();
+
+        return _errors[propertyName];
+    }
+
+    /// <summary>
+    /// Adds a validation error for a property.
+    /// </summary>
+    private void AddError(string propertyName, string error)
+    {
+        if (!_errors.ContainsKey(propertyName))
+            _errors[propertyName] = new List<string>();
+
+        if (!_errors[propertyName].Contains(error))
+        {
+            _errors[propertyName].Add(error);
+            OnErrorsChanged(propertyName);
+        }
+    }
+
+    /// <summary>
+    /// Clears all validation errors for a property.
+    /// </summary>
+    private void ClearErrors(string propertyName)
+    {
+        if (_errors.ContainsKey(propertyName))
+        {
+            _errors.Remove(propertyName);
+            OnErrorsChanged(propertyName);
+        }
+    }
+
+    /// <summary>
+    /// Raises the ErrorsChanged event.
+    /// </summary>
+    private void OnErrorsChanged(string propertyName)
+    {
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
     }
 
     /// <summary>
