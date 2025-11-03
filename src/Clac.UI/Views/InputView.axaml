@@ -8,23 +8,37 @@
         <Style Selector="TextBox.input-box">
             <Setter Property="FontFamily" Value="Courier New, monospace"/>
             <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Padding" Value="10"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="#e6e6e6"/>
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="CornerRadius" Value="0"/>
             <Setter Property="BorderThickness" Value="2,0,2,2"/>
             <Setter Property="BorderBrush" Value="Gray"/>
         </Style>
         <Style Selector="TextBox.input-box:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="#e6e6e6"/>
             <Setter Property="BorderBrush" Value="Gray"/>
             <Setter Property="BorderThickness" Value="2,0,2,2"/>
             <Setter Property="CornerRadius" Value="0"/>
         </Style>
         <Style Selector="TextBox.input-box:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="#e6e6e6"/>
             <Setter Property="BorderThickness" Value="2,0,2,2"/>
             <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.input-box /template/ TextBlock#PART_Watermark">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="TextBox.input-box:pointerover /template/ TextBlock#PART_Watermark">
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+        <Style Selector="TextBox.input-box:focus /template/ TextBlock#PART_Watermark">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Normal"/>
         </Style>
         <Style Selector="TextBlock.error">
             <Setter Property="Foreground" Value="Red"/>
