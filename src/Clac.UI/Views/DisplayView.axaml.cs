@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
 using Clac.UI.ViewModels;
 using Clac.UI.Helpers;
@@ -98,6 +99,11 @@ public partial class DisplayView : UserControl
         }
 
         StackItemsControl.ItemsSource = items;
+
+        // Show scrollbar only if stack has more than 4 values
+        StackScrollViewer.VerticalScrollBarVisibility = stack.Length > DisplayLines
+            ? ScrollBarVisibility.Auto
+            : ScrollBarVisibility.Hidden;
 
         // Scroll to bottom to show the top of stack (Line 1)
         Dispatcher.UIThread.Post(() =>
