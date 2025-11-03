@@ -73,21 +73,27 @@ public partial class DisplayView : UserControl
     /// <param name="stack">The new stack.</param>
     private void UpdateDisplay(string[] stack)
     {
+        const int DisplayLines = 4; // Always show 4 lines
+
         var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
         int maxIntegerPartLength = visibleValues.Length > 0
             ? DisplayFormatter.GetMaxIntegerPartLength(visibleValues)
             : 0;
 
         var items = new List<StackLineItem>();
-        int stackSize = stack.Length;
 
-        for (int i = 0; i < stackSize; i++)
+        for (int lineNum = DisplayLines; lineNum >= 1; lineNum--)
         {
-            int lineNum = stackSize - i;
+            // Calculate which stack position this line should display
+            int stackIndex = stack.Length - lineNum;
+            string value = stackIndex >= 0 ? stack[stackIndex] : "";
+
             items.Add(new StackLineItem
             {
-                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, stackSize),
-                FormattedValue = DisplayFormatter.FormatValue(stack[i], maxIntegerPartLength)
+                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, DisplayLines),
+                FormattedValue = string.IsNullOrEmpty(value)
+                    ? ""
+                    : DisplayFormatter.FormatValue(value, maxIntegerPartLength)
             });
         }
 
