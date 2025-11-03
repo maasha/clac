@@ -3,6 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
 using Clac.UI.ViewModels;
 using Clac.UI.Helpers;
+using Clac.UI.Configuration;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.Generic;
@@ -74,7 +75,7 @@ public partial class DisplayView : UserControl
     /// <param name="stack">The new stack.</param>
     private void UpdateDisplay(string[] stack)
     {
-        const int DisplayLines = 4; // Always show 4 lines
+        int displayLines = SettingsManager.UI.DisplayLines;
 
         var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
         int maxIntegerPartLength = visibleValues.Length > 0
@@ -83,7 +84,7 @@ public partial class DisplayView : UserControl
 
         var items = new List<StackLineItem>();
 
-        for (int lineNum = DisplayLines; lineNum >= 1; lineNum--)
+        for (int lineNum = displayLines; lineNum >= 1; lineNum--)
         {
             // Calculate which stack position this line should display
             int stackIndex = stack.Length - lineNum;
@@ -91,7 +92,7 @@ public partial class DisplayView : UserControl
 
             items.Add(new StackLineItem
             {
-                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, DisplayLines),
+                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, displayLines),
                 FormattedValue = string.IsNullOrEmpty(value)
                     ? ""
                     : DisplayFormatter.FormatValue(value, maxIntegerPartLength)
@@ -100,8 +101,8 @@ public partial class DisplayView : UserControl
 
         StackItemsControl.ItemsSource = items;
 
-        // Show scrollbar only if stack has more than 4 values
-        StackScrollViewer.VerticalScrollBarVisibility = stack.Length > DisplayLines
+        // Show scrollbar only if stack has more values than display lines
+        StackScrollViewer.VerticalScrollBarVisibility = stack.Length > displayLines
             ? ScrollBarVisibility.Auto
             : ScrollBarVisibility.Hidden;
 
