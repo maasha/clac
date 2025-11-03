@@ -24,6 +24,8 @@ public class StackLineItem
 /// </summary>
 public partial class DisplayView : UserControl
 {
+    private const int LineHeight = 30;
+    private const int DisplayBorderThickness = 4; // 2px top + 2px bottom
     private CalculatorViewModel? _viewModel;
 
     /// <summary>
@@ -33,6 +35,10 @@ public partial class DisplayView : UserControl
     {
         InitializeComponent();
         DataContextChanged += OnDataContextChanged;
+
+        // Set display height based on configured number of lines
+        int displayLines = SettingsManager.UI.DisplayLines;
+        DisplayBorder.Height = (displayLines * LineHeight) + DisplayBorderThickness;
     }
 
     /// <summary>
