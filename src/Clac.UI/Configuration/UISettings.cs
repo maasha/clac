@@ -7,8 +7,8 @@ public class UISettings
 {
     /// <summary>
     /// Gets or sets the number of lines to display in the stack display.
-    /// Default is 4 lines.
+    /// Default is 6 lines.
     /// </summary>
-    public int DisplayLines { get; set; } = 4;
+    public int DisplayLines { get; set; } = 6;
 }
 

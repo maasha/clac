@@ -8,10 +8,8 @@ public class UISettingsTests
     [Fact]
     public void UISettings_ShouldHaveDefaultDisplayLines()
     {
-        // Arrange & Act
         var settings = new UISettings();
 
-        // Assert
-        Assert.Equal(4, settings.DisplayLines);
+        Assert.Equal(6, settings.DisplayLines);
     }
 }
