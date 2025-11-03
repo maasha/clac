@@ -27,7 +27,7 @@ public static class DisplayFormatter
     /// <summary>
     /// Formats the line number for the display.
     /// 
-    /// The line number is prefixed with padded to ensure vertical alignment.
+    /// The line number is prefixed with padding to ensure vertical alignment.
     /// 
     /// Examples:
     /// 100: 4
@@ -49,8 +49,8 @@ public static class DisplayFormatter
     /// Gets the maximum length of the integer part of the given values. For
     /// negative numbers, the minus sign is included in the length.
     /// </summary>
-    /// <param name="values">The values to get the maximum length of the integer part of.</param>
-    /// <returns>The maximum length of the integer part of the numbers.</returns>
+    /// <param name="values">The values to get the maximum length from.</param>
+    /// <returns>The maximum length of the integer part of the values.</returns>
     public static int GetMaxIntegerPartLength(string[] values)
     {
         return values.Max(value => value.Split('.')[0].Length);
