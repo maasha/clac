@@ -30,7 +30,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40"/>   <!-- Line numbers -->
-                                <ColumnDefinition Width="Auto"/> <!-- Values -->
+                                <ColumnDefinition Width="*"/> <!-- Values - fills remaining space -->
                             </Grid.ColumnDefinitions>
                             
                             <TextBlock Classes="stack-line line-number" 
@@ -40,8 +40,8 @@
                             <TextBlock Classes="stack-line" 
                                        Text="{Binding FormattedValue}" 
                                        Grid.Column="1" 
-                                       HorizontalAlignment="Left"
-                                       Margin="50,0,0,0"/>
+                                       HorizontalAlignment="Right"
+                                       Margin="0,0,8,0"/>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
