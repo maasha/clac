@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using Clac.UI.ViewModels;
 using Clac.UI.Helpers;
 using Clac.UI.Configuration;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.Generic;
@@ -89,8 +90,11 @@ public partial class DisplayView : UserControl
             : 0;
 
         var items = new List<StackLineItem>();
+        
+        // Determine how many lines to show: at least displayLines, or all stack items if more
+        int totalLines = Math.Max(displayLines, stack.Length);
 
-        for (int lineNum = displayLines; lineNum >= 1; lineNum--)
+        for (int lineNum = totalLines; lineNum >= 1; lineNum--)
         {
             // Calculate which stack position this line should display
             int stackIndex = stack.Length - lineNum;
@@ -98,7 +102,7 @@ public partial class DisplayView : UserControl
 
             items.Add(new StackLineItem
             {
-                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, displayLines),
+                LineNumber = DisplayFormatter.FormatLineNumber(lineNum, totalLines),
                 FormattedValue = string.IsNullOrEmpty(value)
                     ? ""
                     : DisplayFormatter.FormatValue(value, maxIntegerPartLength)
