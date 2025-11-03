@@ -20,4 +20,12 @@ public class UISettingsTests
 
         Assert.Equal(30, settings.LineHeight);
     }
+
+    [Fact]
+    public void UISettings_ShouldHaveDefaultBorderThickness()
+    {
+        var settings = new UISettings();
+
+        Assert.Equal(2, settings.BorderThickness);
+    }
 }

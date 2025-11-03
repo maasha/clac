@@ -16,5 +16,11 @@ public class UISettings
     /// Default is 30 pixels.
     /// </summary>
     public int LineHeight { get; set; } = 30;
+
+    /// <summary>
+    /// Gets or sets the border thickness of the display in pixels.
+    /// Default is 2 pixels.
+    /// </summary>
+    public int BorderThickness { get; set; } = 2;
 }
 
