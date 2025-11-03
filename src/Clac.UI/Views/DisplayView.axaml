@@ -29,7 +29,7 @@
                     <DataTemplate x:DataType="views:StackLineItem">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="60"/>   <!-- Line numbers -->
+                                <ColumnDefinition Width="40"/>   <!-- Line numbers -->
                                 <ColumnDefinition Width="Auto"/> <!-- Values -->
                             </Grid.ColumnDefinitions>
                             
