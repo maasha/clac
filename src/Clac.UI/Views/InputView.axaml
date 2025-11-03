@@ -43,7 +43,7 @@
         <!-- Input box -->
         <TextBox Classes="input-box"
                  Text="{Binding CurrentInput}"
-                 Watermark="Enter number or operator (+, -, *, /)"
+                 Watermark="Enter number or operator"
                  KeyDown="OnInputKeyDown"/>
     </StackPanel>
 </UserControl>
