@@ -49,6 +49,44 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontWeight" Value="Normal"/>
         </Style>
+        <!-- Custom DataValidationErrors template -->
+        <Style Selector="DataValidationErrors">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <DockPanel LastChildFill="True">
+                        <Border DockPanel.Dock="Bottom"
+                                BorderBrush="Gray"
+                                BorderThickness="2,0,2,0"
+                                Background="White"
+                                IsVisible="{Binding (DataValidationErrors.HasErrors)}">
+                            <ContentControl ContentTemplate="{TemplateBinding ErrorTemplate}"
+                                            DataContext="{TemplateBinding Owner}"
+                                            Content="{Binding (DataValidationErrors.Errors)}"
+                                            Margin="5,0,0,0"/>
+                        </Border>
+                        <ContentPresenter Name="PART_ContentPresenter"
+                                          Background="{TemplateBinding Background}"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          CornerRadius="{TemplateBinding CornerRadius}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Content="{TemplateBinding Content}"
+                                          Padding="{TemplateBinding Padding}"/>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter>
+            <Setter Property="ErrorTemplate">
+                <DataTemplate>
+                    <ItemsControl ItemsSource="{Binding}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Foreground="Red"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+            </Setter>
+        </Style>
     </UserControl.Styles>
     
     <StackPanel Background="White">
