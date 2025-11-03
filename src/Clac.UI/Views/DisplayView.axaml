@@ -10,6 +10,7 @@
         <Style Selector="TextBlock.stack-line">
             <Setter Property="FontFamily" Value="Courier New, monospace"/>
             <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Padding" Value="8,4"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Foreground" Value="Black"/>
@@ -19,7 +20,7 @@
         </Style>
     </UserControl.Styles>
     
-    <Border BorderBrush="Gray" BorderThickness="2" Background="White" Height="120">
+    <Border BorderBrush="Gray" BorderThickness="2" Background="#e6e6e6" Height="120">
         <ScrollViewer Name="StackScrollViewer"
                       VerticalScrollBarVisibility="Auto" 
                       HorizontalScrollBarVisibility="Disabled"
