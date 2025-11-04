@@ -2,6 +2,7 @@ namespace Clac.Core.Tests;
 
 using Xunit;
 using Clac.Core;
+using Clac.Core.Enums;
 
 public class RpnParserTests
 {
