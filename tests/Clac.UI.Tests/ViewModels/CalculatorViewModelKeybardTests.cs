@@ -48,4 +48,20 @@ public class CalculatorViewModelKeyboardTests
 
         Assert.Equal("", viewModel.CurrentInput);
     }
+
+    [Fact]
+    public void AppendToInput_ShouldRaisePropertyChangedForCurrentInput()
+    {
+        var viewModel = new CalculatorViewModel();
+        bool propertyChangedRaised = false;
+        viewModel.PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName == nameof(CalculatorViewModel.CurrentInput))
+                propertyChangedRaised = true;
+        };
+
+        viewModel.AppendToInput("1");
+
+        Assert.True(propertyChangedRaised);
+    }
 }

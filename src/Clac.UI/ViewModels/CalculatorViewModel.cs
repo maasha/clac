@@ -71,8 +71,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     public void AppendToInput(string value)
     {
         _currentInput += value;
-
-        /// TODO add         OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(nameof(CurrentInput));
     }
 
 
