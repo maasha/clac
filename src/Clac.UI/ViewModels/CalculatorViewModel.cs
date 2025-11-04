@@ -79,6 +79,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     /// </summary>
     /// Deletes the last character from the current input.
     /// </summary>
+    /// <remarks>Does nothing if the input is empty.</remarks>
     public void DeleteFromInput()
     {
         if (string.IsNullOrEmpty(_currentInput))
