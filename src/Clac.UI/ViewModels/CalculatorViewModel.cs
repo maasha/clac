@@ -75,6 +75,20 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         /// TODO add         OnPropertyChanged(nameof(CurrentInput));
     }
 
+
+    /// </summary>
+    /// Deletes the last character from the current input.
+    /// </summary>
+    public void DeleteFromInput()
+    {
+        if (string.IsNullOrEmpty(_currentInput))
+            return;
+
+        _currentInput = _currentInput.Substring(0, _currentInput.Length - 1);
+
+        /// TODO add         OnPropertyChanged(nameof(CurrentInput));
+    }
+
     /// <summary>
     /// Enters the current input into the calculator.
     /// If the input is valid, the current input is cleared and the result is

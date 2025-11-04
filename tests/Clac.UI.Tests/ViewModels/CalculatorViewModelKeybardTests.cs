@@ -15,4 +15,37 @@ public class CalculatorViewModelKeyboardTests
 
         Assert.Equal("123", viewModel.CurrentInput);
     }
+
+    [Fact]
+    public void AppendToInput_WithEmptyInput_ShouldSetCurrentInput()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "";
+
+        viewModel.AppendToInput("3");
+
+        Assert.Equal("3", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void DeleteFromInput_WithInput_ShouldRemoveLastCharacter()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "123";
+
+        viewModel.DeleteFromInput();
+
+        Assert.Equal("12", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void DeleteFromInput_WithEmptyInput_ShouldDoNothing()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "";
+
+        viewModel.DeleteFromInput();
+
+        Assert.Equal("", viewModel.CurrentInput);
+    }
 }
