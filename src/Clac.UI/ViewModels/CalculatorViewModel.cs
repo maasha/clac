@@ -65,6 +65,17 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     public string ErrorMessage => _errorMessage ?? "";
 
     /// <summary>
+    /// Appends the specified value to the current input.
+    /// </summary>
+    /// <param name="value">The value to append to the current input.</param>
+    public void AppendToInput(string value)
+    {
+        _currentInput += value;
+
+        /// TODO add         OnPropertyChanged(nameof(CurrentInput));
+    }
+
+    /// <summary>
     /// Enters the current input into the calculator.
     /// If the input is valid, the current input is cleared and the result is
     /// displayed.
