@@ -1,4 +1,4 @@
-namespace Clac.Core;
+namespace Clac.Core.Enums;
 
 /// <summary>
 /// Enum for the operator symbols allowed in the calculator.

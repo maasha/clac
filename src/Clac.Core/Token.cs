@@ -1,5 +1,7 @@
 namespace Clac.Core;
 
+using Clac.Core.Enums;
+
 /// <summary>
 /// Represents a token in the RPN calculator, which can be either a number or an
 /// operator or a command.
