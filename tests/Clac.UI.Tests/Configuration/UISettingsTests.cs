@@ -6,6 +6,22 @@ namespace Clac.UI.Tests.Configuration;
 public class UISettingsTests
 {
     [Fact]
+    public void UISettings_ShouldHaveDefaultWindowHeight()
+    {
+        var settings = new UISettings();
+
+        Assert.Equal(400, settings.WindowHeight);
+    }
+
+    [Fact]
+    public void UISettings_ShouldHaveDefaultWindowWidth()
+    {
+        var settings = new UISettings();
+
+        Assert.Equal(400, settings.WindowWidth);
+    }
+
+    [Fact]
     public void UISettings_ShouldHaveDefaultDisplayLines()
     {
         var settings = new UISettings();

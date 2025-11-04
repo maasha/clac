@@ -6,6 +6,18 @@ namespace Clac.UI.Configuration;
 public class UISettings
 {
     /// <summary>
+    /// Gets or sets the height of the window in pixels.
+    /// Default is 400 pixels.
+    /// </summary>
+    public int WindowHeight { get; set; } = 600;
+
+    /// <summary>
+    /// Gets or sets the width of the window in pixels.
+    /// Default is 400 pixels.
+    /// </summary>
+    public int WindowWidth { get; set; } = 400;
+
+    /// <summary>
     /// Gets or sets the number of lines to display in the stack display.
     /// Default is 6 lines.
     /// </summary>
