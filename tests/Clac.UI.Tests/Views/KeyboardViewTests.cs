@@ -261,5 +261,20 @@ public class KeyboardViewTests
         Assert.Equal(".", decimalKey.Value);
         Assert.Equal(KeyType.Number, decimalKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHavePopKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var popKeyView = view.FindControl<KeyboardKeyView>("PopKeyView");
+        Assert.NotNull(popKeyView);
+
+        var popKey = popKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(popKey);
+        Assert.Equal("POP", popKey.Label);
+        Assert.Equal("pop()", popKey.Value);
+        Assert.Equal(KeyType.Command, popKey.Type);
+    }
 }
 
