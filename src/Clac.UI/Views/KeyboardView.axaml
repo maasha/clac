@@ -3,7 +3,7 @@
              xmlns:views="using:Clac.UI.Views"
              x:Class="Clac.UI.Views.KeyboardView">
     
-    <Border BorderBrush="Gray" BorderThickness="2,0,2,2" Padding="20" CornerRadius="0,0,8,8">
+    <Border BorderBrush="Gray" BorderThickness="2,0,2,2" CornerRadius="0,0,8,8">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
