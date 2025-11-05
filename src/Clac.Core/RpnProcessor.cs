@@ -103,13 +103,22 @@ public class RpnProcessor
 
                     if (!result.IsSuccessful)
                     {
-                        return result;
+                        if (result.Error.Message.Contains("Stack is empty"))
+                        {
+                            commandExecuted = true;
+                        }
+                        else
+                        {
+                            return result;
+                        }
                     }
-
-                    _stack.Pop();
-                    _stack.Push(result.Value);
-                    commandResult = result.Value;
-                    commandExecuted = true;
+                    else
+                    {
+                        _stack.Pop();
+                        _stack.Push(result.Value);
+                        commandResult = result.Value;
+                        commandExecuted = true;
+                    }
                 }
             }
         }

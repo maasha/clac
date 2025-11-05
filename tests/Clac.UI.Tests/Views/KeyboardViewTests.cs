@@ -322,5 +322,20 @@ public class KeyboardViewTests
         Assert.Equal("sum()", sumKey.Value);
         Assert.Equal(KeyType.Command, sumKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveSqrtKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var sqrtKeyView = view.FindControl<KeyboardKeyView>("SqrtKeyView");
+        Assert.NotNull(sqrtKeyView);
+
+        var sqrtKey = sqrtKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(sqrtKey);
+        Assert.Equal("√", sqrtKey.Label);
+        Assert.Equal("sqrt()", sqrtKey.Value);
+        Assert.Equal(KeyType.Command, sqrtKey.Type);
+    }
 }
 

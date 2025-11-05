@@ -18,7 +18,7 @@ public partial class KeyboardView : UserControl
         InitializeComponent();
 
         // Row 1: √, xʸ, 1/x, /, DEL
-        SqrtKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
+        SqrtKeyView.DataContext = new KeyboardKey { Label = "√", Value = "sqrt()", Type = KeyType.Command };
         PowerKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
         ReciprocalKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
         DivideKeyView.DataContext = new KeyboardKey { Label = "/", Value = "/", Type = KeyType.Operator };

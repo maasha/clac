@@ -853,5 +853,132 @@ public class KeyboardKeyViewTests
         Assert.Equal("46", viewModel.StackDisplay[0]);
         Assert.False(viewModel.HasError);
     }
+
+    [Fact]
+    public void SqrtKeyClick_ShouldCalculateSquareRootOfLastItem_WhenSqrtKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "4";
+        viewModel.Enter();
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("4", viewModel.StackDisplay[0]);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "√",
+            Value = "sqrt()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("2", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void SqrtKeyClick_ShouldDoNothing_WhenStackIsEmpty()
+    {
+        var viewModel = new CalculatorViewModel();
+
+        Assert.Empty(viewModel.StackDisplay);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "√",
+            Value = "sqrt()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Empty(viewModel.StackDisplay);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void SqrtKeyClick_ShouldShowError_WhenLastItemIsNegative()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "-1";
+        viewModel.Enter();
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("-1", viewModel.StackDisplay[0]);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "√",
+            Value = "sqrt()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("-1", viewModel.StackDisplay[0]);
+        Assert.True(viewModel.HasError);
+        Assert.Contains("Invalid: negative square root", viewModel.ErrorMessage);
+    }
+
+    [Fact]
+    public void SqrtKeyClick_ShouldCalculateSquareRootWithoutError_WhenInputContainsNumber()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "9";
+        viewModel.Enter();
+        viewModel.CurrentInput = "16";
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("9", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "√",
+            Value = "sqrt()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("3", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
 }
 
