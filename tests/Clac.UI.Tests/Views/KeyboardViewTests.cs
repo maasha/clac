@@ -9,6 +9,21 @@ using Avalonia.Controls;
 public class KeyboardViewTests
 {
     [Fact]
+    public void KeyboardView_ShouldHaveKey1_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var key1View = view.FindControl<KeyboardKeyView>("Key1View");
+        Assert.NotNull(key1View);
+
+        var key1 = key1View.DataContext as KeyboardKey;
+        Assert.NotNull(key1);
+        Assert.Equal("1", key1.Label);
+        Assert.Equal("1", key1.Value);
+        Assert.Equal(KeyType.Number, key1.Type);
+    }
+
+    [Fact]
     public void KeyboardView_ShouldHaveDeleteKey_WhenInitialized()
     {
         var view = new KeyboardView();
