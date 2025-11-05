@@ -25,23 +25,23 @@ public partial class KeyboardView : UserControl
         DeleteKeyView.DataContext = new KeyboardKey { Label = "DEL", Value = "", Type = KeyType.Command };
 
         // Row 2: 7, 8, 9, x, CLEAR
-        Key7View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
-        Key8View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
-        Key9View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        Key7View.DataContext = new KeyboardKey { Label = "7", Value = "7", Type = KeyType.Number };
+        Key8View.DataContext = new KeyboardKey { Label = "8", Value = "8", Type = KeyType.Number };
+        Key9View.DataContext = new KeyboardKey { Label = "9", Value = "9", Type = KeyType.Number };
         MultiplyKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Operator };
         ClearKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
 
         // Row 3: 4, 5, 6, -, UNDO
-        Key4View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
-        Key5View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
-        Key6View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        Key4View.DataContext = new KeyboardKey { Label = "4", Value = "4", Type = KeyType.Number };
+        Key5View.DataContext = new KeyboardKey { Label = "5", Value = "5", Type = KeyType.Number };
+        Key6View.DataContext = new KeyboardKey { Label = "6", Value = "6", Type = KeyType.Number };
         MinusKeyView.DataContext = new KeyboardKey { Label = "-", Value = "-", Type = KeyType.Operator };
         UndoKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
 
         // Row 4: 1, 2, 3, +, POP
         Key1View.DataContext = new KeyboardKey { Label = "1", Value = "1", Type = KeyType.Number };
-        Key2View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
-        Key3View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        Key2View.DataContext = new KeyboardKey { Label = "2", Value = "2", Type = KeyType.Number };
+        Key3View.DataContext = new KeyboardKey { Label = "3", Value = "3", Type = KeyType.Number };
         PlusKeyView.DataContext = new KeyboardKey { Label = "+", Value = "+", Type = KeyType.Operator };
         PopKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
 

@@ -96,5 +96,125 @@ public class KeyboardViewTests
         Assert.Equal("0", zeroKey.Value);
         Assert.Equal(KeyType.Number, zeroKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveTwoKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var twoKeyView = view.FindControl<KeyboardKeyView>("Key2View");
+        Assert.NotNull(twoKeyView);
+
+        var twoKey = twoKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(twoKey);
+        Assert.Equal("2", twoKey.Label);
+        Assert.Equal("2", twoKey.Value);
+        Assert.Equal(KeyType.Number, twoKey.Type);
+    }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveThreeKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var threeKeyView = view.FindControl<KeyboardKeyView>("Key3View");
+        Assert.NotNull(threeKeyView);
+
+        var threeKey = threeKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(threeKey);
+        Assert.Equal("3", threeKey.Label);
+        Assert.Equal("3", threeKey.Value);
+        Assert.Equal(KeyType.Number, threeKey.Type);
+    }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveFourKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var fourKeyView = view.FindControl<KeyboardKeyView>("Key4View");
+        Assert.NotNull(fourKeyView);
+
+        var fourKey = fourKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(fourKey);
+        Assert.Equal("4", fourKey.Label);
+        Assert.Equal("4", fourKey.Value);
+        Assert.Equal(KeyType.Number, fourKey.Type);
+    }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveFiveKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var fiveKeyView = view.FindControl<KeyboardKeyView>("Key5View");
+        Assert.NotNull(fiveKeyView);
+
+        var fiveKey = fiveKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(fiveKey);
+        Assert.Equal("5", fiveKey.Label);
+        Assert.Equal("5", fiveKey.Value);
+        Assert.Equal(KeyType.Number, fiveKey.Type);
+    }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveSixKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var sixKeyView = view.FindControl<KeyboardKeyView>("Key6View");
+        Assert.NotNull(sixKeyView);
+
+        var sixKey = sixKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(sixKey);
+        Assert.Equal("6", sixKey.Label);
+        Assert.Equal("6", sixKey.Value);
+        Assert.Equal(KeyType.Number, sixKey.Type);
+    }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveSevenKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var sevenKeyView = view.FindControl<KeyboardKeyView>("Key7View");
+        Assert.NotNull(sevenKeyView);
+
+        var sevenKey = sevenKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(sevenKey);
+        Assert.Equal("7", sevenKey.Label);
+        Assert.Equal("7", sevenKey.Value);
+        Assert.Equal(KeyType.Number, sevenKey.Type);
+    }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveEightKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var eightKeyView = view.FindControl<KeyboardKeyView>("Key8View");
+        Assert.NotNull(eightKeyView);
+
+        var eightKey = eightKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(eightKey);
+        Assert.Equal("8", eightKey.Label);
+        Assert.Equal("8", eightKey.Value);
+        Assert.Equal(KeyType.Number, eightKey.Type);
+    }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveNineKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var nineKeyView = view.FindControl<KeyboardKeyView>("Key9View");
+        Assert.NotNull(nineKeyView);
+
+        var nineKey = nineKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(nineKey);
+        Assert.Equal("9", nineKey.Label);
+        Assert.Equal("9", nineKey.Value);
+        Assert.Equal(KeyType.Number, nineKey.Type);
+    }
 }
 

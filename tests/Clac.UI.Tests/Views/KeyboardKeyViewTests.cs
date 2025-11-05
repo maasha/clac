@@ -250,5 +250,197 @@ public class KeyboardKeyViewTests
 
         Assert.Equal("0", viewModel.CurrentInput);
     }
+
+    [Fact]
+    public void TwoKeyClick_ShouldAppendTwoToInput_WhenTwoKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "2",
+            Value = "2",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("2", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void ThreeKeyClick_ShouldAppendThreeToInput_WhenThreeKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "3",
+            Value = "3",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("3", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void FourKeyClick_ShouldAppendFourToInput_WhenFourKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "4",
+            Value = "4",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("4", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void FiveKeyClick_ShouldAppendFiveToInput_WhenFiveKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "5",
+            Value = "5",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("5", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void SixKeyClick_ShouldAppendSixToInput_WhenSixKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "6",
+            Value = "6",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("6", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void SevenKeyClick_ShouldAppendSevenToInput_WhenSevenKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "7",
+            Value = "7",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("7", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void EightKeyClick_ShouldAppendEightToInput_WhenEightKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "8",
+            Value = "8",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("8", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void NineKeyClick_ShouldAppendNineToInput_WhenNineKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "9",
+            Value = "9",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("9", viewModel.CurrentInput);
+    }
 }
 
