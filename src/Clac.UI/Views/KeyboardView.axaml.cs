@@ -55,5 +55,16 @@ public partial class KeyboardView : UserControl
 
         // Set DataContext for plus key
         PlusKeyView.DataContext = plusKey;
+
+        // Create the minus key
+        var minusKey = new KeyboardKey
+        {
+            Label = "-",
+            Value = "-",
+            Type = KeyType.Operator
+        };
+
+        // Set DataContext for minus key
+        MinusKeyView.DataContext = minusKey;
     }
 }
