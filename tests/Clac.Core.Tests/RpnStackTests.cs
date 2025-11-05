@@ -136,6 +136,6 @@ public class RpnStackTests
         stack.Push(-1);
         var result = stack.Sqrt();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Square root of a negative number is not supported", result.Error.Message);
+        Assert.Contains("Invalid: negative square root", result.Error.Message);
     }
 }

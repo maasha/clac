@@ -181,6 +181,6 @@ public class RpnProcessorTests
         Assert.Equal(-1, processor.Stack.Peek().Value);
         var result = processor.Process(RpnParser.Parse("sqrt()").Value);
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Square root of a negative number is not supported", result.Error.Message);
+        Assert.Contains("Invalid: negative square root", result.Error.Message);
     }
 }

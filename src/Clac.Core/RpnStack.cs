@@ -119,7 +119,7 @@ public class RpnStack
 
         if (_stack[^1] < 0)
         {
-            return new Result<double>(new InvalidOperationException("Square root of a negative number is not supported"));
+            return new Result<double>(new InvalidOperationException("Invalid: negative square root"));
         }
 
         return new Result<double>(Math.Sqrt(_stack[^1]));
