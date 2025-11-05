@@ -19,6 +19,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
             <!-- Row 1: √, xʸ, 1/x, /, DEL -->
@@ -34,7 +35,7 @@
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="3">
                 <views:KeyboardKeyView x:Name="DivideKeyView"/>
             </Border>
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="4">
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2">
                 <views:KeyboardKeyView x:Name="DeleteKeyView"/>
             </Border>
             
@@ -104,7 +105,7 @@
             </Border>
             
             <!-- Row 6: ENTER (spans all columns) -->
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5">
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="6">
                 <views:KeyboardKeyView x:Name="EnterKeyView"/>
             </Border>
         </Grid>
