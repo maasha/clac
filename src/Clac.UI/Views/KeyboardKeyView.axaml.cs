@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Clac.UI.ViewModels;
 using Clac.UI.Models;
+using Clac.UI.Enums;
 
 namespace Clac.UI.Views;
 
@@ -32,7 +33,14 @@ public partial class KeyboardKeyView : UserControl
         var viewModel = FindCalculatorViewModel();
         if (viewModel != null)
         {
-            viewModel.AppendToInput(key.Value);
+            if (key.Type == KeyType.Command)
+            {
+                viewModel.DeleteFromInput();
+            }
+            else
+            {
+                viewModel.AppendToInput(key.Value);
+            }
         }
     }
 

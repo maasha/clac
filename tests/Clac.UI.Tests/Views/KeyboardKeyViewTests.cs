@@ -24,7 +24,7 @@ public class KeyboardKeyViewTests
 
         view.InitializeComponent();
 
-        var button = view.FindControl<Button>("Button");
+        var button = view.FindControl<Button>("KeyButton");
         Assert.NotNull(button);
         Assert.Equal("7", button.Content);
     }
@@ -51,6 +51,31 @@ public class KeyboardKeyViewTests
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
         Assert.Equal("7", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void DeleteKeyClick_ShouldRemoveLastCharacterFromInput_WhenDeleteKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "123";
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "DEL",
+            Value = "",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("12", viewModel.CurrentInput);
     }
 }
 

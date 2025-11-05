@@ -33,5 +33,16 @@ public partial class KeyboardView : UserControl
         {
             System.Diagnostics.Debug.WriteLine($"Key1View DataContext set: Label={key.Label}");
         }
+
+        // Create the delete key
+        var deleteKey = new KeyboardKey
+        {
+            Label = "DEL",
+            Value = "",
+            Type = KeyType.Command
+        };
+
+        // Set DataContext for delete key
+        DeleteKeyView.DataContext = deleteKey;
     }
 }

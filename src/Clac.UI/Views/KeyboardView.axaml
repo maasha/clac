@@ -4,6 +4,9 @@
              x:Class="Clac.UI.Views.KeyboardView">
     
     <Border BorderBrush="Gray" BorderThickness="2,0,2,2" Padding="20" CornerRadius="0,0,8,8">
-        <views:KeyboardKeyView x:Name="Key1View"/>
+        <StackPanel>
+            <views:KeyboardKeyView x:Name="Key1View"/>
+            <views:KeyboardKeyView x:Name="DeleteKeyView"/>
+        </StackPanel>
     </Border>
 </UserControl>
