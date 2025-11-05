@@ -91,6 +91,21 @@ public class RpnStack
     }
 
     /// <summary>
+    /// Sums all the elements on the stack.
+    /// </summary>
+    /// <returns>The sum of the elements on the stack.</returns>
+    /// <remarks>Returns a failed result with an error if the stack is empty.</remarks>
+    public Result<double> Sum()
+    {
+        if (_stack.Count == 0)
+        {
+            return new Result<double>(new InvalidOperationException("Stack is empty"));
+        }
+
+        return new Result<double>(_stack.Sum());
+    }
+
+    /// <summary>
     /// Returns the number of elements on the stack.
     /// </summary>
     /// <returns>The number of elements on the stack.</returns>

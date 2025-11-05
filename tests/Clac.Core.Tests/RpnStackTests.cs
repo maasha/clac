@@ -89,4 +89,24 @@ public class RpnStackTests
         Assert.False(result.IsSuccessful);
         Assert.Contains("Stack has less than two elements", result.Error.Message);
     }
+
+    [Fact]
+    public void Sum_WithEmptyStack_ShouldReturnError()
+    {
+        var stack = new RpnStack();
+        var result = stack.Sum();
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Stack is empty", result.Error.Message);
+    }
+
+    [Fact]
+    public void Sum_WithNonEmptyStack_ShouldReturnSumOfElements()
+    {
+        var stack = new RpnStack();
+        stack.Push(1);
+        stack.Push(2);
+        var result = stack.Sum();
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(3, result.Value);
+    }
 }

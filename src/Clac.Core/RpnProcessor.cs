@@ -86,6 +86,11 @@ public class RpnProcessor
                     var result = _stack.Swap();
                     commandExecuted = true;
                 }
+                else if (commandToken.Command == "sum")
+                {
+                    var result = _stack.Sum();
+                    commandExecuted = true;
+                }
             }
         }
 

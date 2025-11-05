@@ -86,4 +86,13 @@ public class RpnParserTests
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
     }
+
+    [Fact]
+    public void Parse_SumCommand_ShouldReturnCommandToken()
+    {
+        var result = RpnParser.Parse("sum()");
+        Assert.True(result.IsSuccessful);
+        Assert.Single(result.Value);
+        Assert.IsType<Token.CommandToken>(result.Value[0]);
+    }
 }
