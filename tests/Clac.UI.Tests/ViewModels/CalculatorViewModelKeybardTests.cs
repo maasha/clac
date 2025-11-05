@@ -64,4 +64,21 @@ public class CalculatorViewModelKeyboardTests
 
         Assert.True(propertyChangedRaised);
     }
+
+    [Fact]
+    public void DeleteFromInput_ShouldRaisePropertyChangedForCurrentInput()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "123";
+        bool propertyChangedRaised = false;
+        viewModel.PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName == nameof(CalculatorViewModel.CurrentInput))
+                propertyChangedRaised = true;
+        };
+
+        viewModel.DeleteFromInput();
+
+        Assert.True(propertyChangedRaised);
+    }
 }

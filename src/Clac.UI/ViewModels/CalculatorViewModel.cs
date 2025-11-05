@@ -85,7 +85,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
         _currentInput = _currentInput.Substring(0, _currentInput.Length - 1);
 
-        /// TODO add         OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(nameof(CurrentInput));
     }
 
     /// <summary>
