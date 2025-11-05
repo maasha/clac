@@ -1,3 +1,4 @@
+using System.Globalization;
 using DotNext;
 using Clac.Core.Enums;
 
@@ -36,7 +37,7 @@ public class RpnParser
 
         foreach (var item in validationResult.Value)
         {
-            if (double.TryParse(item, out var number))
+            if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
             {
                 tokens.Add(Token.CreateNumber(number));
             }
@@ -74,7 +75,7 @@ public class RpnParser
 
         foreach (var item in input)
         {
-            bool isNumber = double.TryParse(item, out _);
+            bool isNumber = double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
             bool isOperator = item is "+" or "-" or "*" or "/";
             bool isCommand = item is "clear()" or "pop()" or "swap()";
 
