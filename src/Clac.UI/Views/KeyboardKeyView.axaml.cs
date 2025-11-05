@@ -35,7 +35,7 @@ public partial class KeyboardKeyView : UserControl
         {
             if (key.Type == KeyType.Command)
             {
-                if (string.IsNullOrEmpty(key.Value))
+                if (key.Value == "del()")
                 {
                     viewModel.DeleteFromInput();
                 }

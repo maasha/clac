@@ -34,6 +34,7 @@ public class KeyboardViewTests
         var deleteKey = deleteKeyView.DataContext as KeyboardKey;
         Assert.NotNull(deleteKey);
         Assert.Equal("DEL", deleteKey.Label);
+        Assert.Equal("del()", deleteKey.Value);
         Assert.Equal(KeyType.Command, deleteKey.Type);
     }
 

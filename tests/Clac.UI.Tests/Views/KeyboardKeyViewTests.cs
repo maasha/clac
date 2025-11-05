@@ -63,7 +63,7 @@ public class KeyboardKeyViewTests
         var key = new KeyboardKey
         {
             Label = "DEL",
-            Value = "",
+            Value = "del()",
             Type = KeyType.Command
         };
         view.DataContext = key;
@@ -87,7 +87,7 @@ public class KeyboardKeyViewTests
         var key = new KeyboardKey
         {
             Label = "DEL",
-            Value = "",
+            Value = "del()",
             Type = KeyType.Command
         };
         view.DataContext = key;

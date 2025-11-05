@@ -22,7 +22,7 @@ public partial class KeyboardView : UserControl
         PowerKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
         ReciprocalKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
         DivideKeyView.DataContext = new KeyboardKey { Label = "/", Value = "/", Type = KeyType.Operator };
-        DeleteKeyView.DataContext = new KeyboardKey { Label = "DEL", Value = "", Type = KeyType.Command };
+        DeleteKeyView.DataContext = new KeyboardKey { Label = "DEL", Value = "del()", Type = KeyType.Command };
 
         // Row 2: 7, 8, 9, x, CLEAR
         Key7View.DataContext = new KeyboardKey { Label = "7", Value = "7", Type = KeyType.Number };
