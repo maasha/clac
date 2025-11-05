@@ -79,6 +79,30 @@ public class KeyboardKeyViewTests
     }
 
     [Fact]
+    public void DeleteKeyClick_ShouldNotChangeInput_WhenInputIsEmpty()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "DEL",
+            Value = "",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("", viewModel.CurrentInput);
+    }
+
+    [Fact]
     public void PlusKeyClick_ShouldAppendPlusToInput_WhenPlusKeyIsClicked()
     {
         var viewModel = new CalculatorViewModel();
