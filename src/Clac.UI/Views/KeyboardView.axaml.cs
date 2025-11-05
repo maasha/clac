@@ -43,7 +43,7 @@ public partial class KeyboardView : UserControl
         Key2View.DataContext = new KeyboardKey { Label = "2", Value = "2", Type = KeyType.Number };
         Key3View.DataContext = new KeyboardKey { Label = "3", Value = "3", Type = KeyType.Number };
         PlusKeyView.DataContext = new KeyboardKey { Label = "+", Value = "+", Type = KeyType.Operator };
-        PopKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
+        PopKeyView.DataContext = new KeyboardKey { Label = "POP", Value = "pop()", Type = KeyType.Command };
 
         // Row 5: 0 (spans two columns), ., Σ, SWAP
         Key0View.DataContext = new KeyboardKey { Label = "0", Value = "0", Type = KeyType.Number };

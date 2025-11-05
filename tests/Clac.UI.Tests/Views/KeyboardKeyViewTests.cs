@@ -564,5 +564,65 @@ public class KeyboardKeyViewTests
 
         Assert.Equal(".", viewModel.CurrentInput);
     }
+
+    [Fact]
+    public void PopKeyClick_ShouldRemoveTopItemFromStack_WhenPopKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "5";
+        viewModel.Enter();
+        viewModel.CurrentInput = "3";
+        viewModel.Enter();
+
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "POP",
+            Value = "pop()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("5", viewModel.StackDisplay[0]);
+    }
+
+    [Fact]
+    public void PopKeyClick_ShouldDoNothing_WhenStackIsEmpty()
+    {
+        var viewModel = new CalculatorViewModel();
+
+        Assert.Empty(viewModel.StackDisplay);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "POP",
+            Value = "pop()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Empty(viewModel.StackDisplay);
+        Assert.False(viewModel.HasError);
+    }
 }
 

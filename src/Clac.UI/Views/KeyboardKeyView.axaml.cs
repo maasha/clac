@@ -35,7 +35,15 @@ public partial class KeyboardKeyView : UserControl
         {
             if (key.Type == KeyType.Command)
             {
-                viewModel.DeleteFromInput();
+                if (string.IsNullOrEmpty(key.Value))
+                {
+                    viewModel.DeleteFromInput();
+                }
+                else
+                {
+                    viewModel.AppendToInput(key.Value);
+                    viewModel.Enter();
+                }
             }
             else if (key.Type == KeyType.Enter)
             {
