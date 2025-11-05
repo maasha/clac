@@ -276,5 +276,20 @@ public class KeyboardViewTests
         Assert.Equal("pop()", popKey.Value);
         Assert.Equal(KeyType.Command, popKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveSwapKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var swapKeyView = view.FindControl<KeyboardKeyView>("SwapKeyView");
+        Assert.NotNull(swapKeyView);
+
+        var swapKey = swapKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(swapKey);
+        Assert.Equal("SWAP", swapKey.Label);
+        Assert.Equal("swap()", swapKey.Value);
+        Assert.Equal(KeyType.Command, swapKey.Type);
+    }
 }
 

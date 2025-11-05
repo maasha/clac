@@ -624,5 +624,40 @@ public class KeyboardKeyViewTests
         Assert.Empty(viewModel.StackDisplay);
         Assert.False(viewModel.HasError);
     }
+
+    [Fact]
+    public void SwapKeyClick_ShouldSwapTopTwoItemsOnStack_WhenSwapKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "5";
+        viewModel.Enter();
+        viewModel.CurrentInput = "3";
+        viewModel.Enter();
+
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+        Assert.Equal("5", viewModel.StackDisplay[0]);
+        Assert.Equal("3", viewModel.StackDisplay[1]);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "SWAP",
+            Value = "swap()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+        Assert.Equal("3", viewModel.StackDisplay[0]);
+        Assert.Equal("5", viewModel.StackDisplay[1]);
+    }
 }
 
