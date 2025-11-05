@@ -81,5 +81,20 @@ public class KeyboardViewTests
         Assert.Equal("", enterKey.Value);
         Assert.Equal(KeyType.Enter, enterKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveZeroKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var zeroKeyView = view.FindControl<KeyboardKeyView>("Key0View");
+        Assert.NotNull(zeroKeyView);
+
+        var zeroKey = zeroKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(zeroKey);
+        Assert.Equal("0", zeroKey.Label);
+        Assert.Equal("0", zeroKey.Value);
+        Assert.Equal(KeyType.Number, zeroKey.Type);
+    }
 }
 

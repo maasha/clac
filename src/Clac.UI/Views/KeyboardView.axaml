@@ -89,18 +89,15 @@
                 <views:KeyboardKeyView x:Name="PopKeyView"/>
             </Border>
             
-            <!-- Row 5: 0, ., Σ, (empty), SWAP -->
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="0">
+            <!-- Row 5: 0, ., Σ, SWAP -->
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
                 <views:KeyboardKeyView x:Name="Key0View"/>
             </Border>
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="1">
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="2">
                 <views:KeyboardKeyView x:Name="DecimalKeyView"/>
             </Border>
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="2">
-                <views:KeyboardKeyView x:Name="SumKeyView"/>
-            </Border>
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="3">
-                <views:KeyboardKeyView x:Name="EmptyKeyView"/>
+                <views:KeyboardKeyView x:Name="SumKeyView"/>
             </Border>
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="4">
                 <views:KeyboardKeyView x:Name="SwapKeyView"/>

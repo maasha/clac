@@ -226,5 +226,29 @@ public class KeyboardKeyViewTests
         Assert.Single(viewModel.StackDisplay);
         Assert.Equal("5", viewModel.StackDisplay[0]);
     }
+
+    [Fact]
+    public void ZeroKeyClick_ShouldAppendZeroToInput_WhenZeroKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "0",
+            Value = "0",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("0", viewModel.CurrentInput);
+    }
 }
 
