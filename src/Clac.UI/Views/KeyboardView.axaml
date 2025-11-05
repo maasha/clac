@@ -4,12 +4,112 @@
              x:Class="Clac.UI.Views.KeyboardView">
     
     <Border BorderBrush="Gray" BorderThickness="2,0,2,2" Padding="20" CornerRadius="0,0,8,8">
-        <StackPanel>
-            <views:KeyboardKeyView x:Name="Key1View"/>
-            <views:KeyboardKeyView x:Name="DeleteKeyView"/>
-            <views:KeyboardKeyView x:Name="PlusKeyView"/>
-            <views:KeyboardKeyView x:Name="MinusKeyView"/>
-            <views:KeyboardKeyView x:Name="EnterKeyView"/>
-        </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Row 1: √, xʸ, 1/x, /, DEL -->
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="0">
+                <views:KeyboardKeyView x:Name="SqrtKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="1">
+                <views:KeyboardKeyView x:Name="PowerKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="2">
+                <views:KeyboardKeyView x:Name="ReciprocalKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="3">
+                <views:KeyboardKeyView x:Name="DivideKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="4">
+                <views:KeyboardKeyView x:Name="DeleteKeyView"/>
+            </Border>
+            
+            <!-- Row 2: 7, 8, 9, x, CLEAR -->
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="1" Grid.Column="0">
+                <views:KeyboardKeyView x:Name="Key7View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="1" Grid.Column="1">
+                <views:KeyboardKeyView x:Name="Key8View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="1" Grid.Column="2">
+                <views:KeyboardKeyView x:Name="Key9View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="1" Grid.Column="3">
+                <views:KeyboardKeyView x:Name="MultiplyKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="1" Grid.Column="4">
+                <views:KeyboardKeyView x:Name="ClearKeyView"/>
+            </Border>
+            
+            <!-- Row 3: 4, 5, 6, -, UNDO -->
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="2" Grid.Column="0">
+                <views:KeyboardKeyView x:Name="Key4View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="2" Grid.Column="1">
+                <views:KeyboardKeyView x:Name="Key5View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="2" Grid.Column="2">
+                <views:KeyboardKeyView x:Name="Key6View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="2" Grid.Column="3">
+                <views:KeyboardKeyView x:Name="MinusKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="2" Grid.Column="4">
+                <views:KeyboardKeyView x:Name="UndoKeyView"/>
+            </Border>
+            
+            <!-- Row 4: 1, 2, 3, +, POP -->
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="3" Grid.Column="0">
+                <views:KeyboardKeyView x:Name="Key1View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="3" Grid.Column="1">
+                <views:KeyboardKeyView x:Name="Key2View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="3" Grid.Column="2">
+                <views:KeyboardKeyView x:Name="Key3View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="3" Grid.Column="3">
+                <views:KeyboardKeyView x:Name="PlusKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="3" Grid.Column="4">
+                <views:KeyboardKeyView x:Name="PopKeyView"/>
+            </Border>
+            
+            <!-- Row 5: 0, ., Σ, (empty), SWAP -->
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="0">
+                <views:KeyboardKeyView x:Name="Key0View"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="1">
+                <views:KeyboardKeyView x:Name="DecimalKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="2">
+                <views:KeyboardKeyView x:Name="SumKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="3">
+                <views:KeyboardKeyView x:Name="EmptyKeyView"/>
+            </Border>
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="4">
+                <views:KeyboardKeyView x:Name="SwapKeyView"/>
+            </Border>
+            
+            <!-- Row 6: ENTER (spans all columns) -->
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5">
+                <views:KeyboardKeyView x:Name="EnterKeyView"/>
+            </Border>
+        </Grid>
     </Border>
 </UserControl>

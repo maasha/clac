@@ -17,65 +17,42 @@ public partial class KeyboardView : UserControl
     {
         InitializeComponent();
 
-        // Create the "1" key
-        var key1 = new KeyboardKey
-        {
-            Label = "1",
-            Value = "1",
-            Type = KeyType.Number
-        };
+        // Row 1: √, xʸ, 1/x, /, DEL
+        SqrtKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
+        PowerKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
+        ReciprocalKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
+        DivideKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Operator };
+        DeleteKeyView.DataContext = new KeyboardKey { Label = "DEL", Value = "", Type = KeyType.Command };
 
-        // Set DataContext after InitializeComponent
-        Key1View.DataContext = key1;
+        // Row 2: 7, 8, 9, x, CLEAR
+        Key7View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        Key8View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        Key9View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        MultiplyKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Operator };
+        ClearKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
 
-        // Verify it was set
-        if (Key1View.DataContext is KeyboardKey key)
-        {
-            System.Diagnostics.Debug.WriteLine($"Key1View DataContext set: Label={key.Label}");
-        }
+        // Row 3: 4, 5, 6, -, UNDO
+        Key4View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        Key5View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        Key6View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        MinusKeyView.DataContext = new KeyboardKey { Label = "-", Value = "-", Type = KeyType.Operator };
+        UndoKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
 
-        // Create the delete key
-        var deleteKey = new KeyboardKey
-        {
-            Label = "DEL",
-            Value = "",
-            Type = KeyType.Command
-        };
+        // Row 4: 1, 2, 3, +, POP
+        Key1View.DataContext = new KeyboardKey { Label = "1", Value = "1", Type = KeyType.Number };
+        Key2View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        Key3View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        PlusKeyView.DataContext = new KeyboardKey { Label = "+", Value = "+", Type = KeyType.Operator };
+        PopKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
 
-        // Set DataContext for delete key
-        DeleteKeyView.DataContext = deleteKey;
+        // Row 5: 0, ., Σ, (empty), SWAP
+        Key0View.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        DecimalKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        SumKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
+        EmptyKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Number };
+        SwapKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
 
-        // Create the plus key
-        var plusKey = new KeyboardKey
-        {
-            Label = "+",
-            Value = "+",
-            Type = KeyType.Operator
-        };
-
-        // Set DataContext for plus key
-        PlusKeyView.DataContext = plusKey;
-
-        // Create the minus key
-        var minusKey = new KeyboardKey
-        {
-            Label = "-",
-            Value = "-",
-            Type = KeyType.Operator
-        };
-
-        // Set DataContext for minus key
-        MinusKeyView.DataContext = minusKey;
-
-        // Create the enter key
-        var enterKey = new KeyboardKey
-        {
-            Label = "ENTER",
-            Value = "",
-            Type = KeyType.Enter
-        };
-
-        // Set DataContext for enter key
-        EnterKeyView.DataContext = enterKey;
+        // Row 6: ENTER (spans all columns)
+        EnterKeyView.DataContext = new KeyboardKey { Label = "ENTER", Value = "", Type = KeyType.Enter };
     }
 }
