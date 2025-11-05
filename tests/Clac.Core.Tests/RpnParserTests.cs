@@ -95,4 +95,13 @@ public class RpnParserTests
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
     }
+
+    [Fact]
+    public void Parse_SquareRootCommand_ShouldReturnCommandToken()
+    {
+        var result = RpnParser.Parse("sqrt()");
+        Assert.True(result.IsSuccessful);
+        Assert.Single(result.Value);
+        Assert.IsType<Token.CommandToken>(result.Value[0]);
+    }
 }

@@ -41,7 +41,7 @@ public class RpnParser
             {
                 tokens.Add(Token.CreateNumber(number));
             }
-            else if (item is "clear()" or "pop()" or "swap()" or "sum()")
+            else if (item is "clear()" or "pop()" or "swap()" or "sum()" or "sqrt()")
             {
                 tokens.Add(Token.CreateCommand(item[..^2]));
             }
@@ -77,7 +77,7 @@ public class RpnParser
         {
             bool isNumber = double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
             bool isOperator = item is "+" or "-" or "*" or "/";
-            bool isCommand = item is "clear()" or "pop()" or "swap()" or "sum()";
+            bool isCommand = item is "clear()" or "pop()" or "swap()" or "sum()" or "sqrt()";
 
             if (!isNumber && !isOperator && !isCommand)
             {
