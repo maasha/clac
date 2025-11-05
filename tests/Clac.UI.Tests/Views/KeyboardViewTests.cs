@@ -36,5 +36,20 @@ public class KeyboardViewTests
         Assert.Equal("DEL", deleteKey.Label);
         Assert.Equal(KeyType.Command, deleteKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHavePlusKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var plusKeyView = view.FindControl<KeyboardKeyView>("PlusKeyView");
+        Assert.NotNull(plusKeyView);
+
+        var plusKey = plusKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(plusKey);
+        Assert.Equal("+", plusKey.Label);
+        Assert.Equal("+", plusKey.Value);
+        Assert.Equal(KeyType.Operator, plusKey.Type);
+    }
 }
 

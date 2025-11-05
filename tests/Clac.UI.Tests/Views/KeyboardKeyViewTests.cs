@@ -77,5 +77,54 @@ public class KeyboardKeyViewTests
 
         Assert.Equal("12", viewModel.CurrentInput);
     }
+
+    [Fact]
+    public void PlusKeyClick_ShouldAppendPlusToInput_WhenPlusKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "1";
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "+",
+            Value = "+",
+            Type = KeyType.Operator
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("1 +", viewModel.CurrentInput);
+    }
+
+    [Fact]
+    public void PlusKeyClick_ShouldNotAddSpaceBeforeOperator_WhenInputIsEmpty()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "+",
+            Value = "+",
+            Type = KeyType.Operator
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("+", viewModel.CurrentInput);
+    }
 }
 

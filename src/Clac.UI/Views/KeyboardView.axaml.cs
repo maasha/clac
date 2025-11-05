@@ -44,5 +44,16 @@ public partial class KeyboardView : UserControl
 
         // Set DataContext for delete key
         DeleteKeyView.DataContext = deleteKey;
+
+        // Create the plus key
+        var plusKey = new KeyboardKey
+        {
+            Label = "+",
+            Value = "+",
+            Type = KeyType.Operator
+        };
+
+        // Set DataContext for plus key
+        PlusKeyView.DataContext = plusKey;
     }
 }
