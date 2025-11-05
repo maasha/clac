@@ -659,5 +659,70 @@ public class KeyboardKeyViewTests
         Assert.Equal("3", viewModel.StackDisplay[0]);
         Assert.Equal("5", viewModel.StackDisplay[1]);
     }
+
+    [Fact]
+    public void ClearKeyClick_ShouldClearStack_WhenClearKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "5";
+        viewModel.Enter();
+        viewModel.CurrentInput = "3";
+        viewModel.Enter();
+
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "CLEAR",
+            Value = "clear()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Empty(viewModel.StackDisplay);
+    }
+
+    [Fact]
+    public void ClearKeyClick_ShouldClearStackWithoutError_WhenInputContainsNumber()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "5";
+        viewModel.Enter();
+        viewModel.CurrentInput = "3";
+        viewModel.Enter();
+        viewModel.CurrentInput = "43";
+
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+        Assert.False(viewModel.HasError);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "CLEAR",
+            Value = "clear()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Empty(viewModel.StackDisplay);
+        Assert.False(viewModel.HasError);
+    }
 }
 

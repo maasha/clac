@@ -291,5 +291,20 @@ public class KeyboardViewTests
         Assert.Equal("swap()", swapKey.Value);
         Assert.Equal(KeyType.Command, swapKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveClearKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var clearKeyView = view.FindControl<KeyboardKeyView>("ClearKeyView");
+        Assert.NotNull(clearKeyView);
+
+        var clearKey = clearKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(clearKey);
+        Assert.Equal("CLEAR", clearKey.Label);
+        Assert.Equal("clear()", clearKey.Value);
+        Assert.Equal(KeyType.Command, clearKey.Type);
+    }
 }
 

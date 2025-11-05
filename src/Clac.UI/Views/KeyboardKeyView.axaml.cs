@@ -41,7 +41,8 @@ public partial class KeyboardKeyView : UserControl
                 }
                 else
                 {
-                    viewModel.AppendToInput(key.Value);
+                    var prefix = string.IsNullOrWhiteSpace(viewModel.CurrentInput) ? "" : " ";
+                    viewModel.AppendToInput(prefix + key.Value);
                     viewModel.Enter();
                 }
             }
