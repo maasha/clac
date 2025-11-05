@@ -74,7 +74,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(CurrentInput));
     }
 
-
     /// </summary>
     /// Deletes the last character from the current input.
     /// </summary>
