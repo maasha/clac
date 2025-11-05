@@ -98,7 +98,13 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (string.IsNullOrEmpty(_currentInput))
             return;
 
-        _currentInput = _currentInput.Substring(0, _currentInput.Length - 1);
+        var lastChar = _currentInput[_currentInput.Length - 1];
+        var isOperator = lastChar == '+' || lastChar == '-' || lastChar == '*' || lastChar == '/';
+        var hasPrefixedSpace = isOperator && _currentInput.Length >= 2 && _currentInput[_currentInput.Length - 2] == ' ';
+
+        var charsToRemove = hasPrefixedSpace ? 2 : 1;
+        _currentInput = _currentInput.Substring(0, _currentInput.Length - charsToRemove);
+
         ClearErrors(nameof(CurrentInput));
         _errorMessage = null;
         OnPropertyChanged(nameof(CurrentInput));

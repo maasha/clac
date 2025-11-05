@@ -81,4 +81,15 @@ public class CalculatorViewModelKeyboardTests
 
         Assert.True(propertyChangedRaised);
     }
+
+    [Fact]
+    public void DeleteFromInput_WithOperator_ShouldDeleteOperatorAndPrefixedWhitespace()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "1 +";
+
+        viewModel.DeleteFromInput();
+
+        Assert.Equal("1", viewModel.CurrentInput);
+    }
 }
