@@ -109,4 +109,33 @@ public class RpnStackTests
         Assert.True(result.IsSuccessful);
         Assert.Equal(3, result.Value);
     }
+
+    [Fact]
+    public void Sqrt_WithEmptyStack_ShouldReturnError()
+    {
+        var stack = new RpnStack();
+        var result = stack.Sqrt();
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Stack is empty", result.Error.Message);
+    }
+
+    [Fact]
+    public void Sqrt_WithNonEmptyStack_ShouldReturnSquareRootOfLastElement()
+    {
+        var stack = new RpnStack();
+        stack.Push(4);
+        var result = stack.Sqrt();
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(2, result.Value);
+    }
+
+    [Fact]
+    public void Sqrt_WithNegativeNumber_ShouldReturnError()
+    {
+        var stack = new RpnStack();
+        stack.Push(-1);
+        var result = stack.Sqrt();
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Square root of a negative number is not supported", result.Error.Message);
+    }
 }

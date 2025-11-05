@@ -106,6 +106,26 @@ public class RpnStack
     }
 
     /// <summary>
+    /// Calculates the square root of the last element on the stack.
+    /// </summary>
+    /// <returns>The square root of the last element on the stack.</returns>
+    /// <remarks>Returns a failed result with an error if the stack is empty.</remarks>
+    public Result<double> Sqrt()
+    {
+        if (_stack.Count == 0)
+        {
+            return new Result<double>(new InvalidOperationException("Stack is empty"));
+        }
+
+        if (_stack[^1] < 0)
+        {
+            return new Result<double>(new InvalidOperationException("Square root of a negative number is not supported"));
+        }
+
+        return new Result<double>(Math.Sqrt(_stack[^1]));
+    }
+
+    /// <summary>
     /// Returns the number of elements on the stack.
     /// </summary>
     /// <returns>The number of elements on the stack.</returns>
