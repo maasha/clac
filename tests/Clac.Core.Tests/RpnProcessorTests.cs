@@ -38,6 +38,22 @@ public class RpnProcessorTests
         Assert.Contains("Stack has less than two numbers", result.Error.Message);
     }
 
+    [Fact]
+    public void Process_OperatorTokenWithLessThanTwoNumbers_ShouldPreserveStackState()
+    {
+        var processor = new RpnProcessor();
+        processor.Process(RpnParser.Parse("5 3 +").Value);
+        Assert.Single(processor.Stack.ToArray());
+        Assert.Equal(8, processor.Stack.Peek().Value);
+
+        var tokens = RpnParser.Parse("+").Value;
+        var result = processor.Process(tokens);
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Stack has less than two numbers", result.Error.Message);
+        Assert.Single(processor.Stack.ToArray());
+        Assert.Equal(8, processor.Stack.Peek().Value);
+    }
+
 
     [Fact]
     public void Process_OperatorToken_ShouldPopTwoNumbersAndPushResult()

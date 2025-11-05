@@ -62,5 +62,49 @@ public class CalculatorViewModelErrorTests
         Assert.Contains("xyz", secondErrors[0]); // Should be the NEW error
         Assert.DoesNotContain("abc", secondErrors[0]); // Should NOT contain old error
     }
+
+    [Fact]
+    public void StackShouldReflectSuccessfulOperations_WhenErrorOccursAfterPartialSuccess()
+    {
+        var vm = new CalculatorViewModel();
+
+        vm.CurrentInput = "5";
+        vm.Enter();
+
+        vm.CurrentInput = "3";
+        vm.Enter();
+
+        Assert.Equal(2, vm.StackDisplay.Length);
+        Assert.Equal("5", vm.StackDisplay[0]);
+        Assert.Equal("3", vm.StackDisplay[1]);
+
+        vm.CurrentInput = "+ +";
+        vm.Enter();
+
+        Assert.True(vm.HasError);
+        Assert.Contains("Stack has less than two numbers", vm.ErrorMessage);
+        Assert.Single(vm.StackDisplay);
+        Assert.Equal("8", vm.StackDisplay[0]);
+    }
+
+    [Fact(Skip = "Pending implementation")]
+    public void DisplayShouldReflectSuccessfulOperations_WhenErrorOccursAfterPartialSuccess()
+    {
+        var vm = new CalculatorViewModel();
+
+        vm.CurrentInput = "5";
+        vm.Enter();
+
+        vm.CurrentInput = "3";
+        vm.Enter();
+
+        vm.CurrentInput = "+ +";
+        vm.Enter();
+
+        Assert.True(vm.HasError);
+        Assert.Contains("Stack has less than two numbers", vm.ErrorMessage);
+        Assert.Single(vm.DisplayItems.Where(item => !string.IsNullOrEmpty(item.FormattedValue)));
+        Assert.Equal("8", vm.DisplayItems.First(item => !string.IsNullOrEmpty(item.FormattedValue)).FormattedValue.Trim());
+    }
 }
 

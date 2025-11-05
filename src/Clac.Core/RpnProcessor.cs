@@ -43,6 +43,11 @@ public class RpnProcessor
             }
             else if (token is Token.OperatorToken operatorToken)
             {
+                if (_stack.Count < 2)
+                {
+                    return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
+                }
+
                 var numberToken1 = _stack.Pop();
                 var numberToken2 = _stack.Pop();
 
