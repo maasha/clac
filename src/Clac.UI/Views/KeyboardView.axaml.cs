@@ -48,7 +48,7 @@ public partial class KeyboardView : UserControl
         // Row 5: 0 (spans two columns), ., Σ, SWAP
         Key0View.DataContext = new KeyboardKey { Label = "0", Value = "0", Type = KeyType.Number };
         DecimalKeyView.DataContext = new KeyboardKey { Label = ".", Value = ".", Type = KeyType.Number };
-        SumKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
+        SumKeyView.DataContext = new KeyboardKey { Label = "Σ", Value = "sum()", Type = KeyType.Command };
         SwapKeyView.DataContext = new KeyboardKey { Label = "SWAP", Value = "swap()", Type = KeyType.Command };
 
         // Row 6: ENTER (spans all columns)

@@ -307,5 +307,20 @@ public class KeyboardViewTests
         Assert.Equal("clear()", clearKey.Value);
         Assert.Equal(KeyType.Command, clearKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveSumKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var sumKeyView = view.FindControl<KeyboardKeyView>("SumKeyView");
+        Assert.NotNull(sumKeyView);
+
+        var sumKey = sumKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(sumKey);
+        Assert.Equal("Σ", sumKey.Label);
+        Assert.Equal("sum()", sumKey.Value);
+        Assert.Equal(KeyType.Command, sumKey.Type);
+    }
 }
 

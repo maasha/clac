@@ -724,5 +724,134 @@ public class KeyboardKeyViewTests
         Assert.Empty(viewModel.StackDisplay);
         Assert.False(viewModel.HasError);
     }
+
+    [Fact]
+    public void SumKeyClick_ShouldSumAllItemsInStackAndReplaceWithSum_WhenSumKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "1";
+        viewModel.Enter();
+        viewModel.CurrentInput = "2";
+        viewModel.Enter();
+        viewModel.CurrentInput = "3";
+        viewModel.Enter();
+
+        Assert.Equal(3, viewModel.StackDisplay.Length);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "Σ",
+            Value = "sum()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("6", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void SumKeyClick_ShouldDoNothing_WhenStackIsEmpty()
+    {
+        var viewModel = new CalculatorViewModel();
+
+        Assert.Empty(viewModel.StackDisplay);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "Σ",
+            Value = "sum()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Empty(viewModel.StackDisplay);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void SumKeyClick_ShouldSumSingleItem_WhenStackHasOneItem()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "5";
+        viewModel.Enter();
+
+        Assert.Single(viewModel.StackDisplay);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "Σ",
+            Value = "sum()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("5", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void SumKeyClick_ShouldSumStackWithoutError_WhenInputContainsNumber()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "1";
+        viewModel.Enter();
+        viewModel.CurrentInput = "2";
+        viewModel.Enter();
+        viewModel.CurrentInput = "43";
+
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+        Assert.False(viewModel.HasError);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "Σ",
+            Value = "sum()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("46", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
 }
 
