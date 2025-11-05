@@ -87,7 +87,7 @@ public class CalculatorViewModelErrorTests
         Assert.Equal("8", vm.StackDisplay[0]);
     }
 
-    [Fact(Skip = "Pending implementation")]
+    [Fact]
     public void DisplayShouldReflectSuccessfulOperations_WhenErrorOccursAfterPartialSuccess()
     {
         var vm = new CalculatorViewModel();
@@ -103,8 +103,28 @@ public class CalculatorViewModelErrorTests
 
         Assert.True(vm.HasError);
         Assert.Contains("Stack has less than two numbers", vm.ErrorMessage);
-        Assert.Single(vm.DisplayItems.Where(item => !string.IsNullOrEmpty(item.FormattedValue)));
-        Assert.Equal("8", vm.DisplayItems.First(item => !string.IsNullOrEmpty(item.FormattedValue)).FormattedValue.Trim());
+        var displayItem = Assert.Single(vm.DisplayItems, item => !string.IsNullOrEmpty(item.FormattedValue));
+        Assert.Equal("8", displayItem.FormattedValue.Trim());
+    }
+
+    [Fact]
+    public void ErrorMessageShouldBeCleared_WhenUserStartsTypingAfterError()
+    {
+        var vm = new CalculatorViewModel();
+
+        vm.CurrentInput = "5";
+        vm.Enter();
+
+        vm.CurrentInput = "+";
+        vm.Enter();
+
+        Assert.True(vm.HasError);
+        Assert.Contains("Stack has less than two numbers", vm.ErrorMessage);
+
+        vm.CurrentInput = "1";
+
+        Assert.False(vm.HasError);
+        Assert.Empty(vm.ErrorMessage);
     }
 }
 

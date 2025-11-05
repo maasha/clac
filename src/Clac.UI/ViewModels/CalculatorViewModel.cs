@@ -58,7 +58,18 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     public string CurrentInput
     {
         get => _currentInput;
-        set => _currentInput = value;
+        set
+        {
+            if (_currentInput != value)
+            {
+                _currentInput = value;
+                ClearErrors(nameof(CurrentInput));
+                _errorMessage = null;
+                OnPropertyChanged(nameof(CurrentInput));
+                OnPropertyChanged(nameof(HasError));
+                OnPropertyChanged(nameof(ErrorMessage));
+            }
+        }
     }
 
     public bool HasError => !string.IsNullOrEmpty(_errorMessage);
@@ -71,7 +82,11 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     public void AppendToInput(string value)
     {
         _currentInput += value;
+        ClearErrors(nameof(CurrentInput));
+        _errorMessage = null;
         OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(nameof(HasError));
+        OnPropertyChanged(nameof(ErrorMessage));
     }
 
     /// </summary>
@@ -84,8 +99,11 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             return;
 
         _currentInput = _currentInput.Substring(0, _currentInput.Length - 1);
-
+        ClearErrors(nameof(CurrentInput));
+        _errorMessage = null;
         OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(nameof(HasError));
+        OnPropertyChanged(nameof(ErrorMessage));
     }
 
     /// <summary>
