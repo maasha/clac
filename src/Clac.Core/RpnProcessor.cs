@@ -100,12 +100,15 @@ public class RpnProcessor
                 else if (commandToken.Command == "sqrt")
                 {
                     var result = _stack.Sqrt();
-                    if (result.IsSuccessful)
+
+                    if (!result.IsSuccessful)
                     {
-                        _stack.Pop();
-                        _stack.Push(result.Value);
-                        commandResult = result.Value;
+                        return result;
                     }
+
+                    _stack.Pop();
+                    _stack.Push(result.Value);
+                    commandResult = result.Value;
                     commandExecuted = true;
                 }
             }
