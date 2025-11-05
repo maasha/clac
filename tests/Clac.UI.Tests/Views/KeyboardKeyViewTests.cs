@@ -976,8 +976,9 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("3", viewModel.StackDisplay[0]);
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+        Assert.Equal("9", viewModel.StackDisplay[0]);
+        Assert.Equal("4", viewModel.StackDisplay[1]);
         Assert.False(viewModel.HasError);
     }
 }
