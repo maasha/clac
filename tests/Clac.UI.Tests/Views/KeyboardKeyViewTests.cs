@@ -199,5 +199,32 @@ public class KeyboardKeyViewTests
 
         Assert.Equal("5 -", viewModel.CurrentInput);
     }
+
+    [Fact]
+    public void EnterKeyClick_ShouldProcessInput_WhenEnterKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "5";
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "ENTER",
+            Value = "",
+            Type = KeyType.Enter
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal("", viewModel.CurrentInput);
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("5", viewModel.StackDisplay[0]);
+    }
 }
 

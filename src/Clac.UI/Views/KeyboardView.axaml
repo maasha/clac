@@ -9,6 +9,7 @@
             <views:KeyboardKeyView x:Name="DeleteKeyView"/>
             <views:KeyboardKeyView x:Name="PlusKeyView"/>
             <views:KeyboardKeyView x:Name="MinusKeyView"/>
+            <views:KeyboardKeyView x:Name="EnterKeyView"/>
         </StackPanel>
     </Border>
 </UserControl>

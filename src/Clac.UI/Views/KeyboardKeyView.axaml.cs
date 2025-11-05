@@ -37,6 +37,10 @@ public partial class KeyboardKeyView : UserControl
             {
                 viewModel.DeleteFromInput();
             }
+            else if (key.Type == KeyType.Enter)
+            {
+                viewModel.Enter();
+            }
             else if (key.Type == KeyType.Operator)
             {
                 var prefix = string.IsNullOrWhiteSpace(viewModel.CurrentInput) ? "" : " ";

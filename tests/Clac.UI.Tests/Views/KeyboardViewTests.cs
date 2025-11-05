@@ -66,5 +66,20 @@ public class KeyboardViewTests
         Assert.Equal("-", minusKey.Value);
         Assert.Equal(KeyType.Operator, minusKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveEnterKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var enterKeyView = view.FindControl<KeyboardKeyView>("EnterKeyView");
+        Assert.NotNull(enterKeyView);
+
+        var enterKey = enterKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(enterKey);
+        Assert.Equal("ENTER", enterKey.Label);
+        Assert.Equal("", enterKey.Value);
+        Assert.Equal(KeyType.Enter, enterKey.Type);
+    }
 }
 

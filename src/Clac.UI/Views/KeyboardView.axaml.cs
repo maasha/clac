@@ -66,5 +66,16 @@ public partial class KeyboardView : UserControl
 
         // Set DataContext for minus key
         MinusKeyView.DataContext = minusKey;
+
+        // Create the enter key
+        var enterKey = new KeyboardKey
+        {
+            Label = "ENTER",
+            Value = "",
+            Type = KeyType.Enter
+        };
+
+        // Set DataContext for enter key
+        EnterKeyView.DataContext = enterKey;
     }
 }
