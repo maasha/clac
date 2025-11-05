@@ -52,7 +52,7 @@
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="1" Grid.Column="3">
                 <views:KeyboardKeyView x:Name="MultiplyKeyView"/>
             </Border>
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="1" Grid.Column="4">
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2">
                 <views:KeyboardKeyView x:Name="ClearKeyView"/>
             </Border>
             
@@ -69,7 +69,7 @@
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="2" Grid.Column="3">
                 <views:KeyboardKeyView x:Name="MinusKeyView"/>
             </Border>
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="2" Grid.Column="4">
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2">
                 <views:KeyboardKeyView x:Name="UndoKeyView"/>
             </Border>
             
@@ -86,7 +86,7 @@
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="3" Grid.Column="3">
                 <views:KeyboardKeyView x:Name="PlusKeyView"/>
             </Border>
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="3" Grid.Column="4">
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2">
                 <views:KeyboardKeyView x:Name="PopKeyView"/>
             </Border>
             
@@ -100,7 +100,7 @@
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="3">
                 <views:KeyboardKeyView x:Name="SumKeyView"/>
             </Border>
-            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="4">
+            <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2">
                 <views:KeyboardKeyView x:Name="SwapKeyView"/>
             </Border>
             
