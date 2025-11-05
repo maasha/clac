@@ -246,5 +246,20 @@ public class KeyboardViewTests
         Assert.Equal("/", divideKey.Value);
         Assert.Equal(KeyType.Operator, divideKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveDecimalKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var decimalKeyView = view.FindControl<KeyboardKeyView>("DecimalKeyView");
+        Assert.NotNull(decimalKeyView);
+
+        var decimalKey = decimalKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(decimalKey);
+        Assert.Equal(".", decimalKey.Label);
+        Assert.Equal(".", decimalKey.Value);
+        Assert.Equal(KeyType.Number, decimalKey.Type);
+    }
 }
 

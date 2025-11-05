@@ -540,5 +540,29 @@ public class KeyboardKeyViewTests
 
         Assert.Equal("/", viewModel.CurrentInput);
     }
+
+    [Fact]
+    public void DecimalKeyClick_ShouldAppendDecimalPointToInput_WhenDecimalKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = ".",
+            Value = ".",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal(".", viewModel.CurrentInput);
+    }
 }
 
