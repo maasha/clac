@@ -216,5 +216,35 @@ public class KeyboardViewTests
         Assert.Equal("9", nineKey.Value);
         Assert.Equal(KeyType.Number, nineKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveMultiplyKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var multiplyKeyView = view.FindControl<KeyboardKeyView>("MultiplyKeyView");
+        Assert.NotNull(multiplyKeyView);
+
+        var multiplyKey = multiplyKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(multiplyKey);
+        Assert.Equal("*", multiplyKey.Label);
+        Assert.Equal("*", multiplyKey.Value);
+        Assert.Equal(KeyType.Operator, multiplyKey.Type);
+    }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveDivideKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var divideKeyView = view.FindControl<KeyboardKeyView>("DivideKeyView");
+        Assert.NotNull(divideKeyView);
+
+        var divideKey = divideKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(divideKey);
+        Assert.Equal("/", divideKey.Label);
+        Assert.Equal("/", divideKey.Value);
+        Assert.Equal(KeyType.Operator, divideKey.Type);
+    }
 }
 

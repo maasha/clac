@@ -21,14 +21,14 @@ public partial class KeyboardView : UserControl
         SqrtKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
         PowerKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
         ReciprocalKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
-        DivideKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Operator };
+        DivideKeyView.DataContext = new KeyboardKey { Label = "/", Value = "/", Type = KeyType.Operator };
         DeleteKeyView.DataContext = new KeyboardKey { Label = "DEL", Value = "", Type = KeyType.Command };
 
         // Row 2: 7, 8, 9, x, CLEAR
         Key7View.DataContext = new KeyboardKey { Label = "7", Value = "7", Type = KeyType.Number };
         Key8View.DataContext = new KeyboardKey { Label = "8", Value = "8", Type = KeyType.Number };
         Key9View.DataContext = new KeyboardKey { Label = "9", Value = "9", Type = KeyType.Number };
-        MultiplyKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Operator };
+        MultiplyKeyView.DataContext = new KeyboardKey { Label = "*", Value = "*", Type = KeyType.Operator };
         ClearKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Command };
 
         // Row 3: 4, 5, 6, -, UNDO
