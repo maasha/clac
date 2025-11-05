@@ -157,4 +157,18 @@ public class RpnProcessorTests
         Assert.Equal(6, processor.Stack.Peek().Value);
         Assert.Equal(6, result.Value);
     }
+
+    [Fact]
+    public void Process_SqrtCommand_ShouldCalculateSquareRootOfLastElementAndPushResult()
+    {
+        var processor = new RpnProcessor();
+        processor.Process(RpnParser.Parse("4").Value);
+        Assert.Equal(1, processor.Stack.Count);
+        Assert.Equal(4, processor.Stack.Peek().Value);
+        var result = processor.Process(RpnParser.Parse("sqrt()").Value);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(2, result.Value);
+        Assert.Equal(1, processor.Stack.Count);
+        Assert.Equal(2, processor.Stack.Peek().Value);
+    }
 }

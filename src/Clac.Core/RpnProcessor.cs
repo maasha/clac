@@ -97,6 +97,17 @@ public class RpnProcessor
                     }
                     commandExecuted = true;
                 }
+                else if (commandToken.Command == "sqrt")
+                {
+                    var result = _stack.Sqrt();
+                    if (result.IsSuccessful)
+                    {
+                        _stack.Pop();
+                        _stack.Push(result.Value);
+                        commandResult = result.Value;
+                    }
+                    commandExecuted = true;
+                }
             }
         }
 
