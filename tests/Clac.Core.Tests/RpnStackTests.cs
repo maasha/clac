@@ -159,4 +159,33 @@ public class RpnStackTests
         Assert.True(result.IsSuccessful);
         Assert.Equal(8, result.Value);
     }
+
+    [Fact]
+    public void Reciprocal_WithNonEmptyStack_ShouldReturnReciprocalOfLastElement()
+    {
+        var stack = new RpnStack();
+        stack.Push(4);
+        var result = stack.Reciprocal();
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(0.25, result.Value);
+    }
+
+    [Fact]
+    public void Reciprocal_WithEmptyStack_ShouldReturnError()
+    {
+        var stack = new RpnStack();
+        var result = stack.Reciprocal();
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Stack is empty", result.Error.Message);
+    }
+
+    [Fact]
+    public void Reciprocal_WithZero_ShouldReturnError()
+    {
+        var stack = new RpnStack();
+        stack.Push(0);
+        var result = stack.Reciprocal();
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Division by zero", result.Error.Message);
+    }
 }

@@ -24,7 +24,8 @@ public class RpnProcessor
             { "swap", HandleSwap },
             { "sum", HandleSum },
             { "sqrt", HandleSqrt },
-            { "pow", HandlePow }
+            { "pow", HandlePow },
+            { "reciprocal", HandleReciprocal }
         };
     }
 
@@ -193,6 +194,28 @@ public class RpnProcessor
         }
 
         _stack.Pop();
+        _stack.Pop();
+        _stack.Push(result.Value);
+        return result;
+    }
+
+    /// <summary>
+    /// Handles the reciprocal command by calculating the reciprocal of the top element.
+    /// </summary>
+    /// <returns>The reciprocal if successful, 0 if the stack is empty, or an error for division by zero.</returns>
+    private Result<double>? HandleReciprocal()
+    {
+        var result = _stack.Reciprocal();
+
+        if (!result.IsSuccessful)
+        {
+            if (result.Error.Message.Contains("Stack is empty"))
+            {
+                return new Result<double>(0);
+            }
+            return result;
+        }
+
         _stack.Pop();
         _stack.Push(result.Value);
         return result;

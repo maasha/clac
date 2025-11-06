@@ -198,4 +198,18 @@ public class RpnProcessorTests
         Assert.Equal(1, processor.Stack.Count);
         Assert.Equal(8, processor.Stack.Peek().Value);
     }
+
+    [Fact]
+    public void Process_ReciprocalCommand_ShouldCalculateReciprocalOfLastElementAndPushResult()
+    {
+        var processor = new RpnProcessor();
+        processor.Process(RpnParser.Parse("4").Value);
+        Assert.Equal(1, processor.Stack.Count);
+        Assert.Equal(4, processor.Stack.Peek().Value);
+        var result = processor.Process(RpnParser.Parse("reciprocal()").Value);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(0.25, result.Value);
+        Assert.Equal(1, processor.Stack.Count);
+        Assert.Equal(0.25, processor.Stack.Peek().Value);
+    }
 }

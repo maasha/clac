@@ -143,6 +143,26 @@ public class RpnStack
     }
 
     /// <summary>
+    /// Calculates the reciprocal of the last element on the stack (1/value).
+    /// </summary>
+    /// <returns>The reciprocal of the last element on the stack.</returns>
+    /// <remarks>Returns a failed result with an error if the stack is empty.</remarks>
+    public Result<double> Reciprocal()
+    {
+        if (_stack.Count == 0)
+        {
+            return new Result<double>(new InvalidOperationException("Stack is empty"));
+        }
+
+        if (_stack[^1] == 0)
+        {
+            return new Result<double>(new InvalidOperationException("Division by zero"));
+        }
+
+        return new Result<double>(1.0 / _stack[^1]);
+    }
+
+    /// <summary>
     /// Returns the number of elements on the stack.
     /// </summary>
     /// <returns>The number of elements on the stack.</returns>
