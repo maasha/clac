@@ -337,5 +337,20 @@ public class KeyboardViewTests
         Assert.Equal("sqrt()", sqrtKey.Value);
         Assert.Equal(KeyType.Command, sqrtKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHavePowKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var powKeyView = view.FindControl<KeyboardKeyView>("PowKeyView");
+        Assert.NotNull(powKeyView);
+
+        var powKey = powKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(powKey);
+        Assert.Equal("xʸ", powKey.Label);
+        Assert.Equal("pow()", powKey.Value);
+        Assert.Equal(KeyType.Command, powKey.Type);
+    }
 }
 

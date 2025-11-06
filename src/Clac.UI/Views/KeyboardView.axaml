@@ -27,7 +27,7 @@
                 <views:KeyboardKeyView x:Name="SqrtKeyView"/>
             </Border>
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="1">
-                <views:KeyboardKeyView x:Name="PowerKeyView"/>
+                <views:KeyboardKeyView x:Name="PowKeyView"/>
             </Border>
             <Border BorderBrush="HotPink" BorderThickness="1" Grid.Row="0" Grid.Column="2">
                 <views:KeyboardKeyView x:Name="ReciprocalKeyView"/>

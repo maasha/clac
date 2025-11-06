@@ -981,5 +981,106 @@ public class KeyboardKeyViewTests
         Assert.Equal("4", viewModel.StackDisplay[1]);
         Assert.False(viewModel.HasError);
     }
+
+    [Fact]
+    public void PowKeyClick_ShouldCalculatePowerOfLastTwoElements_WhenPowKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "2";
+        viewModel.Enter();
+        viewModel.CurrentInput = "3";
+        viewModel.Enter();
+
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+        Assert.Equal("2", viewModel.StackDisplay[0]);
+        Assert.Equal("3", viewModel.StackDisplay[1]);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "xʸ",
+            Value = "pow()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("8", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void PowKeyClick_ShouldDoNothing_WhenStackHasLessThanTwoElements()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "2";
+        viewModel.Enter();
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("2", viewModel.StackDisplay[0]);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "xʸ",
+            Value = "pow()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("2", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void PowKeyClick_ShouldCalculatePowerWithoutError_WhenInputContainsNumber()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "2";
+        viewModel.Enter();
+        viewModel.CurrentInput = "3";
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("2", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "xʸ",
+            Value = "pow()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("8", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
 }
 
