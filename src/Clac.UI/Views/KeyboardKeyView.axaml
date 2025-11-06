@@ -8,12 +8,15 @@
     <UserControl.Styles>
         <Style Selector="Button">
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#404040"/>
         </Style>
         <Style Selector="Button:pointerover">
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#404040"/>
         </Style>
         <Style Selector="Button:pressed">
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#404040"/>
         </Style>
         <Style Selector="Button ContentPresenter">
             <Setter Property="Foreground" Value="White"/>
