@@ -51,82 +51,15 @@ public class RpnProcessor
             }
             else if (token is Token.CommandToken commandToken)
             {
-                if (commandToken.Command == "clear")
+                var commandProcessResult = ProcessCommand(commandToken.Command);
+                if (commandProcessResult.HasValue)
                 {
-                    _stack.Clear();
-                    commandExecuted = true;
-                }
-                else if (commandToken.Command == "pop")
-                {
-                    var result = _stack.Pop();
-                    if (result.IsSuccessful)
+                    if (!commandProcessResult.Value.IsSuccessful)
                     {
-                        commandResult = result.Value;
+                        return commandProcessResult.Value;
                     }
                     commandExecuted = true;
-                }
-                else if (commandToken.Command == "swap")
-                {
-                    var result = _stack.Swap();
-                    commandExecuted = true;
-                }
-                else if (commandToken.Command == "sum")
-                {
-                    var result = _stack.Sum();
-                    if (result.IsSuccessful)
-                    {
-                        _stack.Clear();
-                        _stack.Push(result.Value);
-                        commandResult = result.Value;
-                    }
-                    commandExecuted = true;
-                }
-                else if (commandToken.Command == "sqrt")
-                {
-                    var result = _stack.Sqrt();
-
-                    if (!result.IsSuccessful)
-                    {
-                        if (result.Error.Message.Contains("Stack is empty"))
-                        {
-                            commandExecuted = true;
-                        }
-                        else
-                        {
-                            return result;
-                        }
-                    }
-                    else
-                    {
-                        _stack.Pop();
-                        _stack.Push(result.Value);
-                        commandResult = result.Value;
-                        commandExecuted = true;
-                    }
-                }
-                else if (commandToken.Command == "pow")
-                {
-                    var result = _stack.Pow();
-
-                    if (!result.IsSuccessful)
-                    {
-                        if (result.Error.Message.Contains("Stack is empty") || result.Error.Message.Contains("Stack has less than two elements"))
-                        {
-                            commandExecuted = true;
-                        }
-                        else
-                        {
-                            return result;
-                        }
-                    }
-                    else
-                    {
-                        _stack.Pop();
-                        _stack.Pop();
-                        _stack.Push(result.Value);
-                        commandResult = result.Value;
-                        commandExecuted = true;
-                    }
+                    commandResult = commandProcessResult.Value.Value;
                 }
             }
         }
@@ -141,6 +74,88 @@ public class RpnProcessor
         return finalResult.IsSuccessful
             ? finalResult
             : new Result<double>(new InvalidOperationException("No result on stack"));
+    }
+
+    /// <summary>
+    /// Processes a command token and returns the result if the command was recognized.
+    /// </summary>
+    /// <param name="command">The command to process.</param>
+    /// <returns>The result of the command execution, or null if the command is not recognized.</returns>
+    /// <remarks>Returns a failed result with an error if the command execution fails critically.</remarks>
+    private Result<double>? ProcessCommand(string command)
+    {
+        if (command == "clear")
+        {
+            _stack.Clear();
+            return new Result<double>(0);
+        }
+        else if (command == "pop")
+        {
+            var result = _stack.Pop();
+            return result.IsSuccessful ? result : new Result<double>(0);
+        }
+        else if (command == "swap")
+        {
+            var result = _stack.Swap();
+            return result.IsSuccessful ? result : new Result<double>(0);
+        }
+        else if (command == "sum")
+        {
+            var result = _stack.Sum();
+            if (result.IsSuccessful)
+            {
+                _stack.Clear();
+                _stack.Push(result.Value);
+            }
+            return result.IsSuccessful ? result : new Result<double>(0);
+        }
+        else if (command == "sqrt")
+        {
+            var result = _stack.Sqrt();
+
+            if (!result.IsSuccessful)
+            {
+                if (result.Error.Message.Contains("Stack is empty"))
+                {
+                    return new Result<double>(0);
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            else
+            {
+                _stack.Pop();
+                _stack.Push(result.Value);
+                return result;
+            }
+        }
+        else if (command == "pow")
+        {
+            var result = _stack.Pow();
+
+            if (!result.IsSuccessful)
+            {
+                if (result.Error.Message.Contains("Stack is empty") || result.Error.Message.Contains("Stack has less than two elements"))
+                {
+                    return new Result<double>(0);
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            else
+            {
+                _stack.Pop();
+                _stack.Pop();
+                _stack.Push(result.Value);
+                return result;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
