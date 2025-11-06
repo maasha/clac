@@ -1082,5 +1082,135 @@ public class KeyboardKeyViewTests
         Assert.Equal("8", viewModel.StackDisplay[0]);
         Assert.False(viewModel.HasError);
     }
+
+    [Fact]
+    public void ReciprocalKeyClick_ShouldCalculateReciprocalOfLastItem_WhenReciprocalKeyIsClicked()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "4";
+        viewModel.Enter();
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("4", viewModel.StackDisplay[0]);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "1/x",
+            Value = "reciprocal()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("0.25", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void ReciprocalKeyClick_ShouldDoNothing_WhenStackIsEmpty()
+    {
+        var viewModel = new CalculatorViewModel();
+
+        Assert.Empty(viewModel.StackDisplay);
+        Assert.False(viewModel.HasError);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "1/x",
+            Value = "reciprocal()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Empty(viewModel.StackDisplay);
+        Assert.False(viewModel.HasError);
+    }
+
+    [Fact]
+    public void ReciprocalKeyClick_ShouldShowError_WhenLastItemIsZero()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "0";
+        viewModel.Enter();
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("0", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "1/x",
+            Value = "reciprocal()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("0", viewModel.StackDisplay[0]);
+        Assert.True(viewModel.HasError);
+        Assert.Contains("Division by zero", viewModel.ErrorMessage);
+    }
+
+    [Fact]
+    public void ReciprocalKeyClick_ShouldCalculateReciprocalWithoutError_WhenInputContainsNumber()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "4";
+        viewModel.Enter();
+        viewModel.CurrentInput = "8";
+
+        Assert.Single(viewModel.StackDisplay);
+        Assert.Equal("4", viewModel.StackDisplay[0]);
+        Assert.False(viewModel.HasError);
+
+        var parent = new UserControl { DataContext = viewModel };
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "1/x",
+            Value = "reciprocal()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Equal(2, viewModel.StackDisplay.Length);
+        Assert.Equal("4", viewModel.StackDisplay[0]);
+        Assert.Equal("0.125", viewModel.StackDisplay[1]);
+        Assert.False(viewModel.HasError);
+    }
 }
 

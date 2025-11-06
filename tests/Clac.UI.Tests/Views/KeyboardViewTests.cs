@@ -352,5 +352,20 @@ public class KeyboardViewTests
         Assert.Equal("pow()", powKey.Value);
         Assert.Equal(KeyType.Command, powKey.Type);
     }
+
+    [Fact]
+    public void KeyboardView_ShouldHaveReciprocalKey_WhenInitialized()
+    {
+        var view = new KeyboardView();
+
+        var reciprocalKeyView = view.FindControl<KeyboardKeyView>("ReciprocalKeyView");
+        Assert.NotNull(reciprocalKeyView);
+
+        var reciprocalKey = reciprocalKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(reciprocalKey);
+        Assert.Equal("1/x", reciprocalKey.Label);
+        Assert.Equal("reciprocal()", reciprocalKey.Value);
+        Assert.Equal(KeyType.Command, reciprocalKey.Type);
+    }
 }
 

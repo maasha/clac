@@ -20,7 +20,7 @@ public partial class KeyboardView : UserControl
         // Row 1: √, xʸ, 1/x, /, DEL
         SqrtKeyView.DataContext = new KeyboardKey { Label = "√", Value = "sqrt()", Type = KeyType.Command };
         PowKeyView.DataContext = new KeyboardKey { Label = "xʸ", Value = "pow()", Type = KeyType.Command };
-        ReciprocalKeyView.DataContext = new KeyboardKey { Label = "D", Value = "", Type = KeyType.Function };
+        ReciprocalKeyView.DataContext = new KeyboardKey { Label = "1/x", Value = "reciprocal()", Type = KeyType.Command };
         DivideKeyView.DataContext = new KeyboardKey { Label = "/", Value = "/", Type = KeyType.Operator };
         DeleteKeyView.DataContext = new KeyboardKey { Label = "DEL", Value = "del()", Type = KeyType.Command };
 
