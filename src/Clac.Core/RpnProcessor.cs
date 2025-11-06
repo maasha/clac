@@ -43,27 +43,11 @@ public class RpnProcessor
             }
             else if (token is Token.OperatorToken operatorToken)
             {
-                if (_stack.Count < 2)
-                {
-                    return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
-                }
-
-                var numberToken1 = _stack.Pop();
-                var numberToken2 = _stack.Pop();
-
-                if (!numberToken1.IsSuccessful || !numberToken2.IsSuccessful)
-                {
-                    return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
-                }
-
-                var result = RpnEvaluator.Evaluate(numberToken2.Value, numberToken1.Value, operatorToken.Symbol);
-
+                var result = ProcessOperator(operatorToken);
                 if (!result.IsSuccessful)
                 {
                     return result;
                 }
-
-                _stack.Push(result.Value);
             }
             else if (token is Token.CommandToken commandToken)
             {
@@ -157,6 +141,40 @@ public class RpnProcessor
         return finalResult.IsSuccessful
             ? finalResult
             : new Result<double>(new InvalidOperationException("No result on stack"));
+    }
+
+    /// <summary>
+    /// Processes an operator token by popping two values, evaluating, and pushing the result.
+    /// </summary>
+    /// <param name="operatorToken">The operator token to process.</param>
+    /// <returns>The result of the evaluation.</returns>
+    /// <remarks>Returns a failed result with an error if the stack has less than two numbers.</remarks>
+    /// <remarks>Returns a failed result with an error if the evaluation fails.</remarks>
+    /// <remarks>Pushes the result back onto the stack.</remarks>
+    private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
+    {
+        if (_stack.Count < 2)
+        {
+            return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
+        }
+
+        var numberToken1 = _stack.Pop();
+        var numberToken2 = _stack.Pop();
+
+        if (!numberToken1.IsSuccessful || !numberToken2.IsSuccessful)
+        {
+            return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
+        }
+
+        var result = RpnEvaluator.Evaluate(numberToken2.Value, numberToken1.Value, operatorToken.Symbol);
+
+        if (!result.IsSuccessful)
+        {
+            return result;
+        }
+
+        _stack.Push(result.Value);
+        return result;
     }
 
     /// <summary>
