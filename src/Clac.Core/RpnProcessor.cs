@@ -120,6 +120,30 @@ public class RpnProcessor
                         commandExecuted = true;
                     }
                 }
+                else if (commandToken.Command == "pow")
+                {
+                    var result = _stack.Pow();
+
+                    if (!result.IsSuccessful)
+                    {
+                        if (result.Error.Message.Contains("Stack is empty") || result.Error.Message.Contains("Stack has less than two elements"))
+                        {
+                            commandExecuted = true;
+                        }
+                        else
+                        {
+                            return result;
+                        }
+                    }
+                    else
+                    {
+                        _stack.Pop();
+                        _stack.Pop();
+                        _stack.Push(result.Value);
+                        commandResult = result.Value;
+                        commandExecuted = true;
+                    }
+                }
             }
         }
 

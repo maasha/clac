@@ -126,6 +126,23 @@ public class RpnStack
     }
 
     /// <summary>
+    /// Calculates the power of the last two elements on the stack (base^exponent).
+    /// </summary>
+    /// <returns>The power of the last two elements on the stack.</returns>
+    /// <remarks>Returns a failed result with an error if the stack has less than two elements.</remarks>
+    public Result<double> Pow()
+    {
+        if (_stack.Count < 2)
+        {
+            return new Result<double>(new InvalidOperationException("Stack has less than two elements"));
+        }
+
+        var exponent = _stack[^1];
+        var baseValue = _stack[^2];
+        return new Result<double>(Math.Pow(baseValue, exponent));
+    }
+
+    /// <summary>
     /// Returns the number of elements on the stack.
     /// </summary>
     /// <returns>The number of elements on the stack.</returns>

@@ -138,4 +138,25 @@ public class RpnStackTests
         Assert.False(result.IsSuccessful);
         Assert.Contains("Invalid: negative square root", result.Error.Message);
     }
+
+    [Fact]
+    public void Pow_WithLessThanTwoElements_ShouldReturnError()
+    {
+        var stack = new RpnStack();
+        stack.Push(2);
+        var result = stack.Pow();
+        Assert.False(result.IsSuccessful);
+        Assert.Contains("Stack has less than two elements", result.Error.Message);
+    }
+
+    [Fact]
+    public void Pow_WithTwoElements_ShouldReturnPowerOfLastTwoElements()
+    {
+        var stack = new RpnStack();
+        stack.Push(2);
+        stack.Push(3);
+        var result = stack.Pow();
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(8, result.Value);
+    }
 }

@@ -183,4 +183,19 @@ public class RpnProcessorTests
         Assert.False(result.IsSuccessful);
         Assert.Contains("Invalid: negative square root", result.Error.Message);
     }
+
+    [Fact]
+    public void Process_PowCommand_ShouldCalculatePowerOfLastTwoElementsAndPushResult()
+    {
+        var processor = new RpnProcessor();
+        processor.Process(RpnParser.Parse("2 3").Value);
+        Assert.Equal(2, processor.Stack.Count);
+        Assert.Equal(2, processor.Stack.ToArray()[0]);
+        Assert.Equal(3, processor.Stack.ToArray()[1]);
+        var result = processor.Process(RpnParser.Parse("pow()").Value);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(8, result.Value);
+        Assert.Equal(1, processor.Stack.Count);
+        Assert.Equal(8, processor.Stack.Peek().Value);
+    }
 }
