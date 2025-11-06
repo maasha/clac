@@ -5,5 +5,5 @@
              x:DataType="models:KeyboardKey"
              Padding="0">
     
-    <Button Content="{Binding Label}" x:Name="KeyButton" Click="OnKeyButtonClick" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+    <Button Content="{Binding Label}" x:Name="KeyButton" Click="OnKeyButtonClick" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 </UserControl>
