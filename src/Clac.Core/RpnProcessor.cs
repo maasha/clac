@@ -10,6 +10,23 @@ namespace Clac.Core;
 public class RpnProcessor
 {
     private readonly RpnStack _stack = new();
+    private readonly Dictionary<string, Func<Result<double>?>> _commandHandlers;
+
+    /// <summary>
+    /// Initializes a new instance of the RpnProcessor class.
+    /// </summary>
+    public RpnProcessor()
+    {
+        _commandHandlers = new Dictionary<string, Func<Result<double>?>>
+        {
+            { "clear", HandleClear },
+            { "pop", HandlePop },
+            { "swap", HandleSwap },
+            { "sum", HandleSum },
+            { "sqrt", HandleSqrt },
+            { "pow", HandlePow }
+        };
+    }
 
     /// <summary>
     /// Gets a clone of the RPN stack.
@@ -84,78 +101,101 @@ public class RpnProcessor
     /// <remarks>Returns a failed result with an error if the command execution fails critically.</remarks>
     private Result<double>? ProcessCommand(string command)
     {
-        if (command == "clear")
+        if (_commandHandlers.TryGetValue(command, out var handler))
+        {
+            return handler();
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Handles the clear command by clearing the stack.
+    /// </summary>
+    /// <returns>A successful result with value 0.</returns>
+    private Result<double>? HandleClear()
+    {
+        _stack.Clear();
+        return new Result<double>(0);
+    }
+
+    /// <summary>
+    /// Handles the pop command by popping the top element from the stack.
+    /// </summary>
+    /// <returns>The popped value if successful, or 0 if the stack is empty.</returns>
+    private Result<double>? HandlePop()
+    {
+        var result = _stack.Pop();
+        return result.IsSuccessful ? result : new Result<double>(0);
+    }
+
+    /// <summary>
+    /// Handles the swap command by swapping the top two elements on the stack.
+    /// </summary>
+    /// <returns>A successful result with value 0 if successful, or 0 if the stack has less than two elements.</returns>
+    private Result<double>? HandleSwap()
+    {
+        var result = _stack.Swap();
+        return result.IsSuccessful ? result : new Result<double>(0);
+    }
+
+    /// <summary>
+    /// Handles the sum command by summing all elements on the stack.
+    /// </summary>
+    /// <returns>The sum of all elements if successful, or 0 if the stack is empty.</returns>
+    private Result<double>? HandleSum()
+    {
+        var result = _stack.Sum();
+        if (result.IsSuccessful)
         {
             _stack.Clear();
-            return new Result<double>(0);
+            _stack.Push(result.Value);
         }
-        else if (command == "pop")
-        {
-            var result = _stack.Pop();
-            return result.IsSuccessful ? result : new Result<double>(0);
-        }
-        else if (command == "swap")
-        {
-            var result = _stack.Swap();
-            return result.IsSuccessful ? result : new Result<double>(0);
-        }
-        else if (command == "sum")
-        {
-            var result = _stack.Sum();
-            if (result.IsSuccessful)
-            {
-                _stack.Clear();
-                _stack.Push(result.Value);
-            }
-            return result.IsSuccessful ? result : new Result<double>(0);
-        }
-        else if (command == "sqrt")
-        {
-            var result = _stack.Sqrt();
+        return result.IsSuccessful ? result : new Result<double>(0);
+    }
 
-            if (!result.IsSuccessful)
-            {
-                if (result.Error.Message.Contains("Stack is empty"))
-                {
-                    return new Result<double>(0);
-                }
-                else
-                {
-                    return result;
-                }
-            }
-            else
-            {
-                _stack.Pop();
-                _stack.Push(result.Value);
-                return result;
-            }
-        }
-        else if (command == "pow")
-        {
-            var result = _stack.Pow();
+    /// <summary>
+    /// Handles the sqrt command by calculating the square root of the top element.
+    /// </summary>
+    /// <returns>The square root if successful, 0 if the stack is empty, or an error for negative numbers.</returns>
+    private Result<double>? HandleSqrt()
+    {
+        var result = _stack.Sqrt();
 
-            if (!result.IsSuccessful)
+        if (!result.IsSuccessful)
+        {
+            if (result.Error.Message.Contains("Stack is empty"))
             {
-                if (result.Error.Message.Contains("Stack is empty") || result.Error.Message.Contains("Stack has less than two elements"))
-                {
-                    return new Result<double>(0);
-                }
-                else
-                {
-                    return result;
-                }
+                return new Result<double>(0);
             }
-            else
-            {
-                _stack.Pop();
-                _stack.Pop();
-                _stack.Push(result.Value);
-                return result;
-            }
+            return result;
         }
 
-        return null;
+        _stack.Pop();
+        _stack.Push(result.Value);
+        return result;
+    }
+
+    /// <summary>
+    /// Handles the pow command by calculating the power of the second-to-top element raised to the top element.
+    /// </summary>
+    /// <returns>The power result if successful, 0 if the stack has less than two elements, or an error for invalid operations.</returns>
+    private Result<double>? HandlePow()
+    {
+        var result = _stack.Pow();
+
+        if (!result.IsSuccessful)
+        {
+            if (result.Error.Message.Contains("Stack is empty") || result.Error.Message.Contains("Stack has less than two elements"))
+            {
+                return new Result<double>(0);
+            }
+            return result;
+        }
+
+        _stack.Pop();
+        _stack.Pop();
+        _stack.Push(result.Value);
+        return result;
     }
 
     /// <summary>
