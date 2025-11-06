@@ -4,5 +4,5 @@
              x:Class="Clac.UI.Views.KeyboardKeyView"
              x:DataType="models:KeyboardKey">
     
-    <Button Content="{Binding Label}" x:Name="KeyButton" Click="OnKeyButtonClick"/>
+    <Button Content="{Binding Label}" x:Name="KeyButton" Click="OnKeyButtonClick" FontWeight="Bold"/>
 </UserControl>
