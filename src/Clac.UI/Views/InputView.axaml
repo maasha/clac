@@ -57,11 +57,12 @@
                         <Border DockPanel.Dock="Bottom"
                                 BorderBrush="Gray"
                                 BorderThickness="2,0,2,0"
-                                Background="White"
+                                Background="#e6e6e6"
                                 IsVisible="{Binding (DataValidationErrors.HasErrors)}">
                             <ContentControl ContentTemplate="{TemplateBinding ErrorTemplate}"
                                             DataContext="{TemplateBinding Owner}"
                                             Content="{Binding (DataValidationErrors.Errors)}"
+                                            Background="#e6e6e6"
                                             Margin="5,0,0,0"/>
                         </Border>
                         <ContentPresenter Name="PART_ContentPresenter"
@@ -77,7 +78,7 @@
             </Setter>
             <Setter Property="ErrorTemplate">
                 <DataTemplate>
-                    <ItemsControl ItemsSource="{Binding}">
+                    <ItemsControl ItemsSource="{Binding}" Background="#e6e6e6">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}" Foreground="#d32f2f" Padding="0,10"/>
