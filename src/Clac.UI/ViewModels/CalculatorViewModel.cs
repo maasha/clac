@@ -134,6 +134,8 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         {
             _errorMessage = tokens.Error.Message;
             AddError(nameof(CurrentInput), tokens.Error.Message);
+            OnPropertyChanged(nameof(HasError));
+            OnPropertyChanged(nameof(ErrorMessage));
             return;
         }
 
