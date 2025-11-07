@@ -105,7 +105,7 @@
             </Border>
             
             <!-- Row 6: ENTER (spans all columns) -->
-            <Border BorderThickness="1" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="6">
+            <Border BorderThickness="1" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="6" CornerRadius="0,0,8,8" ClipToBounds="True">
                 <views:KeyboardKeyView x:Name="EnterKeyView"/>
             </Border>
         </Grid>
