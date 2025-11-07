@@ -4,8 +4,7 @@
         xmlns:config="using:Clac.UI.Configuration"
         x:Class="Clac.UI.MainWindow"
         Title="Clac - RPN Calculator"
-        Width="{Binding Source={x:Static config:SettingsManager.UI}, Path=WindowWidth, Mode=TwoWay}"
-        Height="{Binding Source={x:Static config:SettingsManager.UI}, Path=WindowHeight, Mode=TwoWay}">
+        Width="{Binding Source={x:Static config:SettingsManager.UI}, Path=WindowWidth, Mode=TwoWay}">
     
     <views:CalculatorView />
 
