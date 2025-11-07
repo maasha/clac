@@ -18,26 +18,6 @@ public partial class KeyboardKeyView : UserControl
     public KeyboardKeyView()
     {
         InitializeComponent();
-        DataContextChanged += OnDataContextChanged;
-        Loaded += OnLoaded;
-    }
-
-    private void OnLoaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        UpdateCornerRadius();
-    }
-
-    private void OnDataContextChanged(object? sender, System.EventArgs e)
-    {
-        UpdateCornerRadius();
-    }
-
-    private void UpdateCornerRadius()
-    {
-        if (DataContext is KeyboardKey key && key.Type == KeyType.Enter && KeyButton != null)
-        {
-            KeyButton.CornerRadius = new Avalonia.CornerRadius(0, 0, 8, 8);
-        }
     }
 
     /// <summary>

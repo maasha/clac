@@ -3,6 +3,18 @@
              xmlns:views="using:Clac.UI.Views"
              x:Class="Clac.UI.Views.KeyboardView">
     
+    <UserControl.Styles>
+        <Style Selector=".enter-key-view Button">
+            <Setter Property="CornerRadius" Value="0,0,8,8"/>
+        </Style>
+        <Style Selector=".enter-key-view Button:pointerover">
+            <Setter Property="CornerRadius" Value="0,0,8,8"/>
+        </Style>
+        <Style Selector=".enter-key-view Button:pressed">
+            <Setter Property="CornerRadius" Value="0,0,8,8"/>
+        </Style>
+    </UserControl.Styles>
+    
     <Border BorderBrush="Gray" BorderThickness="2,0,2,2" CornerRadius="0,0,8,8">
         <Grid>
             <Grid.RowDefinitions>
@@ -106,7 +118,7 @@
             
             <!-- Row 6: ENTER (spans all columns) -->
             <Border BorderThickness="1" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="6" CornerRadius="0,0,8,8" ClipToBounds="True">
-                <views:KeyboardKeyView x:Name="EnterKeyView"/>
+                <views:KeyboardKeyView x:Name="EnterKeyView" Classes="enter-key-view"/>
             </Border>
         </Grid>
     </Border>
