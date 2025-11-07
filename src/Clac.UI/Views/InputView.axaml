@@ -80,7 +80,7 @@
                     <ItemsControl ItemsSource="{Binding}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding}" Foreground="#d32f2f"/>
+                                <TextBlock Text="{Binding}" Foreground="#d32f2f" Padding="0,10"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
