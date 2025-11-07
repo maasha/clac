@@ -7,7 +7,7 @@ namespace Clac.UI;
 
 public partial class MainWindow : Window
 {
-    private const double ErrorLineHeight = 30.0;
+    private const double ErrorLineHeight = 50.0;
     private double _baseWindowHeight;
     private CalculatorViewModel? _viewModel;
 
