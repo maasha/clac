@@ -10,7 +10,7 @@ public class UISettingsTests
     {
         var settings = new UISettings();
 
-        Assert.Equal(400, settings.WindowHeight);
+        Assert.Equal(450, settings.WindowHeight);
     }
 
     [Fact]

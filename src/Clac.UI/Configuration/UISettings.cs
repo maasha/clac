@@ -7,9 +7,9 @@ public class UISettings
 {
     /// <summary>
     /// Gets or sets the height of the window in pixels.
-    /// Default is 400 pixels.
+    /// Default is 450 pixels.
     /// </summary>
-    public int WindowHeight { get; set; } = 400;
+    public int WindowHeight { get; set; } = 450;
 
     /// <summary>
     /// Gets or sets the width of the window in pixels.
