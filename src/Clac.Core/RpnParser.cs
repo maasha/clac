@@ -49,15 +49,12 @@ public class RpnParser
             }
             else
             {
-                var operatorSymbol = item switch
+                var operatorResult = Operator.GetOperatorSymbol(item);
+                if (!operatorResult.IsSuccessful)
                 {
-                    "+" => OperatorSymbol.Add,
-                    "-" => OperatorSymbol.Subtract,
-                    "*" => OperatorSymbol.Multiply,
-                    "/" => OperatorSymbol.Divide,
-                    _ => throw new InvalidOperationException($"Unreachable: validation failed for '{item}'")
-                };
-                tokens.Add(Token.CreateOperator(operatorSymbol));
+                    return new Result<List<Token>>(operatorResult.Error);
+                }
+                tokens.Add(Token.CreateOperator(operatorResult.Value));
             }
         }
 
@@ -78,7 +75,7 @@ public class RpnParser
         foreach (var item in input)
         {
             bool isNumber = double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
-            bool isOperator = item is "+" or "-" or "*" or "/";
+            bool isOperator = Operator.IsValidOperator(item);
             bool isCommand = ValidCommands.Contains(item);
 
             if (!isNumber && !isOperator && !isCommand)
