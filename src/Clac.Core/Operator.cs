@@ -5,11 +5,6 @@ namespace Clac.Core;
 
 public static class Operator
 {
-    /// <summary>
-    /// Gets the OperatorSymbol for the given string symbol.
-    /// </summary>
-    /// <param name="symbol">The string representation of the operator.</param>
-    /// <returns>A Result containing the OperatorSymbol if valid, or an error if invalid.</returns>
     public static Result<OperatorSymbol> GetOperatorSymbol(string symbol)
     {
         return symbol switch
@@ -22,11 +17,6 @@ public static class Operator
         };
     }
 
-    /// <summary>
-    /// Checks if the given symbol is a valid operator symbol.
-    /// </summary>
-    /// <param name="symbol">The symbol to check.</param>
-    /// <returns>True if the symbol is a valid operator symbol, false otherwise.</returns>
     public static bool IsValidOperator(string symbol)
     {
         return symbol switch

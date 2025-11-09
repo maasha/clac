@@ -23,15 +23,9 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private readonly RpnProcessor _processor = new();
     private readonly Dictionary<string, List<string>> _errors = new();
 
-    /// <summary>
-    /// Gets the collection of items to display in the stack view.
-    /// </summary>
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
     private ScrollBarVisibility _scrollBarVisibility = ScrollBarVisibility.Hidden;
-    /// <summary>
-    /// Gets the scrollbar visibility for the display.
-    /// </summary>
     public ScrollBarVisibility ScrollBarVisibility
     {
         get => _scrollBarVisibility;
@@ -75,10 +69,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     public bool HasError => !string.IsNullOrEmpty(_errorMessage);
     public string ErrorMessage => _errorMessage ?? "";
 
-    /// <summary>
-    /// Appends the specified value to the current input.
-    /// </summary>
-    /// <param name="value">The value to append to the current input.</param>
     public void AppendToInput(string value)
     {
         _currentInput += value;
@@ -89,10 +79,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(ErrorMessage));
     }
 
-    /// </summary>
-    /// Deletes the last character from the current input.
-    /// </summary>
-    /// <remarks>Does nothing if the input is empty.</remarks>
     public void DeleteFromInput()
     {
         if (string.IsNullOrEmpty(_currentInput))
@@ -112,20 +98,11 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(ErrorMessage));
     }
 
-    /// <summary>
-    /// Enters the current input into the calculator.
-    /// If the input is valid, the current input is cleared and the result is
-    /// displayed.
-    /// 
-    /// If the input is invalid, the current input is not cleared and the error
-    /// is displayed.
-    /// </summary>
     public void Enter()
     {
         if (string.IsNullOrWhiteSpace(_currentInput))
             return;
 
-        // Clear previous errors before attempting new input
         ClearErrors(nameof(CurrentInput));
 
         var tokens = RpnParser.Parse(_currentInput);
@@ -164,9 +141,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(ErrorMessage));
     }
 
-    /// <summary>
-    /// Initializes the display items with empty lines based on configured display lines.
-    /// </summary>
     private void InitializeDisplayItems()
     {
         int displayLines = SettingsManager.UI.DisplayLines;
@@ -178,9 +152,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         }
     }
 
-    /// <summary>
-    /// Updates the display items to reflect the current stack state.
-    /// </summary>
     private void UpdateDisplayItems()
     {
         var stack = StackDisplay;
@@ -191,14 +162,12 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             ? DisplayFormatter.GetMaxIntegerPartLength(visibleValues)
             : 0;
 
-        // Determine how many lines to show: at least displayLines, or all stack items if more
         int totalLines = Math.Max(displayLines, stack.Length);
 
         DisplayItems.Clear();
 
         for (int lineNum = totalLines; lineNum >= 1; lineNum--)
         {
-            // Calculate which stack position this line should display
             int stackIndex = stack.Length - lineNum;
             string value = stackIndex >= 0 ? stack[stackIndex] : "";
 
@@ -210,20 +179,13 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             DisplayItems.Add(new StackLineItem(lineNumber, formattedValue));
         }
 
-        // Show scrollbar only if stack has more values than display lines
         ScrollBarVisibility = stack.Length > displayLines
             ? ScrollBarVisibility.Auto
             : ScrollBarVisibility.Hidden;
     }
 
-    /// <summary>
-    /// Gets whether the view model has validation errors.
-    /// </summary>
     public bool HasErrors => _errors.Any();
 
-    /// <summary>
-    /// Gets the validation errors for a specified property.
-    /// </summary>
     public IEnumerable GetErrors(string? propertyName)
     {
         if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
@@ -232,9 +194,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         return _errors[propertyName];
     }
 
-    /// <summary>
-    /// Adds a validation error for a property.
-    /// </summary>
     private void AddError(string propertyName, string error)
     {
         if (!_errors.ContainsKey(propertyName))
@@ -247,9 +206,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         }
     }
 
-    /// <summary>
-    /// Clears all validation errors for a property.
-    /// </summary>
     private void ClearErrors(string propertyName)
     {
         if (_errors.ContainsKey(propertyName))
@@ -259,18 +215,11 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         }
     }
 
-    /// <summary>
-    /// Raises the ErrorsChanged event.
-    /// </summary>
     private void OnErrorsChanged(string propertyName)
     {
         ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
     }
 
-    /// <summary>
-    /// Raises the PropertyChanged event.
-    /// </summary>
-    /// <param name="propertyName"></param>
     protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
