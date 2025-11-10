@@ -7,15 +7,21 @@ namespace Clac.UI.Tests.ViewModels;
 
 public class CalculatorViewModelErrorTests
 {
+    private readonly CalculatorViewModel _vm;
+
+    public CalculatorViewModelErrorTests()
+    {
+        _vm = new CalculatorViewModel();
+    }
+
     [Fact]
     public void UserCanSeeErrorMessage_WhenInputIsInvalid()
     {
-        var vm = new CalculatorViewModel();
-        vm.CurrentInput = "abc";
+        _vm.CurrentInput = "abc";
 
-        vm.Enter();
+        _vm.Enter();
 
-        var errorInfo = vm as INotifyDataErrorInfo;
+        var errorInfo = _vm as INotifyDataErrorInfo;
         Assert.NotNull(errorInfo);
         Assert.True(errorInfo.HasErrors);
     }
@@ -23,17 +29,16 @@ public class CalculatorViewModelErrorTests
     [Fact]
     public void ErrorMessageDisappears_WhenValidInputIsEntered()
     {
-        var vm = new CalculatorViewModel();
 
         // First, create an error
-        vm.CurrentInput = "abc";
-        vm.Enter();
+        _vm.CurrentInput = "abc";
+        _vm.Enter();
 
         // Then, enter valid input
-        vm.CurrentInput = "5";
-        vm.Enter();
+        _vm.CurrentInput = "5";
+        _vm.Enter();
 
-        var errorInfo = vm as INotifyDataErrorInfo;
+        var errorInfo = _vm as INotifyDataErrorInfo;
         Assert.NotNull(errorInfo);
         Assert.False(errorInfo.HasErrors);
     }
@@ -41,23 +46,22 @@ public class CalculatorViewModelErrorTests
     [Fact]
     public void OnlyMostRecentError_IsShown_WhenMultipleInvalidInputsEntered()
     {
-        var vm = new CalculatorViewModel();
-        var errorInfo = vm as INotifyDataErrorInfo;
+        var errorInfo = _vm as INotifyDataErrorInfo;
         Assert.NotNull(errorInfo);
 
         // First invalid input
-        vm.CurrentInput = "abc";
-        vm.Enter();
+        _vm.CurrentInput = "abc";
+        _vm.Enter();
 
-        var firstErrors = errorInfo.GetErrors(nameof(vm.CurrentInput)).Cast<string>().ToList();
+        var firstErrors = errorInfo.GetErrors(nameof(_vm.CurrentInput)).Cast<string>().ToList();
         Assert.Single(firstErrors);
         Assert.Contains("abc", firstErrors[0]);
 
         // Second invalid input
-        vm.CurrentInput = "xyz";
-        vm.Enter();
+        _vm.CurrentInput = "xyz";
+        _vm.Enter();
 
-        var secondErrors = errorInfo.GetErrors(nameof(vm.CurrentInput)).Cast<string>().ToList();
+        var secondErrors = errorInfo.GetErrors(nameof(_vm.CurrentInput)).Cast<string>().ToList();
         Assert.Single(secondErrors); // Should still be only ONE error
         Assert.Contains("xyz", secondErrors[0]); // Should be the NEW error
         Assert.DoesNotContain("abc", secondErrors[0]); // Should NOT contain old error
@@ -66,65 +70,62 @@ public class CalculatorViewModelErrorTests
     [Fact]
     public void StackShouldReflectSuccessfulOperations_WhenErrorOccursAfterPartialSuccess()
     {
-        var vm = new CalculatorViewModel();
 
-        vm.CurrentInput = "5";
-        vm.Enter();
+        _vm.CurrentInput = "5";
+        _vm.Enter();
 
-        vm.CurrentInput = "3";
-        vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
 
-        Assert.Equal(2, vm.StackDisplay.Length);
-        Assert.Equal("5", vm.StackDisplay[0]);
-        Assert.Equal("3", vm.StackDisplay[1]);
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.Equal("5", _vm.StackDisplay[0]);
+        Assert.Equal("3", _vm.StackDisplay[1]);
 
-        vm.CurrentInput = "+ +";
-        vm.Enter();
+        _vm.CurrentInput = "+ +";
+        _vm.Enter();
 
-        Assert.True(vm.HasError);
-        Assert.Contains("Stack has less than two numbers", vm.ErrorMessage);
-        Assert.Single(vm.StackDisplay);
-        Assert.Equal("8", vm.StackDisplay[0]);
+        Assert.True(_vm.HasError);
+        Assert.Contains("Stack has less than two numbers", _vm.ErrorMessage);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("8", _vm.StackDisplay[0]);
     }
 
     [Fact]
     public void DisplayShouldReflectSuccessfulOperations_WhenErrorOccursAfterPartialSuccess()
     {
-        var vm = new CalculatorViewModel();
 
-        vm.CurrentInput = "5";
-        vm.Enter();
+        _vm.CurrentInput = "5";
+        _vm.Enter();
 
-        vm.CurrentInput = "3";
-        vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
 
-        vm.CurrentInput = "+ +";
-        vm.Enter();
+        _vm.CurrentInput = "+ +";
+        _vm.Enter();
 
-        Assert.True(vm.HasError);
-        Assert.Contains("Stack has less than two numbers", vm.ErrorMessage);
-        var displayItem = Assert.Single(vm.DisplayItems, item => !string.IsNullOrEmpty(item.FormattedValue));
+        Assert.True(_vm.HasError);
+        Assert.Contains("Stack has less than two numbers", _vm.ErrorMessage);
+        var displayItem = Assert.Single(_vm.DisplayItems, item => !string.IsNullOrEmpty(item.FormattedValue));
         Assert.Equal("8", displayItem.FormattedValue.Trim());
     }
 
     [Fact]
     public void ErrorMessageShouldBeCleared_WhenUserStartsTypingAfterError()
     {
-        var vm = new CalculatorViewModel();
 
-        vm.CurrentInput = "5";
-        vm.Enter();
+        _vm.CurrentInput = "5";
+        _vm.Enter();
 
-        vm.CurrentInput = "+";
-        vm.Enter();
+        _vm.CurrentInput = "+";
+        _vm.Enter();
 
-        Assert.True(vm.HasError);
-        Assert.Contains("Stack has less than two numbers", vm.ErrorMessage);
+        Assert.True(_vm.HasError);
+        Assert.Contains("Stack has less than two numbers", _vm.ErrorMessage);
 
-        vm.CurrentInput = "1";
+        _vm.CurrentInput = "1";
 
-        Assert.False(vm.HasError);
-        Assert.Empty(vm.ErrorMessage);
+        Assert.False(_vm.HasError);
+        Assert.Empty(_vm.ErrorMessage);
     }
 }
 
