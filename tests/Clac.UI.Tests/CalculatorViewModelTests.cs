@@ -5,64 +5,64 @@ using Clac.UI.ViewModels;
 
 public class CalculatorViewModelTests
 {
+    private readonly CalculatorViewModel _viewModel;
+
+    public CalculatorViewModelTests()
+    {
+        _viewModel = new CalculatorViewModel();
+    }
+
     [Fact]
     public void Constructor_ShouldInitializeWithEmptyStackDisplay()
     {
-        var viewModel = new CalculatorViewModel();
-        Assert.Empty(viewModel.StackDisplay);
+        Assert.Empty(_viewModel.StackDisplay);
     }
 
     [Fact]
     public void Constructor_ShouldInitializeWithEmptyCurrentInput()
     {
-        var viewModel = new CalculatorViewModel();
-        Assert.Equal("", viewModel.CurrentInput);
+        Assert.Equal("", _viewModel.CurrentInput);
     }
 
     [Fact]
     public void CurrentInput_CanBeSetDirectly()
     {
-        var viewModel = new CalculatorViewModel();
 
-        viewModel.CurrentInput = "42";
+        _viewModel.CurrentInput = "42";
 
-        Assert.Equal("42", viewModel.CurrentInput);
+        Assert.Equal("42", _viewModel.CurrentInput);
     }
 
     [Fact]
     public void Enter_WithNumber_ShouldPushToStackAndClearInput()
     {
-        var viewModel = new CalculatorViewModel();
-        viewModel.CurrentInput = "42";
+        _viewModel.CurrentInput = "42";
 
-        viewModel.Enter();
+        _viewModel.Enter();
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("42", viewModel.StackDisplay[0]);
-        Assert.Equal("", viewModel.CurrentInput);
+        Assert.Single(_viewModel.StackDisplay);
+        Assert.Equal("42", _viewModel.StackDisplay[0]);
+        Assert.Equal("", _viewModel.CurrentInput);
     }
 
     [Fact]
     public void Enter_WithInvalidInput_ShouldSetErrorState()
     {
-        var viewModel = new CalculatorViewModel();
-        viewModel.CurrentInput = "abc";
+        _viewModel.CurrentInput = "abc";
 
-        viewModel.Enter();
+        _viewModel.Enter();
 
-        Assert.True(viewModel.HasError);
-        Assert.Contains("Invalid", viewModel.ErrorMessage);
-        Assert.Empty(viewModel.StackDisplay);
+        Assert.True(_viewModel.HasError);
+        Assert.Contains("Invalid", _viewModel.ErrorMessage);
+        Assert.Empty(_viewModel.StackDisplay);
     }
 
     [Fact]
     public void Enter_WithEmptyInput_ShouldDoNothing()
     {
-        var viewModel = new CalculatorViewModel();
+        _viewModel.Enter();
 
-        viewModel.Enter();
-
-        Assert.False(viewModel.HasError);
-        Assert.Empty(viewModel.StackDisplay);
+        Assert.False(_viewModel.HasError);
+        Assert.Empty(_viewModel.StackDisplay);
     }
 }
