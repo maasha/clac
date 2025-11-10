@@ -25,6 +25,14 @@ public class RpnProcessor
 
     public Result<double> Process(List<Token> tokens)
     {
+        var processResult = ProcessTokens(tokens);
+        if (!processResult.IsSuccessful)
+            return new Result<double>(processResult.Error);
+        return GetFinalResult(processResult.Value.commandExecuted, processResult.Value.commandResult);
+    }
+
+    private Result<(bool commandExecuted, double commandResult)> ProcessTokens(List<Token> tokens)
+    {
         bool commandExecuted = false;
         double commandResult = 0;
 
@@ -38,22 +46,22 @@ public class RpnProcessor
             {
                 var result = ProcessOperator(operatorToken);
                 if (!result.IsSuccessful)
-                    return result;
+                    return new Result<(bool commandExecuted, double commandResult)>(result.Error);
             }
             else if (token is Token.CommandToken commandToken)
             {
-                var commandProcessResult = ProcessCommand(commandToken.Command);
-                if (commandProcessResult.HasValue)
+                var commandProcessResult = ProcessCommandToken(commandToken);
+                if (!commandProcessResult.IsSuccessful)
+                    return new Result<(bool commandExecuted, double commandResult)>(commandProcessResult.Error);
+                if (commandProcessResult.Value.HasValue)
                 {
-                    if (!commandProcessResult.Value.IsSuccessful)
-                        return commandProcessResult.Value;
                     commandExecuted = true;
-                    commandResult = commandProcessResult.Value.Value;
+                    commandResult = commandProcessResult.Value.Value.result;
                 }
             }
         }
 
-        return GetFinalResult(commandExecuted, commandResult);
+        return new Result<(bool commandExecuted, double commandResult)>((commandExecuted, commandResult));
     }
 
     private Result<double> GetFinalResult(bool commandExecuted, double commandResult)
@@ -65,6 +73,19 @@ public class RpnProcessor
         return finalResult.IsSuccessful
             ? finalResult
             : new Result<double>(new InvalidOperationException("No result on stack"));
+    }
+
+    private Result<(bool executed, double result)?> ProcessCommandToken(Token.CommandToken commandToken)
+    {
+        var commandProcessResult = ProcessCommand(commandToken.Command);
+        if (commandProcessResult.HasValue)
+        {
+            if (!commandProcessResult.Value.IsSuccessful)
+                return new Result<(bool executed, double result)?>(commandProcessResult.Value.Error);
+            return new Result<(bool executed, double result)?>((true, commandProcessResult.Value.Value));
+        }
+        (bool executed, double result)? nullValue = null;
+        return new Result<(bool executed, double result)?>(nullValue);
     }
 
     private Result<double>? ProcessCommand(string command)
