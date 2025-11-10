@@ -27,7 +27,7 @@ public class RpnProcessor
     {
         var processResult = ProcessTokens(tokens);
         if (!processResult.IsSuccessful)
-            return new Result<double>(processResult.Error);
+            return ProcessingError(processResult.Error);
         return GetFinalResult(processResult.Value.commandExecuted, processResult.Value.commandResult);
     }
 
@@ -40,7 +40,7 @@ public class RpnProcessor
         {
             var tokenResult = ProcessSingleToken(token);
             if (!tokenResult.IsSuccessful)
-                return new Result<(bool commandExecuted, double commandResult)>(tokenResult.Error);
+                return TokenProcessingError(tokenResult.Error);
 
             if (tokenResult.Value.HasValue)
             {
@@ -85,6 +85,16 @@ public class RpnProcessor
     private Result<(bool commandExecuted, double result)?> ErrorResult(Exception error)
     {
         return new Result<(bool commandExecuted, double result)?>(error);
+    }
+
+    private Result<(bool commandExecuted, double commandResult)> TokenProcessingError(Exception error)
+    {
+        return new Result<(bool commandExecuted, double commandResult)>(error);
+    }
+
+    private Result<double> ProcessingError(Exception error)
+    {
+        return new Result<double>(error);
     }
 
     private Result<double> GetFinalResult(bool commandExecuted, double commandResult)
