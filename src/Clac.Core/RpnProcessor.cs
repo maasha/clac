@@ -189,49 +189,46 @@ public class RpnProcessor
 
     private Result<double>? HandleSqrt()
     {
-        var result = _stack.Sqrt();
-
-        if (!result.IsSuccessful)
-        {
-            if (result.Error.Message.Contains(ErrorStackEmpty))
-                return IgnoreError();
-            return result;
-        }
-
-        _stack.Pop();
-        _stack.Push(result.Value);
-        return result;
+        return HandleStackOperation(
+            () => _stack.Sqrt(),
+            popCount: 1,
+            shouldIgnoreError: error => error.Message.Contains(ErrorStackEmpty));
     }
 
     private Result<double>? HandlePow()
     {
-        var result = _stack.Pow();
-
-        if (!result.IsSuccessful)
-        {
-            if (result.Error.Message.Contains(ErrorStackEmpty) || result.Error.Message.Contains(ErrorStackHasLessThanTwoElements))
-                return IgnoreError();
-            return result;
-        }
-
-        _stack.Pop();
-        _stack.Pop();
-        _stack.Push(result.Value);
-        return result;
+        return HandleStackOperation(
+            () => _stack.Pow(),
+            popCount: 2,
+            shouldIgnoreError: error => error.Message.Contains(ErrorStackEmpty) || error.Message.Contains(ErrorStackHasLessThanTwoElements));
     }
 
     private Result<double>? HandleReciprocal()
     {
-        var result = _stack.Reciprocal();
+        return HandleStackOperation(
+            () => _stack.Reciprocal(),
+            popCount: 1,
+            shouldIgnoreError: error => error.Message.Contains(ErrorStackEmpty));
+    }
+
+    private Result<double>? HandleStackOperation(
+        Func<Result<double>> operation,
+        int popCount,
+        Func<Exception, bool> shouldIgnoreError)
+    {
+        var result = operation();
 
         if (!result.IsSuccessful)
         {
-            if (result.Error.Message.Contains(ErrorStackEmpty))
+            if (shouldIgnoreError(result.Error))
                 return IgnoreError();
             return result;
         }
 
-        _stack.Pop();
+        for (int i = 0; i < popCount; i++)
+        {
+            _stack.Pop();
+        }
         _stack.Push(result.Value);
         return result;
     }
