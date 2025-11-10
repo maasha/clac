@@ -5,64 +5,64 @@ using Clac.UI.ViewModels;
 
 public class CalculatorViewModelTests
 {
-    private readonly CalculatorViewModel _viewModel;
+    private readonly CalculatorViewModel _vm;
 
     public CalculatorViewModelTests()
     {
-        _viewModel = new CalculatorViewModel();
+        _vm = new CalculatorViewModel();
     }
 
     [Fact]
     public void Constructor_ShouldInitializeWithEmptyStackDisplay()
     {
-        Assert.Empty(_viewModel.StackDisplay);
+        Assert.Empty(_vm.StackDisplay);
     }
 
     [Fact]
     public void Constructor_ShouldInitializeWithEmptyCurrentInput()
     {
-        Assert.Equal("", _viewModel.CurrentInput);
+        Assert.Equal("", _vm.CurrentInput);
     }
 
     [Fact]
     public void CurrentInput_CanBeSetDirectly()
     {
 
-        _viewModel.CurrentInput = "42";
+        _vm.CurrentInput = "42";
 
-        Assert.Equal("42", _viewModel.CurrentInput);
+        Assert.Equal("42", _vm.CurrentInput);
     }
 
     [Fact]
     public void Enter_WithNumber_ShouldPushToStackAndClearInput()
     {
-        _viewModel.CurrentInput = "42";
+        _vm.CurrentInput = "42";
 
-        _viewModel.Enter();
+        _vm.Enter();
 
-        Assert.Single(_viewModel.StackDisplay);
-        Assert.Equal("42", _viewModel.StackDisplay[0]);
-        Assert.Equal("", _viewModel.CurrentInput);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("42", _vm.StackDisplay[0]);
+        Assert.Equal("", _vm.CurrentInput);
     }
 
     [Fact]
     public void Enter_WithInvalidInput_ShouldSetErrorState()
     {
-        _viewModel.CurrentInput = "abc";
+        _vm.CurrentInput = "abc";
 
-        _viewModel.Enter();
+        _vm.Enter();
 
-        Assert.True(_viewModel.HasError);
-        Assert.Contains("Invalid", _viewModel.ErrorMessage);
-        Assert.Empty(_viewModel.StackDisplay);
+        Assert.True(_vm.HasError);
+        Assert.Contains("Invalid", _vm.ErrorMessage);
+        Assert.Empty(_vm.StackDisplay);
     }
 
     [Fact]
     public void Enter_WithEmptyInput_ShouldDoNothing()
     {
-        _viewModel.Enter();
+        _vm.Enter();
 
-        Assert.False(_viewModel.HasError);
-        Assert.Empty(_viewModel.StackDisplay);
+        Assert.False(_vm.HasError);
+        Assert.Empty(_vm.StackDisplay);
     }
 }
