@@ -97,6 +97,11 @@ public class RpnProcessor
         return new Result<double>(error);
     }
 
+    private Result<double> NoResultOnStackError()
+    {
+        return new Result<double>(new InvalidOperationException("No result on stack"));
+    }
+
     private Result<double> GetFinalResult(bool commandExecuted, double commandResult)
     {
         if (commandExecuted)
@@ -105,7 +110,7 @@ public class RpnProcessor
         var finalResult = _stack.Peek();
         return finalResult.IsSuccessful
             ? finalResult
-            : new Result<double>(new InvalidOperationException("No result on stack"));
+            : NoResultOnStackError();
     }
 
     private Result<(bool executed, double result)?> ProcessCommandToken(Token.CommandToken commandToken)
