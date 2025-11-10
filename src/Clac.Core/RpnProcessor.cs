@@ -192,7 +192,7 @@ public class RpnProcessor
         return HandleStackOperation(
             () => _stack.Sqrt(),
             popCount: 1,
-            shouldIgnoreError: error => error.Message.Contains(ErrorStackEmpty));
+            shouldIgnoreError: IsStackEmptyError);
     }
 
     private Result<double>? HandlePow()
@@ -200,7 +200,7 @@ public class RpnProcessor
         return HandleStackOperation(
             () => _stack.Pow(),
             popCount: 2,
-            shouldIgnoreError: error => error.Message.Contains(ErrorStackEmpty) || error.Message.Contains(ErrorStackHasLessThanTwoElements));
+            shouldIgnoreError: error => IsStackEmptyError(error) || IsStackInsufficientElementsError(error));
     }
 
     private Result<double>? HandleReciprocal()
@@ -208,7 +208,17 @@ public class RpnProcessor
         return HandleStackOperation(
             () => _stack.Reciprocal(),
             popCount: 1,
-            shouldIgnoreError: error => error.Message.Contains(ErrorStackEmpty));
+            shouldIgnoreError: IsStackEmptyError);
+    }
+
+    private bool IsStackEmptyError(Exception error)
+    {
+        return error is InvalidOperationException && error.Message == ErrorStackEmpty;
+    }
+
+    private bool IsStackInsufficientElementsError(Exception error)
+    {
+        return error is InvalidOperationException && error.Message == ErrorStackHasLessThanTwoElements;
     }
 
     private Result<double>? HandleStackOperation(
