@@ -1,34 +1,27 @@
 using DotNext;
+using Clac.Core.Enums;
 
 namespace Clac.Core;
 
 public class RpnProcessor
 {
-    private const string CommandClear = "clear";
-    private const string CommandPop = "pop";
-    private const string CommandSwap = "swap";
-    private const string CommandSum = "sum";
-    private const string CommandSqrt = "sqrt";
-    private const string CommandPow = "pow";
-    private const string CommandReciprocal = "reciprocal";
-
     private const string ErrorStackEmpty = "Stack is empty";
     private const string ErrorStackHasLessThanTwoElements = "Stack has less than two elements";
 
     private readonly RpnStack _stack = new();
-    private readonly Dictionary<string, Func<Result<double>?>> _commandHandlers;
+    private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
 
     public RpnProcessor()
     {
-        _commandHandlers = new Dictionary<string, Func<Result<double>?>>
+        _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
         {
-            { CommandClear, HandleClear },
-            { CommandPop, HandlePop },
-            { CommandSwap, HandleSwap },
-            { CommandSum, HandleSum },
-            { CommandSqrt, HandleSqrt },
-            { CommandPow, HandlePow },
-            { CommandReciprocal, HandleReciprocal }
+            { CommandSymbol.Clear, HandleClear },
+            { CommandSymbol.Pop, HandlePop },
+            { CommandSymbol.Swap, HandleSwap },
+            { CommandSymbol.Sum, HandleSum },
+            { CommandSymbol.Sqrt, HandleSqrt },
+            { CommandSymbol.Pow, HandlePow },
+            { CommandSymbol.Reciprocal, HandleReciprocal }
         };
     }
 
@@ -146,7 +139,7 @@ public class RpnProcessor
         return new Result<(bool executed, double result)?>(nullValue);
     }
 
-    private Result<double>? ProcessCommand(string command)
+    private Result<double>? ProcessCommand(CommandSymbol command)
     {
         if (_commandHandlers.TryGetValue(command, out var handler))
             return handler();

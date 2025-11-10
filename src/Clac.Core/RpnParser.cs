@@ -33,7 +33,13 @@ public class RpnParser
             }
             else if (ValidCommands.Contains(item))
             {
-                tokens.Add(Token.CreateCommand(item[..^2]));
+                var commandString = item[..^2];
+                var commandResult = Command.GetCommandSymbol(commandString);
+                if (!commandResult.IsSuccessful)
+                {
+                    return new Result<List<Token>>(commandResult.Error);
+                }
+                tokens.Add(Token.CreateCommand(commandResult.Value));
             }
             else
             {

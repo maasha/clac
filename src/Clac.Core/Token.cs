@@ -14,7 +14,7 @@ public abstract record Token
 
     public static Token CreateOperator(OperatorSymbol symbol) => new OperatorToken(symbol);
 
-    public sealed record CommandToken(string Command) : Token;
+    public sealed record CommandToken(CommandSymbol Command) : Token;
 
-    public static Token CreateCommand(string command) => new CommandToken(command);
+    public static Token CreateCommand(CommandSymbol command) => new CommandToken(command);
 }
