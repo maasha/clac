@@ -248,10 +248,10 @@ public class RpnProcessor
         if (_stack.Count < MinimumStackSizeForBinaryOperation)
             return InsufficientStackElementsError();
 
-        var numberToken1 = _stack.Pop();
-        var numberToken2 = _stack.Pop();
+        var number1 = _stack.Pop();
+        var number2 = _stack.Pop();
 
-        var result = RpnEvaluator.Evaluate(numberToken2.Value, numberToken1.Value, operatorToken.Symbol);
+        var result = RpnEvaluator.Evaluate(number2.Value, number1.Value, operatorToken.Symbol);
 
         if (!result.IsSuccessful)
             return result;
