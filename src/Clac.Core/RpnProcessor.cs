@@ -38,9 +38,7 @@ public class RpnProcessor
             {
                 var result = ProcessOperator(operatorToken);
                 if (!result.IsSuccessful)
-                {
                     return result;
-                }
             }
             else if (token is Token.CommandToken commandToken)
             {
@@ -48,9 +46,7 @@ public class RpnProcessor
                 if (commandProcessResult.HasValue)
                 {
                     if (!commandProcessResult.Value.IsSuccessful)
-                    {
                         return commandProcessResult.Value;
-                    }
                     commandExecuted = true;
                     commandResult = commandProcessResult.Value.Value;
                 }
@@ -58,9 +54,7 @@ public class RpnProcessor
         }
 
         if (commandExecuted)
-        {
             return new Result<double>(commandResult);
-        }
 
         var finalResult = _stack.Peek();
         return finalResult.IsSuccessful
@@ -71,28 +65,31 @@ public class RpnProcessor
     private Result<double>? ProcessCommand(string command)
     {
         if (_commandHandlers.TryGetValue(command, out var handler))
-        {
             return handler();
-        }
         return null;
+    }
+
+    private Result<double> IgnoreError()
+    {
+        return new Result<double>(0);
     }
 
     private Result<double>? HandleClear()
     {
         _stack.Clear();
-        return new Result<double>(0);
+        return IgnoreError();
     }
 
     private Result<double>? HandlePop()
     {
         var result = _stack.Pop();
-        return result.IsSuccessful ? result : new Result<double>(0);
+        return result.IsSuccessful ? result : IgnoreError();
     }
 
     private Result<double>? HandleSwap()
     {
         var result = _stack.Swap();
-        return result.IsSuccessful ? result : new Result<double>(0);
+        return result.IsSuccessful ? result : IgnoreError();
     }
 
     private Result<double>? HandleSum()
@@ -103,7 +100,7 @@ public class RpnProcessor
             _stack.Clear();
             _stack.Push(result.Value);
         }
-        return result.IsSuccessful ? result : new Result<double>(0);
+        return result.IsSuccessful ? result : IgnoreError();
     }
 
     private Result<double>? HandleSqrt()
@@ -113,9 +110,7 @@ public class RpnProcessor
         if (!result.IsSuccessful)
         {
             if (result.Error.Message.Contains("Stack is empty"))
-            {
-                return new Result<double>(0);
-            }
+                return IgnoreError();
             return result;
         }
 
@@ -131,9 +126,7 @@ public class RpnProcessor
         if (!result.IsSuccessful)
         {
             if (result.Error.Message.Contains("Stack is empty") || result.Error.Message.Contains("Stack has less than two elements"))
-            {
-                return new Result<double>(0);
-            }
+                return IgnoreError();
             return result;
         }
 
@@ -150,9 +143,7 @@ public class RpnProcessor
         if (!result.IsSuccessful)
         {
             if (result.Error.Message.Contains("Stack is empty"))
-            {
-                return new Result<double>(0);
-            }
+                return IgnoreError();
             return result;
         }
 
@@ -171,17 +162,10 @@ public class RpnProcessor
         var numberToken1 = _stack.Pop();
         var numberToken2 = _stack.Pop();
 
-        if (!numberToken1.IsSuccessful || !numberToken2.IsSuccessful)
-        {
-            return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
-        }
-
         var result = RpnEvaluator.Evaluate(numberToken2.Value, numberToken1.Value, operatorToken.Symbol);
 
         if (!result.IsSuccessful)
-        {
             return result;
-        }
 
         _stack.Push(result.Value);
         return result;
