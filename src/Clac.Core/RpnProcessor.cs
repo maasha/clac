@@ -49,14 +49,14 @@ public class RpnProcessor
             if (tokenResult.Value.HasValue)
             {
                 commandExecuted = true;
-                commandResult = tokenResult.Value.Value.result;
+                commandResult = tokenResult.Value.Value.commandResult;
             }
         }
 
         return new Result<(bool commandExecuted, double commandResult)>((commandExecuted, commandResult));
     }
 
-    private Result<(bool commandExecuted, double result)?> ProcessSingleToken(Token token)
+    private Result<(bool commandExecuted, double commandResult)?> ProcessSingleToken(Token token)
     {
         if (token is Token.NumberToken numberToken)
             return ProcessNumberToken(numberToken);
@@ -70,34 +70,34 @@ public class RpnProcessor
         return NoCommandExecuted();
     }
 
-    private Result<(bool commandExecuted, double result)?> ProcessNumberToken(Token.NumberToken numberToken)
+    private Result<(bool commandExecuted, double commandResult)?> ProcessNumberToken(Token.NumberToken numberToken)
     {
         _stack.Push(numberToken.Value);
         return NoCommandExecuted();
     }
 
-    private Result<(bool commandExecuted, double result)?> ProcessOperatorToken(Token.OperatorToken operatorToken)
+    private Result<(bool commandExecuted, double commandResult)?> ProcessOperatorToken(Token.OperatorToken operatorToken)
     {
         var operatorResult = ProcessOperator(operatorToken);
         return ConvertOperatorResultToTokenResult(operatorResult);
     }
 
-    private Result<(bool commandExecuted, double result)?> ConvertOperatorResultToTokenResult(Result<double> operatorResult)
+    private Result<(bool commandExecuted, double commandResult)?> ConvertOperatorResultToTokenResult(Result<double> operatorResult)
     {
         return operatorResult.IsSuccessful
             ? NoCommandExecuted()
             : ErrorResult(operatorResult.Error);
     }
 
-    private Result<(bool commandExecuted, double result)?> NoCommandExecuted()
+    private Result<(bool commandExecuted, double commandResult)?> NoCommandExecuted()
     {
-        (bool commandExecuted, double result)? nullValue = null;
-        return new Result<(bool commandExecuted, double result)?>(nullValue);
+        (bool commandExecuted, double commandResult)? nullValue = null;
+        return new Result<(bool commandExecuted, double commandResult)?>(nullValue);
     }
 
-    private Result<(bool commandExecuted, double result)?> ErrorResult(Exception error)
+    private Result<(bool commandExecuted, double commandResult)?> ErrorResult(Exception error)
     {
-        return new Result<(bool commandExecuted, double result)?>(error);
+        return new Result<(bool commandExecuted, double commandResult)?>(error);
     }
 
     private Result<(bool commandExecuted, double commandResult)> TokenProcessingError(Exception error)
@@ -126,17 +126,17 @@ public class RpnProcessor
             : NoResultOnStackError();
     }
 
-    private Result<(bool executed, double result)?> ProcessCommandToken(Token.CommandToken commandToken)
+    private Result<(bool commandExecuted, double commandResult)?> ProcessCommandToken(Token.CommandToken commandToken)
     {
         var commandProcessResult = ProcessCommand(commandToken.Command);
         if (commandProcessResult.HasValue)
         {
             if (!commandProcessResult.Value.IsSuccessful)
                 return ErrorResult(commandProcessResult.Value.Error);
-            return new Result<(bool executed, double result)?>((true, commandProcessResult.Value.Value));
+            return new Result<(bool commandExecuted, double commandResult)?>((true, commandProcessResult.Value.Value));
         }
-        (bool executed, double result)? nullValue = null;
-        return new Result<(bool executed, double result)?>(nullValue);
+        (bool commandExecuted, double commandResult)? nullValue = null;
+        return new Result<(bool commandExecuted, double commandResult)?>(nullValue);
     }
 
     private Result<double>? ProcessCommand(CommandSymbol command)
