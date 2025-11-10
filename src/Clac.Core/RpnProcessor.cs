@@ -149,7 +149,9 @@ public class RpnProcessor
         return null;
     }
 
-    private Result<double> IgnoreError()
+    /// This was introduced to silence the errors that would just cause
+    /// confusion in the calculator such as clicking pop() on and empty stack.
+    private Result<double> SuccessWithZero()
     {
         return new Result<double>(0);
     }
@@ -157,19 +159,19 @@ public class RpnProcessor
     private Result<double>? HandleClear()
     {
         _stack.Clear();
-        return IgnoreError();
+        return SuccessWithZero();
     }
 
     private Result<double>? HandlePop()
     {
         var result = _stack.Pop();
-        return result.IsSuccessful ? result : IgnoreError();
+        return result.IsSuccessful ? result : SuccessWithZero();
     }
 
     private Result<double>? HandleSwap()
     {
         var result = _stack.Swap();
-        return result.IsSuccessful ? result : IgnoreError();
+        return result.IsSuccessful ? result : SuccessWithZero();
     }
 
     private Result<double>? HandleSum()
@@ -179,8 +181,9 @@ public class RpnProcessor
         {
             _stack.Clear();
             _stack.Push(result.Value);
+            return result;
         }
-        return result.IsSuccessful ? result : IgnoreError();
+        return SuccessWithZero();
     }
 
     private Result<double>? HandleSqrt()
@@ -227,7 +230,7 @@ public class RpnProcessor
         if (!result.IsSuccessful)
         {
             if (shouldIgnoreError(result.Error))
-                return IgnoreError();
+                return SuccessWithZero();
             return result;
         }
 
