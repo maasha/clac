@@ -53,6 +53,11 @@ public class RpnProcessor
             }
         }
 
+        return GetFinalResult(commandExecuted, commandResult);
+    }
+
+    private Result<double> GetFinalResult(bool commandExecuted, double commandResult)
+    {
         if (commandExecuted)
             return new Result<double>(commandResult);
 
@@ -155,9 +160,7 @@ public class RpnProcessor
     private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
     {
         if (_stack.Count < 2)
-        {
             return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
-        }
 
         var numberToken1 = _stack.Pop();
         var numberToken2 = _stack.Pop();
