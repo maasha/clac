@@ -128,15 +128,13 @@ public class RpnProcessor
 
     private Result<(bool commandExecuted, double commandResult)?> ProcessCommandToken(Token.CommandToken commandToken)
     {
-        var commandProcessResult = ProcessCommand(commandToken.Command);
-        if (commandProcessResult.HasValue)
-        {
-            if (!commandProcessResult.Value.IsSuccessful)
-                return ErrorResult(commandProcessResult.Value.Error);
-            return new Result<(bool commandExecuted, double commandResult)?>((true, commandProcessResult.Value.Value));
-        }
-        (bool commandExecuted, double commandResult)? nullValue = null;
-        return new Result<(bool commandExecuted, double commandResult)?>(nullValue);
+        var commandResult = ProcessCommand(commandToken.Command);
+        if (commandResult == null)
+            return NoCommandExecuted();
+
+        return commandResult.Value.IsSuccessful
+            ? new Result<(bool commandExecuted, double commandResult)?>((true, commandResult.Value.Value))
+            : ErrorResult(commandResult.Value.Error);
     }
 
     private Result<double>? ProcessCommand(CommandSymbol command)
