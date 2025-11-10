@@ -38,30 +38,44 @@ public class RpnProcessor
 
         foreach (var token in tokens)
         {
-            if (token is Token.NumberToken numberToken)
+            var tokenResult = ProcessSingleToken(token);
+            if (!tokenResult.IsSuccessful)
+                return new Result<(bool commandExecuted, double commandResult)>(tokenResult.Error);
+
+            if (tokenResult.Value.HasValue)
             {
-                _stack.Push(numberToken.Value);
-            }
-            else if (token is Token.OperatorToken operatorToken)
-            {
-                var result = ProcessOperator(operatorToken);
-                if (!result.IsSuccessful)
-                    return new Result<(bool commandExecuted, double commandResult)>(result.Error);
-            }
-            else if (token is Token.CommandToken commandToken)
-            {
-                var commandProcessResult = ProcessCommandToken(commandToken);
-                if (!commandProcessResult.IsSuccessful)
-                    return new Result<(bool commandExecuted, double commandResult)>(commandProcessResult.Error);
-                if (commandProcessResult.Value.HasValue)
-                {
-                    commandExecuted = true;
-                    commandResult = commandProcessResult.Value.Value.result;
-                }
+                commandExecuted = true;
+                commandResult = tokenResult.Value.Value.result;
             }
         }
 
         return new Result<(bool commandExecuted, double commandResult)>((commandExecuted, commandResult));
+    }
+
+    private Result<(bool commandExecuted, double result)?> ProcessSingleToken(Token token)
+    {
+        (bool commandExecuted, double result)? nullValue = null;
+
+        if (token is Token.NumberToken numberToken)
+        {
+            _stack.Push(numberToken.Value);
+            return new Result<(bool commandExecuted, double result)?>(nullValue);
+        }
+
+        if (token is Token.OperatorToken operatorToken)
+        {
+            var operatorResult = ProcessOperator(operatorToken);
+            if (!operatorResult.IsSuccessful)
+                return new Result<(bool commandExecuted, double result)?>(operatorResult.Error);
+            return new Result<(bool commandExecuted, double result)?>(nullValue);
+        }
+
+        if (token is Token.CommandToken commandToken)
+        {
+            return ProcessCommandToken(commandToken);
+        }
+
+        return new Result<(bool commandExecuted, double result)?>(nullValue);
     }
 
     private Result<double> GetFinalResult(bool commandExecuted, double commandResult)
