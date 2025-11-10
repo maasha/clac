@@ -115,6 +115,11 @@ public class RpnProcessor
         return new Result<double>(new InvalidOperationException("No result on stack"));
     }
 
+    private Result<double> InsufficientStackElementsError()
+    {
+        return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
+    }
+
     private Result<double> GetFinalResult(bool commandExecuted, double commandResult)
     {
         if (commandExecuted)
@@ -237,7 +242,7 @@ public class RpnProcessor
     private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
     {
         if (_stack.Count < 2)
-            return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
+            return InsufficientStackElementsError();
 
         var numberToken1 = _stack.Pop();
         var numberToken2 = _stack.Pop();
