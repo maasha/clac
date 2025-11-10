@@ -5,62 +5,64 @@ using Clac.UI.ViewModels;
 
 public class CalculatorViewModelKeyboardTests
 {
+    private readonly CalculatorViewModel _vm;
+
+    public CalculatorViewModelKeyboardTests()
+    {
+        _vm = new CalculatorViewModel();
+    }
+
     [Fact]
     public void AppendToInput_WithCharacter_ShouldAppendToCurrentInput()
     {
-        var viewModel = new CalculatorViewModel();
-        viewModel.CurrentInput = "12";
+        _vm.CurrentInput = "12";
 
-        viewModel.AppendToInput("3");
+        _vm.AppendToInput("3");
 
-        Assert.Equal("123", viewModel.CurrentInput);
+        Assert.Equal("123", _vm.CurrentInput);
     }
 
     [Fact]
     public void AppendToInput_WithEmptyInput_ShouldSetCurrentInput()
     {
-        var viewModel = new CalculatorViewModel();
-        viewModel.CurrentInput = "";
+        _vm.CurrentInput = "";
 
-        viewModel.AppendToInput("3");
+        _vm.AppendToInput("3");
 
-        Assert.Equal("3", viewModel.CurrentInput);
+        Assert.Equal("3", _vm.CurrentInput);
     }
 
     [Fact]
     public void DeleteFromInput_WithInput_ShouldRemoveLastCharacter()
     {
-        var viewModel = new CalculatorViewModel();
-        viewModel.CurrentInput = "123";
+        _vm.CurrentInput = "123";
 
-        viewModel.DeleteFromInput();
+        _vm.DeleteFromInput();
 
-        Assert.Equal("12", viewModel.CurrentInput);
+        Assert.Equal("12", _vm.CurrentInput);
     }
 
     [Fact]
     public void DeleteFromInput_WithEmptyInput_ShouldDoNothing()
     {
-        var viewModel = new CalculatorViewModel();
-        viewModel.CurrentInput = "";
+        _vm.CurrentInput = "";
 
-        viewModel.DeleteFromInput();
+        _vm.DeleteFromInput();
 
-        Assert.Equal("", viewModel.CurrentInput);
+        Assert.Equal("", _vm.CurrentInput);
     }
 
     [Fact]
     public void AppendToInput_ShouldRaisePropertyChangedForCurrentInput()
     {
-        var viewModel = new CalculatorViewModel();
         bool propertyChangedRaised = false;
-        viewModel.PropertyChanged += (sender, e) =>
+        _vm.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName == nameof(CalculatorViewModel.CurrentInput))
                 propertyChangedRaised = true;
         };
 
-        viewModel.AppendToInput("1");
+        _vm.AppendToInput("1");
 
         Assert.True(propertyChangedRaised);
     }
@@ -68,16 +70,15 @@ public class CalculatorViewModelKeyboardTests
     [Fact]
     public void DeleteFromInput_ShouldRaisePropertyChangedForCurrentInput()
     {
-        var viewModel = new CalculatorViewModel();
-        viewModel.CurrentInput = "123";
+        _vm.CurrentInput = "123";
         bool propertyChangedRaised = false;
-        viewModel.PropertyChanged += (sender, e) =>
+        _vm.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName == nameof(CalculatorViewModel.CurrentInput))
                 propertyChangedRaised = true;
         };
 
-        viewModel.DeleteFromInput();
+        _vm.DeleteFromInput();
 
         Assert.True(propertyChangedRaised);
     }
@@ -85,11 +86,10 @@ public class CalculatorViewModelKeyboardTests
     [Fact]
     public void DeleteFromInput_WithOperator_ShouldDeleteOperatorAndPrefixedWhitespace()
     {
-        var viewModel = new CalculatorViewModel();
-        viewModel.CurrentInput = "1 +";
+        _vm.CurrentInput = "1 +";
 
-        viewModel.DeleteFromInput();
+        _vm.DeleteFromInput();
 
-        Assert.Equal("1", viewModel.CurrentInput);
+        Assert.Equal("1", _vm.CurrentInput);
     }
 }
