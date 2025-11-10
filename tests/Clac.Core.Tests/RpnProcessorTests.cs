@@ -2,38 +2,43 @@ namespace Clac.Core.Tests;
 
 using Xunit;
 using Clac.Core;
+using Xunit.Sdk;
 
 public class RpnProcessorTests
 {
+    private readonly RpnProcessor _processor;
+
+    public RpnProcessorTests()
+    {
+        _processor = new RpnProcessor();
+    }
+
     [Fact]
     public void Process_EmptyTokenList_ShouldNotUpdateStack()
     {
-        var processor = new RpnProcessor();
         var tokens = new List<Token>();
-        var stackLength = processor.Stack.Count;
-        var result = processor.Process(tokens);
+        var stackLength = _processor.Stack.Count;
+        var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
         Assert.Contains("No result on stack", result.Error.Message);
-        Assert.Equal(stackLength, processor.Stack.Count);
+        Assert.Equal(stackLength, _processor.Stack.Count);
     }
 
     [Fact]
     public void Process_NumberToken_ShouldPushOntoStack()
     {
-        var processor = new RpnProcessor();
         var tokens = RpnParser.Parse("1 2 3").Value;
-        var result = processor.Process(tokens);
+        var result = _processor.Process(tokens);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(3, processor.Stack.Count);
-        Assert.Equal([1, 2, 3], processor.Stack.ToArray());
+        Assert.Equal(3, _processor.Stack.Count);
+        Assert.Equal([1, 2, 3], _processor.Stack.ToArray());
     }
 
     [Fact]
     public void Process_OperatorTokenWithLessThanTwoNumbers_ShouldReturnError()
     {
-        var processor = new RpnProcessor();
         var tokens = RpnParser.Parse("1 +").Value;
-        var result = processor.Process(tokens);
+        var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
         Assert.Contains("Stack has less than two numbers", result.Error.Message);
     }
@@ -41,37 +46,34 @@ public class RpnProcessorTests
     [Fact]
     public void Process_OperatorTokenWithLessThanTwoNumbers_ShouldPreserveStackState()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("5 3 +").Value);
-        Assert.Single(processor.Stack.ToArray());
-        Assert.Equal(8, processor.Stack.Peek().Value);
+        _processor.Process(RpnParser.Parse("5 3 +").Value);
+        Assert.Single(_processor.Stack.ToArray());
+        Assert.Equal(8, _processor.Stack.Peek().Value);
 
         var tokens = RpnParser.Parse("+").Value;
-        var result = processor.Process(tokens);
+        var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
         Assert.Contains("Stack has less than two numbers", result.Error.Message);
-        Assert.Single(processor.Stack.ToArray());
-        Assert.Equal(8, processor.Stack.Peek().Value);
+        Assert.Single(_processor.Stack.ToArray());
+        Assert.Equal(8, _processor.Stack.Peek().Value);
     }
 
 
     [Fact]
     public void Process_OperatorToken_ShouldPopTwoNumbersAndPushResult()
     {
-        var processor = new RpnProcessor();
         var tokens = RpnParser.Parse("1 2 +").Value;
-        var result = processor.Process(tokens);
+        var result = _processor.Process(tokens);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(1, processor.Stack.Count);
-        Assert.Equal(3, processor.Stack.Peek().Value);
+        Assert.Equal(1, _processor.Stack.Count);
+        Assert.Equal(3, _processor.Stack.Peek().Value);
     }
 
     [Fact]
     public void Process_SimpleAddition_ShouldReturnCorrectResult()
     {
-        var processor = new RpnProcessor();
         var tokens = RpnParser.Parse("2 3 +").Value;
-        var result = processor.Process(tokens);
+        var result = _processor.Process(tokens);
         Assert.True(result.IsSuccessful);
         Assert.Equal(5, result.Value);
     }
@@ -79,9 +81,8 @@ public class RpnProcessorTests
     [Fact]
     public void Process_ComplexExpression_ShouldReturnCorrectResult()
     {
-        var processor = new RpnProcessor();
-        var tokens = RpnParser.Parse("5 3 - 2 *").Value; // (5-3)*2 = 4
-        var result = processor.Process(tokens);
+        var tokens = RpnParser.Parse("5 3 - 2 *").Value;
+        var result = _processor.Process(tokens);
         Assert.True(result.IsSuccessful);
         Assert.Equal(4, result.Value);
     }
@@ -89,9 +90,8 @@ public class RpnProcessorTests
     [Fact]
     public void Process_DivisionByZero_ShouldReturnError()
     {
-        var processor = new RpnProcessor();
         var tokens = RpnParser.Parse("5 0 /").Value;
-        var result = processor.Process(tokens);
+        var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
         Assert.IsType<DivideByZeroException>(result.Error);
     }
@@ -99,87 +99,80 @@ public class RpnProcessorTests
     [Fact]
     public void Process_ConsecutiveCalls_ShouldMaintainStack()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("1 2").Value);
-        Assert.Equal(2, processor.Stack.Count);
+        _processor.Process(RpnParser.Parse("1 2").Value);
+        Assert.Equal(2, _processor.Stack.Count);
 
-        var result = processor.Process(RpnParser.Parse("+").Value);
+        var result = _processor.Process(RpnParser.Parse("+").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(3, result.Value);
-        Assert.Equal(1, processor.Stack.Count);
+        Assert.Equal(1, _processor.Stack.Count);
     }
 
     [Fact]
     public void Process_ClearCommand_ShouldClearStack()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("1 2 3").Value);
-        Assert.Equal(3, processor.Stack.Count);
-        var result = processor.Process(RpnParser.Parse("clear()").Value);
+        _processor.Process(RpnParser.Parse("1 2 3").Value);
+        Assert.Equal(3, _processor.Stack.Count);
+        var result = _processor.Process(RpnParser.Parse("clear()").Value);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(0, processor.Stack.Count);
+        Assert.Equal(0, _processor.Stack.Count);
     }
 
     [Fact]
     public void Process_PopCommand_ShouldPopLastElementFromStack()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("1 2 3").Value);
-        Assert.Equal(3, processor.Stack.Count);
-        var result = processor.Process(RpnParser.Parse("pop()").Value);
+        _processor.Process(RpnParser.Parse("1 2 3").Value);
+        Assert.Equal(3, _processor.Stack.Count);
+        var result = _processor.Process(RpnParser.Parse("pop()").Value);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(2, processor.Stack.Count);
+        Assert.Equal(2, _processor.Stack.Count);
         Assert.Equal(3, result.Value);
-        Assert.Equal([1, 2], processor.Stack.ToArray());
+        Assert.Equal([1, 2], _processor.Stack.ToArray());
     }
 
     [Fact]
     public void Process_SwapCommand_ShouldSwapLastTwoElementsOfStack()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("1 2 3").Value);
-        Assert.Equal(3, processor.Stack.Count);
-        var result = processor.Process(RpnParser.Parse("swap()").Value);
+        _processor.Process(RpnParser.Parse("1 2 3").Value);
+        Assert.Equal(3, _processor.Stack.Count);
+        var result = _processor.Process(RpnParser.Parse("swap()").Value);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(3, processor.Stack.Count);
-        Assert.Equal([1, 3, 2], processor.Stack.ToArray());
+        Assert.Equal(3, _processor.Stack.Count);
+        Assert.Equal([1, 3, 2], _processor.Stack.ToArray());
     }
 
     [Fact]
     public void Process_SumCommand_ShouldClearStackAndPushSum()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("1 2 3").Value);
-        Assert.Equal(3, processor.Stack.Count);
-        var result = processor.Process(RpnParser.Parse("sum()").Value);
+        _processor.Process(RpnParser.Parse("1 2 3").Value);
+        Assert.Equal(3, _processor.Stack.Count);
+        var result = _processor.Process(RpnParser.Parse("sum()").Value);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(1, processor.Stack.Count);
-        Assert.Equal(6, processor.Stack.Peek().Value);
+        Assert.Equal(1, _processor.Stack.Count);
+        Assert.Equal(6, _processor.Stack.Peek().Value);
         Assert.Equal(6, result.Value);
     }
 
     [Fact]
     public void Process_SqrtCommand_ShouldCalculateSquareRootOfLastElementAndPushResult()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("4").Value);
-        Assert.Equal(1, processor.Stack.Count);
-        Assert.Equal(4, processor.Stack.Peek().Value);
-        var result = processor.Process(RpnParser.Parse("sqrt()").Value);
+        _processor.Process(RpnParser.Parse("4").Value);
+        Assert.Equal(1, _processor.Stack.Count);
+        Assert.Equal(4, _processor.Stack.Peek().Value);
+        var result = _processor.Process(RpnParser.Parse("sqrt()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(2, result.Value);
-        Assert.Equal(1, processor.Stack.Count);
-        Assert.Equal(2, processor.Stack.Peek().Value);
+        Assert.Equal(1, _processor.Stack.Count);
+        Assert.Equal(2, _processor.Stack.Peek().Value);
     }
 
     [Fact]
     public void Process_SqrtCommand_WithNegativeNumber_ShouldReturnError()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("-1").Value);
-        Assert.Equal(1, processor.Stack.Count);
-        Assert.Equal(-1, processor.Stack.Peek().Value);
-        var result = processor.Process(RpnParser.Parse("sqrt()").Value);
+        _processor.Process(RpnParser.Parse("-1").Value);
+        Assert.Equal(1, _processor.Stack.Count);
+        Assert.Equal(-1, _processor.Stack.Peek().Value);
+        var result = _processor.Process(RpnParser.Parse("sqrt()").Value);
         Assert.False(result.IsSuccessful);
         Assert.Contains("Invalid: negative square root", result.Error.Message);
     }
@@ -187,29 +180,27 @@ public class RpnProcessorTests
     [Fact]
     public void Process_PowCommand_ShouldCalculatePowerOfLastTwoElementsAndPushResult()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("2 3").Value);
-        Assert.Equal(2, processor.Stack.Count);
-        Assert.Equal(2, processor.Stack.ToArray()[0]);
-        Assert.Equal(3, processor.Stack.ToArray()[1]);
-        var result = processor.Process(RpnParser.Parse("pow()").Value);
+        _processor.Process(RpnParser.Parse("2 3").Value);
+        Assert.Equal(2, _processor.Stack.Count);
+        Assert.Equal(2, _processor.Stack.ToArray()[0]);
+        Assert.Equal(3, _processor.Stack.ToArray()[1]);
+        var result = _processor.Process(RpnParser.Parse("pow()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(8, result.Value);
-        Assert.Equal(1, processor.Stack.Count);
-        Assert.Equal(8, processor.Stack.Peek().Value);
+        Assert.Equal(1, _processor.Stack.Count);
+        Assert.Equal(8, _processor.Stack.Peek().Value);
     }
 
     [Fact]
     public void Process_ReciprocalCommand_ShouldCalculateReciprocalOfLastElementAndPushResult()
     {
-        var processor = new RpnProcessor();
-        processor.Process(RpnParser.Parse("4").Value);
-        Assert.Equal(1, processor.Stack.Count);
-        Assert.Equal(4, processor.Stack.Peek().Value);
-        var result = processor.Process(RpnParser.Parse("reciprocal()").Value);
+        _processor.Process(RpnParser.Parse("4").Value);
+        Assert.Equal(1, _processor.Stack.Count);
+        Assert.Equal(4, _processor.Stack.Peek().Value);
+        var result = _processor.Process(RpnParser.Parse("reciprocal()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(0.25, result.Value);
-        Assert.Equal(1, processor.Stack.Count);
-        Assert.Equal(0.25, processor.Stack.Peek().Value);
+        Assert.Equal(1, _processor.Stack.Count);
+        Assert.Equal(0.25, _processor.Stack.Peek().Value);
     }
 }
