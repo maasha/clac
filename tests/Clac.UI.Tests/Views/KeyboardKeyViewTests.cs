@@ -10,21 +10,29 @@ using Avalonia.Interactivity;
 
 public class KeyboardKeyViewTests
 {
+    private readonly CalculatorViewModel _viewModel;
+    private readonly KeyboardKeyView _view;
+
+    public KeyboardKeyViewTests()
+    {
+        _viewModel = new CalculatorViewModel();
+        _view = new KeyboardKeyView();
+    }
+
     [Fact]
     public void Button_ShouldDisplayLabel_WhenKeyboardKeyIsSetAsDataContext()
     {
-        var view = new KeyboardKeyView();
         var key = new KeyboardKey
         {
             Label = "7",
             Value = "7",
             Type = KeyType.Number
         };
-        view.DataContext = key;
+        _view.DataContext = key;
 
-        view.InitializeComponent();
+        _view.InitializeComponent();
 
-        var button = view.FindControl<Button>("KeyButton");
+        var button = _view.FindControl<Button>("KeyButton");
         Assert.NotNull(button);
         Assert.Equal("7", button.Content);
     }
@@ -32,9 +40,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ButtonClick_ShouldAppendValueToInput_WhenKeyboardKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "7",
@@ -56,10 +64,10 @@ public class KeyboardKeyViewTests
     [Fact]
     public void DeleteKeyClick_ShouldRemoveLastCharacterFromInput_WhenDeleteKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "123";
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "DEL",
@@ -81,9 +89,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void DeleteKeyClick_ShouldNotChangeInput_WhenInputIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "DEL",
@@ -105,10 +113,10 @@ public class KeyboardKeyViewTests
     [Fact]
     public void PlusKeyClick_ShouldAppendPlusToInput_WhenPlusKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "1";
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "+",
@@ -130,9 +138,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void PlusKeyClick_ShouldNotAddSpaceBeforeOperator_WhenInputIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "+",
@@ -154,9 +162,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void MinusKeyClick_ShouldAppendMinusWithoutSpace_WhenInputIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "-",
@@ -178,10 +186,10 @@ public class KeyboardKeyViewTests
     [Fact]
     public void MinusKeyClick_ShouldAppendMinusWithSpace_WhenInputEndsWithNumber()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "5";
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "-",
@@ -203,10 +211,10 @@ public class KeyboardKeyViewTests
     [Fact]
     public void EnterKeyClick_ShouldProcessInput_WhenEnterKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "5";
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "ENTER",
@@ -230,9 +238,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ZeroKeyClick_ShouldAppendZeroToInput_WhenZeroKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "0",
@@ -254,9 +262,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void TwoKeyClick_ShouldAppendTwoToInput_WhenTwoKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "2",
@@ -278,9 +286,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ThreeKeyClick_ShouldAppendThreeToInput_WhenThreeKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "3",
@@ -302,9 +310,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void FourKeyClick_ShouldAppendFourToInput_WhenFourKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "4",
@@ -326,9 +334,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void FiveKeyClick_ShouldAppendFiveToInput_WhenFiveKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "5",
@@ -350,9 +358,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SixKeyClick_ShouldAppendSixToInput_WhenSixKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "6",
@@ -374,9 +382,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SevenKeyClick_ShouldAppendSevenToInput_WhenSevenKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "7",
@@ -398,9 +406,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void EightKeyClick_ShouldAppendEightToInput_WhenEightKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "8",
@@ -422,9 +430,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void NineKeyClick_ShouldAppendNineToInput_WhenNineKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "9",
@@ -446,10 +454,10 @@ public class KeyboardKeyViewTests
     [Fact]
     public void MultiplyKeyClick_ShouldAppendMultiplyToInput_WhenMultiplyKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "1";
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "*",
@@ -471,9 +479,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void MultiplyKeyClick_ShouldNotAddSpaceBeforeOperator_WhenInputIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "*",
@@ -495,10 +503,10 @@ public class KeyboardKeyViewTests
     [Fact]
     public void DivideKeyClick_ShouldAppendDivideToInput_WhenDivideKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "1";
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "/",
@@ -520,9 +528,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void DivideKeyClick_ShouldNotAddSpaceBeforeOperator_WhenInputIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "/",
@@ -544,9 +552,9 @@ public class KeyboardKeyViewTests
     [Fact]
     public void DecimalKeyClick_ShouldAppendDecimalPointToInput_WhenDecimalKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = ".",
@@ -568,7 +576,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void PopKeyClick_ShouldRemoveTopItemFromStack_WhenPopKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "5";
         viewModel.Enter();
         viewModel.CurrentInput = "3";
@@ -577,7 +585,7 @@ public class KeyboardKeyViewTests
         Assert.Equal(2, viewModel.StackDisplay.Length);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "POP",
@@ -600,12 +608,12 @@ public class KeyboardKeyViewTests
     [Fact]
     public void PopKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
 
         Assert.Empty(viewModel.StackDisplay);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "POP",
@@ -628,7 +636,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SwapKeyClick_ShouldSwapTopTwoItemsOnStack_WhenSwapKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "5";
         viewModel.Enter();
         viewModel.CurrentInput = "3";
@@ -639,7 +647,7 @@ public class KeyboardKeyViewTests
         Assert.Equal("3", viewModel.StackDisplay[1]);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "SWAP",
@@ -663,7 +671,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ClearKeyClick_ShouldClearStack_WhenClearKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "5";
         viewModel.Enter();
         viewModel.CurrentInput = "3";
@@ -672,7 +680,7 @@ public class KeyboardKeyViewTests
         Assert.Equal(2, viewModel.StackDisplay.Length);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "CLEAR",
@@ -694,7 +702,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ClearKeyClick_ShouldClearStackWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "5";
         viewModel.Enter();
         viewModel.CurrentInput = "3";
@@ -705,7 +713,7 @@ public class KeyboardKeyViewTests
         Assert.False(viewModel.HasError);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "CLEAR",
@@ -728,7 +736,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SumKeyClick_ShouldSumAllItemsInStackAndReplaceWithSum_WhenSumKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "1";
         viewModel.Enter();
         viewModel.CurrentInput = "2";
@@ -739,7 +747,7 @@ public class KeyboardKeyViewTests
         Assert.Equal(3, viewModel.StackDisplay.Length);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "Σ",
@@ -763,12 +771,12 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SumKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
 
         Assert.Empty(viewModel.StackDisplay);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "Σ",
@@ -791,14 +799,14 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SumKeyClick_ShouldSumSingleItem_WhenStackHasOneItem()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "5";
         viewModel.Enter();
 
         Assert.Single(viewModel.StackDisplay);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "Σ",
@@ -822,7 +830,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SumKeyClick_ShouldSumStackWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "1";
         viewModel.Enter();
         viewModel.CurrentInput = "2";
@@ -833,7 +841,7 @@ public class KeyboardKeyViewTests
         Assert.False(viewModel.HasError);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "Σ",
@@ -857,7 +865,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SqrtKeyClick_ShouldCalculateSquareRootOfLastItem_WhenSqrtKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "4";
         viewModel.Enter();
 
@@ -865,7 +873,7 @@ public class KeyboardKeyViewTests
         Assert.Equal("4", viewModel.StackDisplay[0]);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "√",
@@ -889,12 +897,12 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SqrtKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
 
         Assert.Empty(viewModel.StackDisplay);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "√",
@@ -917,7 +925,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SqrtKeyClick_ShouldShowError_WhenLastItemIsNegative()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "-1";
         viewModel.Enter();
 
@@ -925,7 +933,7 @@ public class KeyboardKeyViewTests
         Assert.Equal("-1", viewModel.StackDisplay[0]);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "√",
@@ -950,7 +958,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void SqrtKeyClick_ShouldCalculateSquareRootWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "9";
         viewModel.Enter();
         viewModel.CurrentInput = "16";
@@ -960,7 +968,7 @@ public class KeyboardKeyViewTests
         Assert.False(viewModel.HasError);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "√",
@@ -985,7 +993,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void PowKeyClick_ShouldCalculatePowerOfLastTwoElements_WhenPowKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "2";
         viewModel.Enter();
         viewModel.CurrentInput = "3";
@@ -996,7 +1004,7 @@ public class KeyboardKeyViewTests
         Assert.Equal("3", viewModel.StackDisplay[1]);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "xʸ",
@@ -1020,7 +1028,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void PowKeyClick_ShouldDoNothing_WhenStackHasLessThanTwoElements()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "2";
         viewModel.Enter();
 
@@ -1028,7 +1036,7 @@ public class KeyboardKeyViewTests
         Assert.Equal("2", viewModel.StackDisplay[0]);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "xʸ",
@@ -1052,7 +1060,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void PowKeyClick_ShouldCalculatePowerWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "2";
         viewModel.Enter();
         viewModel.CurrentInput = "3";
@@ -1062,7 +1070,7 @@ public class KeyboardKeyViewTests
         Assert.False(viewModel.HasError);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "xʸ",
@@ -1086,7 +1094,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ReciprocalKeyClick_ShouldCalculateReciprocalOfLastItem_WhenReciprocalKeyIsClicked()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "4";
         viewModel.Enter();
 
@@ -1094,7 +1102,7 @@ public class KeyboardKeyViewTests
         Assert.Equal("4", viewModel.StackDisplay[0]);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "1/x",
@@ -1118,13 +1126,13 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ReciprocalKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
 
         Assert.Empty(viewModel.StackDisplay);
         Assert.False(viewModel.HasError);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "1/x",
@@ -1147,7 +1155,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ReciprocalKeyClick_ShouldShowError_WhenLastItemIsZero()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "0";
         viewModel.Enter();
 
@@ -1156,7 +1164,7 @@ public class KeyboardKeyViewTests
         Assert.False(viewModel.HasError);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "1/x",
@@ -1181,7 +1189,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ReciprocalKeyClick_ShouldCalculateReciprocalWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = _viewModel;
         viewModel.CurrentInput = "4";
         viewModel.Enter();
         viewModel.CurrentInput = "8";
@@ -1191,7 +1199,7 @@ public class KeyboardKeyViewTests
         Assert.False(viewModel.HasError);
 
         var parent = new UserControl { DataContext = viewModel };
-        var view = new KeyboardKeyView();
+        var view = _view;
         var key = new KeyboardKey
         {
             Label = "1/x",
