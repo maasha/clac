@@ -34,7 +34,7 @@ public class DisplayFormatterTests
 
         int result = DisplayFormatter.GetMaxIntegerPartLength(values);
 
-        Assert.Equal(1, result); // All have 1-digit integer part
+        Assert.Equal(1, result);
     }
 
     [Fact]
