@@ -7,6 +7,7 @@ public class RpnProcessor
 {
     private const string ErrorStackEmpty = "Stack is empty";
     private const string ErrorStackHasLessThanTwoElements = "Stack has less than two elements";
+    private const int MinimumStackSizeForBinaryOperation = 2;
 
     private readonly RpnStack _stack = new();
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
@@ -244,7 +245,7 @@ public class RpnProcessor
 
     private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
     {
-        if (_stack.Count < 2)
+        if (_stack.Count < MinimumStackSizeForBinaryOperation)
             return InsufficientStackElementsError();
 
         var numberToken1 = _stack.Pop();
