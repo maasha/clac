@@ -10,12 +10,12 @@ using Avalonia.Interactivity;
 
 public class KeyboardKeyViewTests
 {
-    private readonly CalculatorViewModel _viewModel;
+    private readonly CalculatorViewModel _vm;
     private readonly KeyboardKeyView _view;
 
     public KeyboardKeyViewTests()
     {
-        _viewModel = new CalculatorViewModel();
+        _vm = new CalculatorViewModel();
         _view = new KeyboardKeyView();
     }
 
@@ -40,8 +40,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ButtonClick_ShouldAppendValueToInput_WhenKeyboardKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -58,15 +57,14 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("7", viewModel.CurrentInput);
+        Assert.Equal("7", _vm.CurrentInput);
     }
 
     [Fact]
     public void DeleteKeyClick_ShouldRemoveLastCharacterFromInput_WhenDeleteKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "123";
-        var parent = new UserControl { DataContext = viewModel };
+        _vm.CurrentInput = "123";
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -83,14 +81,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("12", viewModel.CurrentInput);
+        Assert.Equal("12", _vm.CurrentInput);
     }
 
     [Fact]
     public void DeleteKeyClick_ShouldNotChangeInput_WhenInputIsEmpty()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -107,15 +104,14 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("", viewModel.CurrentInput);
+        Assert.Equal("", _vm.CurrentInput);
     }
 
     [Fact]
     public void PlusKeyClick_ShouldAppendPlusToInput_WhenPlusKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "1";
-        var parent = new UserControl { DataContext = viewModel };
+        _vm.CurrentInput = "1";
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -132,14 +128,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("1 +", viewModel.CurrentInput);
+        Assert.Equal("1 +", _vm.CurrentInput);
     }
 
     [Fact]
     public void PlusKeyClick_ShouldNotAddSpaceBeforeOperator_WhenInputIsEmpty()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -156,14 +151,14 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("+", viewModel.CurrentInput);
+        Assert.Equal("+", _vm.CurrentInput);
     }
 
     [Fact]
     public void MinusKeyClick_ShouldAppendMinusWithoutSpace_WhenInputIsEmpty()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -180,15 +175,14 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("-", viewModel.CurrentInput);
+        Assert.Equal("-", _vm.CurrentInput);
     }
 
     [Fact]
     public void MinusKeyClick_ShouldAppendMinusWithSpace_WhenInputEndsWithNumber()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "5";
-        var parent = new UserControl { DataContext = viewModel };
+        _vm.CurrentInput = "5";
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -205,15 +199,14 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("5 -", viewModel.CurrentInput);
+        Assert.Equal("5 -", _vm.CurrentInput);
     }
 
     [Fact]
     public void EnterKeyClick_ShouldProcessInput_WhenEnterKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "5";
-        var parent = new UserControl { DataContext = viewModel };
+        _vm.CurrentInput = "5";
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -230,16 +223,15 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("", viewModel.CurrentInput);
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("5", viewModel.StackDisplay[0]);
+        Assert.Equal("", _vm.CurrentInput);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("5", _vm.StackDisplay[0]);
     }
 
     [Fact]
     public void ZeroKeyClick_ShouldAppendZeroToInput_WhenZeroKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -256,14 +248,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("0", viewModel.CurrentInput);
+        Assert.Equal("0", _vm.CurrentInput);
     }
 
     [Fact]
     public void TwoKeyClick_ShouldAppendTwoToInput_WhenTwoKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -280,14 +271,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("2", viewModel.CurrentInput);
+        Assert.Equal("2", _vm.CurrentInput);
     }
 
     [Fact]
     public void ThreeKeyClick_ShouldAppendThreeToInput_WhenThreeKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -304,14 +294,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("3", viewModel.CurrentInput);
+        Assert.Equal("3", _vm.CurrentInput);
     }
 
     [Fact]
     public void FourKeyClick_ShouldAppendFourToInput_WhenFourKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -328,14 +317,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("4", viewModel.CurrentInput);
+        Assert.Equal("4", _vm.CurrentInput);
     }
 
     [Fact]
     public void FiveKeyClick_ShouldAppendFiveToInput_WhenFiveKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -352,14 +340,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("5", viewModel.CurrentInput);
+        Assert.Equal("5", _vm.CurrentInput);
     }
 
     [Fact]
     public void SixKeyClick_ShouldAppendSixToInput_WhenSixKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -376,14 +363,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("6", viewModel.CurrentInput);
+        Assert.Equal("6", _vm.CurrentInput);
     }
 
     [Fact]
     public void SevenKeyClick_ShouldAppendSevenToInput_WhenSevenKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -400,14 +386,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("7", viewModel.CurrentInput);
+        Assert.Equal("7", _vm.CurrentInput);
     }
 
     [Fact]
     public void EightKeyClick_ShouldAppendEightToInput_WhenEightKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -424,14 +409,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("8", viewModel.CurrentInput);
+        Assert.Equal("8", _vm.CurrentInput);
     }
 
     [Fact]
     public void NineKeyClick_ShouldAppendNineToInput_WhenNineKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -448,15 +432,14 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("9", viewModel.CurrentInput);
+        Assert.Equal("9", _vm.CurrentInput);
     }
 
     [Fact]
     public void MultiplyKeyClick_ShouldAppendMultiplyToInput_WhenMultiplyKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "1";
-        var parent = new UserControl { DataContext = viewModel };
+        _vm.CurrentInput = "1";
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -473,14 +456,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("1 *", viewModel.CurrentInput);
+        Assert.Equal("1 *", _vm.CurrentInput);
     }
 
     [Fact]
     public void MultiplyKeyClick_ShouldNotAddSpaceBeforeOperator_WhenInputIsEmpty()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -497,15 +479,14 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("*", viewModel.CurrentInput);
+        Assert.Equal("*", _vm.CurrentInput);
     }
 
     [Fact]
     public void DivideKeyClick_ShouldAppendDivideToInput_WhenDivideKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "1";
-        var parent = new UserControl { DataContext = viewModel };
+        _vm.CurrentInput = "1";
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -522,14 +503,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("1 /", viewModel.CurrentInput);
+        Assert.Equal("1 /", _vm.CurrentInput);
     }
 
     [Fact]
     public void DivideKeyClick_ShouldNotAddSpaceBeforeOperator_WhenInputIsEmpty()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -546,14 +526,13 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal("/", viewModel.CurrentInput);
+        Assert.Equal("/", _vm.CurrentInput);
     }
 
     [Fact]
     public void DecimalKeyClick_ShouldAppendDecimalPointToInput_WhenDecimalKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -570,21 +549,20 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal(".", viewModel.CurrentInput);
+        Assert.Equal(".", _vm.CurrentInput);
     }
 
     [Fact]
     public void PopKeyClick_ShouldRemoveTopItemFromStack_WhenPopKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "5";
-        viewModel.Enter();
-        viewModel.CurrentInput = "3";
-        viewModel.Enter();
+        _vm.CurrentInput = "5";
+        _vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
+        Assert.Equal(2, _vm.StackDisplay.Length);
 
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -601,18 +579,16 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("5", viewModel.StackDisplay[0]);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("5", _vm.StackDisplay[0]);
     }
 
     [Fact]
     public void PopKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
-        var viewModel = _viewModel;
+        Assert.Empty(_vm.StackDisplay);
 
-        Assert.Empty(viewModel.StackDisplay);
-
-        var parent = new UserControl { DataContext = viewModel };
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -629,24 +605,24 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Empty(viewModel.StackDisplay);
-        Assert.False(viewModel.HasError);
+        Assert.Empty(_vm.StackDisplay);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void SwapKeyClick_ShouldSwapTopTwoItemsOnStack_WhenSwapKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "5";
-        viewModel.Enter();
-        viewModel.CurrentInput = "3";
-        viewModel.Enter();
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
-        Assert.Equal("5", viewModel.StackDisplay[0]);
-        Assert.Equal("3", viewModel.StackDisplay[1]);
+        _vm.CurrentInput = "5";
+        _vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.Equal("5", _vm.StackDisplay[0]);
+        Assert.Equal("3", _vm.StackDisplay[1]);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -663,23 +639,23 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
-        Assert.Equal("3", viewModel.StackDisplay[0]);
-        Assert.Equal("5", viewModel.StackDisplay[1]);
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.Equal("3", _vm.StackDisplay[0]);
+        Assert.Equal("5", _vm.StackDisplay[1]);
     }
 
     [Fact]
     public void ClearKeyClick_ShouldClearStack_WhenClearKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "5";
-        viewModel.Enter();
-        viewModel.CurrentInput = "3";
-        viewModel.Enter();
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
+        _vm.CurrentInput = "5";
+        _vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Equal(2, _vm.StackDisplay.Length);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -696,23 +672,23 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Empty(viewModel.StackDisplay);
+        Assert.Empty(_vm.StackDisplay);
     }
 
     [Fact]
     public void ClearKeyClick_ShouldClearStackWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "5";
-        viewModel.Enter();
-        viewModel.CurrentInput = "3";
-        viewModel.Enter();
-        viewModel.CurrentInput = "43";
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
-        Assert.False(viewModel.HasError);
+        _vm.CurrentInput = "5";
+        _vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
+        _vm.CurrentInput = "43";
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.False(_vm.HasError);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -729,24 +705,24 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Empty(viewModel.StackDisplay);
-        Assert.False(viewModel.HasError);
+        Assert.Empty(_vm.StackDisplay);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void SumKeyClick_ShouldSumAllItemsInStackAndReplaceWithSum_WhenSumKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "1";
-        viewModel.Enter();
-        viewModel.CurrentInput = "2";
-        viewModel.Enter();
-        viewModel.CurrentInput = "3";
-        viewModel.Enter();
 
-        Assert.Equal(3, viewModel.StackDisplay.Length);
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+        _vm.CurrentInput = "2";
+        _vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Equal(3, _vm.StackDisplay.Length);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -763,19 +739,19 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("6", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("6", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void SumKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
-        var viewModel = _viewModel;
 
-        Assert.Empty(viewModel.StackDisplay);
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Empty(_vm.StackDisplay);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -792,20 +768,20 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Empty(viewModel.StackDisplay);
-        Assert.False(viewModel.HasError);
+        Assert.Empty(_vm.StackDisplay);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void SumKeyClick_ShouldSumSingleItem_WhenStackHasOneItem()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "5";
-        viewModel.Enter();
 
-        Assert.Single(viewModel.StackDisplay);
+        _vm.CurrentInput = "5";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -822,25 +798,25 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("5", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("5", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void SumKeyClick_ShouldSumStackWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "1";
-        viewModel.Enter();
-        viewModel.CurrentInput = "2";
-        viewModel.Enter();
-        viewModel.CurrentInput = "43";
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
-        Assert.False(viewModel.HasError);
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+        _vm.CurrentInput = "2";
+        _vm.Enter();
+        _vm.CurrentInput = "43";
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.False(_vm.HasError);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -857,22 +833,22 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("46", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("46", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void SqrtKeyClick_ShouldCalculateSquareRootOfLastItem_WhenSqrtKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "4";
-        viewModel.Enter();
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("4", viewModel.StackDisplay[0]);
+        _vm.CurrentInput = "4";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("4", _vm.StackDisplay[0]);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -889,19 +865,19 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("2", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("2", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void SqrtKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
-        var viewModel = _viewModel;
 
-        Assert.Empty(viewModel.StackDisplay);
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Empty(_vm.StackDisplay);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -918,21 +894,21 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Empty(viewModel.StackDisplay);
-        Assert.False(viewModel.HasError);
+        Assert.Empty(_vm.StackDisplay);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void SqrtKeyClick_ShouldShowError_WhenLastItemIsNegative()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "-1";
-        viewModel.Enter();
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("-1", viewModel.StackDisplay[0]);
+        _vm.CurrentInput = "-1";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("-1", _vm.StackDisplay[0]);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -949,25 +925,25 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("-1", viewModel.StackDisplay[0]);
-        Assert.True(viewModel.HasError);
-        Assert.Contains("Invalid: negative square root", viewModel.ErrorMessage);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("-1", _vm.StackDisplay[0]);
+        Assert.True(_vm.HasError);
+        Assert.Contains("Invalid: negative square root", _vm.ErrorMessage);
     }
 
     [Fact]
     public void SqrtKeyClick_ShouldCalculateSquareRootWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "9";
-        viewModel.Enter();
-        viewModel.CurrentInput = "16";
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("9", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        _vm.CurrentInput = "9";
+        _vm.Enter();
+        _vm.CurrentInput = "16";
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("9", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -984,26 +960,26 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
-        Assert.Equal("9", viewModel.StackDisplay[0]);
-        Assert.Equal("4", viewModel.StackDisplay[1]);
-        Assert.False(viewModel.HasError);
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.Equal("9", _vm.StackDisplay[0]);
+        Assert.Equal("4", _vm.StackDisplay[1]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void PowKeyClick_ShouldCalculatePowerOfLastTwoElements_WhenPowKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "2";
-        viewModel.Enter();
-        viewModel.CurrentInput = "3";
-        viewModel.Enter();
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
-        Assert.Equal("2", viewModel.StackDisplay[0]);
-        Assert.Equal("3", viewModel.StackDisplay[1]);
+        _vm.CurrentInput = "2";
+        _vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.Equal("2", _vm.StackDisplay[0]);
+        Assert.Equal("3", _vm.StackDisplay[1]);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -1020,22 +996,22 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("8", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("8", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void PowKeyClick_ShouldDoNothing_WhenStackHasLessThanTwoElements()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "2";
-        viewModel.Enter();
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("2", viewModel.StackDisplay[0]);
+        _vm.CurrentInput = "2";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("2", _vm.StackDisplay[0]);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -1052,24 +1028,24 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("2", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("2", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void PowKeyClick_ShouldCalculatePowerWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "2";
-        viewModel.Enter();
-        viewModel.CurrentInput = "3";
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("2", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        _vm.CurrentInput = "2";
+        _vm.Enter();
+        _vm.CurrentInput = "3";
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("2", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -1086,22 +1062,22 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("8", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("8", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void ReciprocalKeyClick_ShouldCalculateReciprocalOfLastItem_WhenReciprocalKeyIsClicked()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "4";
-        viewModel.Enter();
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("4", viewModel.StackDisplay[0]);
+        _vm.CurrentInput = "4";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("4", _vm.StackDisplay[0]);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -1118,20 +1094,20 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("0.25", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("0.25", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void ReciprocalKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
-        var viewModel = _viewModel;
 
-        Assert.Empty(viewModel.StackDisplay);
-        Assert.False(viewModel.HasError);
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Empty(_vm.StackDisplay);
+        Assert.False(_vm.HasError);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -1148,22 +1124,22 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Empty(viewModel.StackDisplay);
-        Assert.False(viewModel.HasError);
+        Assert.Empty(_vm.StackDisplay);
+        Assert.False(_vm.HasError);
     }
 
     [Fact]
     public void ReciprocalKeyClick_ShouldShowError_WhenLastItemIsZero()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "0";
-        viewModel.Enter();
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("0", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        _vm.CurrentInput = "0";
+        _vm.Enter();
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("0", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -1180,25 +1156,25 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("0", viewModel.StackDisplay[0]);
-        Assert.True(viewModel.HasError);
-        Assert.Contains("Division by zero", viewModel.ErrorMessage);
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("0", _vm.StackDisplay[0]);
+        Assert.True(_vm.HasError);
+        Assert.Contains("Division by zero", _vm.ErrorMessage);
     }
 
     [Fact]
     public void ReciprocalKeyClick_ShouldCalculateReciprocalWithoutError_WhenInputContainsNumber()
     {
-        var viewModel = _viewModel;
-        viewModel.CurrentInput = "4";
-        viewModel.Enter();
-        viewModel.CurrentInput = "8";
 
-        Assert.Single(viewModel.StackDisplay);
-        Assert.Equal("4", viewModel.StackDisplay[0]);
-        Assert.False(viewModel.HasError);
+        _vm.CurrentInput = "4";
+        _vm.Enter();
+        _vm.CurrentInput = "8";
 
-        var parent = new UserControl { DataContext = viewModel };
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("4", _vm.StackDisplay[0]);
+        Assert.False(_vm.HasError);
+
+        var parent = new UserControl { DataContext = _vm };
         var view = _view;
         var key = new KeyboardKey
         {
@@ -1215,10 +1191,10 @@ public class KeyboardKeyViewTests
 
         button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-        Assert.Equal(2, viewModel.StackDisplay.Length);
-        Assert.Equal("4", viewModel.StackDisplay[0]);
-        Assert.Equal("0.125", viewModel.StackDisplay[1]);
-        Assert.False(viewModel.HasError);
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.Equal("4", _vm.StackDisplay[0]);
+        Assert.Equal("0.125", _vm.StackDisplay[1]);
+        Assert.False(_vm.HasError);
     }
 }
 
