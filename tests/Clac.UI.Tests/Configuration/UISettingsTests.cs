@@ -5,43 +5,40 @@ namespace Clac.UI.Tests.Configuration;
 
 public class UISettingsTests
 {
+    private readonly UISettings _settings;
+
+    public UISettingsTests()
+    {
+        _settings = new UISettings();
+    }
+
     [Fact]
     public void UISettings_ShouldHaveDefaultWindowHeight()
     {
-        var settings = new UISettings();
-
-        Assert.Equal(450, settings.WindowHeight);
+        Assert.Equal(450, _settings.WindowHeight);
     }
 
     [Fact]
     public void UISettings_ShouldHaveDefaultWindowWidth()
     {
-        var settings = new UISettings();
-
-        Assert.Equal(400, settings.WindowWidth);
+        Assert.Equal(400, _settings.WindowWidth);
     }
 
     [Fact]
     public void UISettings_ShouldHaveDefaultDisplayLines()
     {
-        var settings = new UISettings();
-
-        Assert.Equal(6, settings.DisplayLines);
+        Assert.Equal(6, _settings.DisplayLines);
     }
 
     [Fact]
     public void UISettings_ShouldHaveDefaultLineHeight()
     {
-        var settings = new UISettings();
-
-        Assert.Equal(30, settings.LineHeight);
+        Assert.Equal(30, _settings.LineHeight);
     }
 
     [Fact]
     public void UISettings_ShouldHaveDefaultBorderThickness()
     {
-        var settings = new UISettings();
-
-        Assert.Equal(2, settings.BorderThickness);
+        Assert.Equal(2, _settings.BorderThickness);
     }
 }
