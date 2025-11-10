@@ -54,20 +54,18 @@ public class RpnProcessor
 
     private Result<(bool commandExecuted, double result)?> ProcessSingleToken(Token token)
     {
-        (bool commandExecuted, double result)? nullValue = null;
-
         if (token is Token.NumberToken numberToken)
         {
             _stack.Push(numberToken.Value);
-            return new Result<(bool commandExecuted, double result)?>(nullValue);
+            return NoCommandExecuted();
         }
 
         if (token is Token.OperatorToken operatorToken)
         {
             var operatorResult = ProcessOperator(operatorToken);
-            if (!operatorResult.IsSuccessful)
-                return new Result<(bool commandExecuted, double result)?>(operatorResult.Error);
-            return new Result<(bool commandExecuted, double result)?>(nullValue);
+            return operatorResult.IsSuccessful
+                ? NoCommandExecuted()
+                : ErrorResult(operatorResult.Error);
         }
 
         if (token is Token.CommandToken commandToken)
@@ -75,7 +73,18 @@ public class RpnProcessor
             return ProcessCommandToken(commandToken);
         }
 
+        return NoCommandExecuted();
+    }
+
+    private Result<(bool commandExecuted, double result)?> NoCommandExecuted()
+    {
+        (bool commandExecuted, double result)? nullValue = null;
         return new Result<(bool commandExecuted, double result)?>(nullValue);
+    }
+
+    private Result<(bool commandExecuted, double result)?> ErrorResult(Exception error)
+    {
+        return new Result<(bool commandExecuted, double result)?>(error);
     }
 
     private Result<double> GetFinalResult(bool commandExecuted, double commandResult)
@@ -95,7 +104,7 @@ public class RpnProcessor
         if (commandProcessResult.HasValue)
         {
             if (!commandProcessResult.Value.IsSuccessful)
-                return new Result<(bool executed, double result)?>(commandProcessResult.Value.Error);
+                return ErrorResult(commandProcessResult.Value.Error);
             return new Result<(bool executed, double result)?>((true, commandProcessResult.Value.Value));
         }
         (bool executed, double result)? nullValue = null;
