@@ -4,6 +4,17 @@ namespace Clac.Core;
 
 public class RpnProcessor
 {
+    private const string CommandClear = "clear";
+    private const string CommandPop = "pop";
+    private const string CommandSwap = "swap";
+    private const string CommandSum = "sum";
+    private const string CommandSqrt = "sqrt";
+    private const string CommandPow = "pow";
+    private const string CommandReciprocal = "reciprocal";
+
+    private const string ErrorStackEmpty = "Stack is empty";
+    private const string ErrorStackHasLessThanTwoElements = "Stack has less than two elements";
+
     private readonly RpnStack _stack = new();
     private readonly Dictionary<string, Func<Result<double>?>> _commandHandlers;
 
@@ -11,13 +22,13 @@ public class RpnProcessor
     {
         _commandHandlers = new Dictionary<string, Func<Result<double>?>>
         {
-            { "clear", HandleClear },
-            { "pop", HandlePop },
-            { "swap", HandleSwap },
-            { "sum", HandleSum },
-            { "sqrt", HandleSqrt },
-            { "pow", HandlePow },
-            { "reciprocal", HandleReciprocal }
+            { CommandClear, HandleClear },
+            { CommandPop, HandlePop },
+            { CommandSwap, HandleSwap },
+            { CommandSum, HandleSum },
+            { CommandSqrt, HandleSqrt },
+            { CommandPow, HandlePow },
+            { CommandReciprocal, HandleReciprocal }
         };
     }
 
@@ -182,7 +193,7 @@ public class RpnProcessor
 
         if (!result.IsSuccessful)
         {
-            if (result.Error.Message.Contains("Stack is empty"))
+            if (result.Error.Message.Contains(ErrorStackEmpty))
                 return IgnoreError();
             return result;
         }
@@ -198,7 +209,7 @@ public class RpnProcessor
 
         if (!result.IsSuccessful)
         {
-            if (result.Error.Message.Contains("Stack is empty") || result.Error.Message.Contains("Stack has less than two elements"))
+            if (result.Error.Message.Contains(ErrorStackEmpty) || result.Error.Message.Contains(ErrorStackHasLessThanTwoElements))
                 return IgnoreError();
             return result;
         }
@@ -215,7 +226,7 @@ public class RpnProcessor
 
         if (!result.IsSuccessful)
         {
-            if (result.Error.Message.Contains("Stack is empty"))
+            if (result.Error.Message.Contains(ErrorStackEmpty))
                 return IgnoreError();
             return result;
         }
