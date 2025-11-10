@@ -55,25 +55,34 @@ public class RpnProcessor
     private Result<(bool commandExecuted, double result)?> ProcessSingleToken(Token token)
     {
         if (token is Token.NumberToken numberToken)
-        {
-            _stack.Push(numberToken.Value);
-            return NoCommandExecuted();
-        }
+            return ProcessNumberToken(numberToken);
 
         if (token is Token.OperatorToken operatorToken)
-        {
-            var operatorResult = ProcessOperator(operatorToken);
-            return operatorResult.IsSuccessful
-                ? NoCommandExecuted()
-                : ErrorResult(operatorResult.Error);
-        }
+            return ProcessOperatorToken(operatorToken);
 
         if (token is Token.CommandToken commandToken)
-        {
             return ProcessCommandToken(commandToken);
-        }
 
         return NoCommandExecuted();
+    }
+
+    private Result<(bool commandExecuted, double result)?> ProcessNumberToken(Token.NumberToken numberToken)
+    {
+        _stack.Push(numberToken.Value);
+        return NoCommandExecuted();
+    }
+
+    private Result<(bool commandExecuted, double result)?> ProcessOperatorToken(Token.OperatorToken operatorToken)
+    {
+        var operatorResult = ProcessOperator(operatorToken);
+        return ConvertOperatorResultToTokenResult(operatorResult);
+    }
+
+    private Result<(bool commandExecuted, double result)?> ConvertOperatorResultToTokenResult(Result<double> operatorResult)
+    {
+        return operatorResult.IsSuccessful
+            ? NoCommandExecuted()
+            : ErrorResult(operatorResult.Error);
     }
 
     private Result<(bool commandExecuted, double result)?> NoCommandExecuted()
