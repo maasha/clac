@@ -1,0 +1,232 @@
+@startuml Clac Class Diagram
+
+!define CORE_COLOR #E1F5FF
+!define UI_COLOR #FFF4E1
+!define ENUM_COLOR #E8F5E9
+
+package "Clac.Core" CORE_COLOR {
+    
+    abstract class Token {
+        {static} +CreateNumber(double): Token
+        {static} +CreateOperator(OperatorSymbol): Token
+        {static} +CreateCommand(string): Token
+    }
+    
+    class Token.NumberToken {
+        +Value: double
+    }
+    
+    class Token.OperatorToken {
+        +Symbol: OperatorSymbol
+    }
+    
+    class Token.CommandToken {
+        +Command: string
+    }
+    
+    class RpnStack {
+        -_stack: List<double>
+        +ToArray(): double[]
+        +Peek(): Result<double>
+        +Push(double): void
+        +Pop(): Result<double>
+        +Clear(): void
+        +Swap(): Result<double>
+        +Sum(): Result<double>
+        +Sqrt(): Result<double>
+        +Pow(): Result<double>
+        +Reciprocal(): Result<double>
+        +Count: int
+    }
+    
+    class RpnParser {
+        -ValidCommands: string[]
+        {static} +Parse(string): Result<List<Token>>
+        -ValidateInput(string[]): Result<string[]>
+    }
+    
+    class RpnEvaluator {
+        {static} +Evaluate(double, double, OperatorSymbol): Result<double>
+    }
+    
+    class RpnProcessor {
+        -_stack: RpnStack
+        -_commandHandlers: Dictionary<string, Func<Result<double>?>>
+        +Stack: RpnStack
+        +Process(List<Token>): Result<double>
+        -ProcessCommand(string): Result<double>?
+        -ProcessOperator(Token.OperatorToken): Result<double>
+        -HandleClear(): Result<double>?
+        -HandlePop(): Result<double>?
+        -HandleSwap(): Result<double>?
+        -HandleSum(): Result<double>?
+        -HandleSqrt(): Result<double>?
+        -HandlePow(): Result<double>?
+        -HandleReciprocal(): Result<double>?
+        -CloneStack(): RpnStack
+    }
+    
+    class Operator {
+        {static} +GetOperatorSymbol(string): Result<OperatorSymbol>
+        {static} +IsValidOperator(string): bool
+    }
+    
+    enum OperatorSymbol ENUM_COLOR {
+        Add
+        Subtract
+        Multiply
+        Divide
+    }
+    
+    Token <|-- Token.NumberToken
+    Token <|-- Token.OperatorToken
+    Token <|-- Token.CommandToken
+    
+    RpnParser ..> Token : creates
+    RpnParser ..> Operator : uses
+    RpnParser ..> OperatorSymbol : uses
+    
+    RpnProcessor --> RpnStack : contains
+    RpnProcessor ..> Token : processes
+    RpnProcessor ..> RpnEvaluator : uses
+    
+    RpnEvaluator ..> OperatorSymbol : uses
+    
+    Operator ..> OperatorSymbol : returns
+}
+
+package "Clac.UI" UI_COLOR {
+    
+    class CalculatorViewModel {
+        -_currentInput: string
+        -_errorMessage: string?
+        -_processor: RpnProcessor
+        -_errors: Dictionary<string, List<string>>
+        -_scrollBarVisibility: ScrollBarVisibility
+        +DisplayItems: ObservableCollection<StackLineItem>
+        +StackDisplay: string[]
+        +CurrentInput: string
+        +HasError: bool
+        +ErrorMessage: string
+        +ScrollBarVisibility: ScrollBarVisibility
+        +HasErrors: bool
+        +AppendToInput(string): void
+        +DeleteFromInput(): void
+        +Enter(): void
+        +GetErrors(string?): IEnumerable
+        -InitializeDisplayItems(): void
+        -UpdateDisplayItems(): void
+        -AddError(string, string): void
+        -ClearErrors(string): void
+        -OnErrorsChanged(string): void
+        -OnPropertyChanged(string?): void
+    }
+    
+    class KeyboardKey {
+        +Label: string
+        +Value: string
+        +Type: KeyType
+        +ColumnSpan: int
+    }
+    
+    class StackLineItem {
+        +LineNumber: string
+        +FormattedValue: string
+    }
+    
+    class UISettings {
+        +WindowHeight: int
+        +WindowWidth: int
+        +DisplayLines: int
+        +LineHeight: int
+        +BorderThickness: int
+    }
+    
+    class SettingsManager {
+        {static} +UI: UISettings
+    }
+    
+    class DisplayFormatter {
+        {static} +FormatLineNumber(int, int): string
+        {static} +GetMaxIntegerPartLength(string[]): int
+        {static} +FormatValue(string, int): string
+    }
+    
+    enum KeyType ENUM_COLOR {
+        Number
+        Operator
+        Function
+        Command
+        Enter
+    }
+    
+    class MainWindow {
+        -ErrorLineHeight: double
+        -_baseWindowHeight: double
+        -_viewModel: CalculatorViewModel?
+        +OnWindowLoaded(object?, RoutedEventArgs): void
+        -OnViewModelPropertyChanged(object?, PropertyChangedEventArgs): void
+    }
+    
+    class CalculatorView {
+    }
+    
+    class DisplayView {
+    }
+    
+    class InputView {
+    }
+    
+    class KeyboardView {
+    }
+    
+    class KeyboardKeyView {
+    }
+    
+    CalculatorViewModel --> RpnProcessor : uses
+    CalculatorViewModel --> StackLineItem : contains
+    CalculatorViewModel ..> RpnParser : uses
+    CalculatorViewModel ..> DisplayFormatter : uses
+    CalculatorViewModel ..> SettingsManager : uses
+    
+    KeyboardKey ..> KeyType : uses
+    
+    SettingsManager --> UISettings : provides
+    
+    MainWindow --> CalculatorViewModel : contains
+    MainWindow --> CalculatorView : contains
+    MainWindow ..> SettingsManager : uses
+    
+    CalculatorView --> DisplayView : contains
+    CalculatorView --> InputView : contains
+    CalculatorView --> KeyboardView : contains
+    
+    KeyboardView --> KeyboardKeyView : contains
+    KeyboardKeyView ..> KeyboardKey : uses
+}
+
+CalculatorViewModel ..> "Clac.Core" : depends on
+
+note right of Token
+  Abstract record with nested
+  record types for different
+  token kinds
+end note
+
+note right of RpnProcessor
+  Orchestrates RPN processing:
+  - Parses tokens
+  - Manages stack operations
+  - Handles commands
+  - Evaluates operators
+end note
+
+note right of CalculatorViewModel
+  MVVM ViewModel:
+  - Implements INotifyPropertyChanged
+  - Implements INotifyDataErrorInfo
+  - Bridges UI and Core logic
+end note
+
+@enduml
+
