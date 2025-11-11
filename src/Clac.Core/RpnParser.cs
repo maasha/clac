@@ -82,6 +82,11 @@ public class RpnParser
         return new Result<string[]>(error);
     }
 
+    private static Result<string[]> InputValidationSuccess(string[] input)
+    {
+        return new Result<string[]>(input);
+    }
+
     private static Result<Token> CreateTokenFromString(string item)
     {
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
@@ -105,7 +110,7 @@ public class RpnParser
         {
             return TokenCreationError(operatorResult.Error);
         }
-        return new Result<Token>(Token.CreateOperator(operatorResult.Value));
+        return TokenCreationSuccess(Token.CreateOperator(operatorResult.Value));
     }
 
     private static Result<string[]> ValidateInput(string[] input)
@@ -130,6 +135,6 @@ public class RpnParser
             return InputValidationError(new Exception(errorMessage));
         }
 
-        return new Result<string[]>(input);
+        return InputValidationSuccess(input);
     }
 }
