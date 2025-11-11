@@ -34,7 +34,7 @@ public class RpnParser
             tokens.Add(tokenResult.Value);
         }
 
-        return ParseSuccess(tokens);
+        return new Result<List<Token>>(tokens);
     }
 
     private static Result<Token> CreateTokenFromItem(string item)
@@ -55,11 +55,6 @@ public class RpnParser
         return new Result<List<Token>>(error);
     }
 
-    private static Result<List<Token>> ParseSuccess(List<Token> tokens)
-    {
-        return new Result<List<Token>>(tokens);
-    }
-
     private static Result<List<Token>> ParseEmptyInput()
     {
         return new Result<List<Token>>([]);
@@ -70,25 +65,15 @@ public class RpnParser
         return new Result<Token>(error);
     }
 
-    private static Result<Token> TokenCreationSuccess(Token token)
-    {
-        return new Result<Token>(token);
-    }
-
     private static Result<string[]> InputValidationError(Exception error)
     {
         return new Result<string[]>(error);
     }
 
-    private static Result<string[]> InputValidationSuccess(string[] input)
-    {
-        return new Result<string[]>(input);
-    }
-
     private static Result<Token> CreateTokenFromString(string item)
     {
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
-            return TokenCreationSuccess(Token.CreateNumber(number));
+            return new Result<Token>(Token.CreateNumber(number));
 
         if (ValidCommands.Contains(item))
         {
@@ -96,13 +81,13 @@ public class RpnParser
             var commandResult = Command.GetCommandSymbol(commandString);
             if (!commandResult.IsSuccessful)
                 return TokenCreationError(commandResult.Error);
-            return TokenCreationSuccess(Token.CreateCommand(commandResult.Value));
+            return new Result<Token>(Token.CreateCommand(commandResult.Value));
         }
 
         var operatorResult = Operator.GetOperatorSymbol(item);
         if (!operatorResult.IsSuccessful)
             return TokenCreationError(operatorResult.Error);
-        return TokenCreationSuccess(Token.CreateOperator(operatorResult.Value));
+        return new Result<Token>(Token.CreateOperator(operatorResult.Value));
     }
 
     private static Result<string[]> ValidateInput(string[] input)
@@ -115,7 +100,7 @@ public class RpnParser
             return InputValidationError(new Exception(errorMessage));
         }
 
-        return InputValidationSuccess(input);
+        return new Result<string[]>(input);
     }
 
     private static List<string> CollectInvalidItems(string[] input)
