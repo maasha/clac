@@ -118,11 +118,16 @@ public class RpnParser
 
     private static bool IsInvalidItem(string item)
     {
-        bool isNumber = double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+        bool isNumber = IsNumber(item);
         bool isOperator = Operator.IsValidOperator(item);
         bool isCommand = ValidCommands.Contains(item);
 
         return !isNumber && !isOperator && !isCommand;
+    }
+
+    private static bool IsNumber(string item)
+    {
+        return double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
     }
 
     private static string ExtractCommandName(string commandWithParentheses)
