@@ -74,7 +74,7 @@ public class RpnParser
         var operatorResult = Operator.GetOperatorSymbol(item);
         if (!operatorResult.IsSuccessful)
         {
-            return new Result<Token>(operatorResult.Error);
+            return TokenCreationError(operatorResult.Error);
         }
         return new Result<Token>(Token.CreateOperator(operatorResult.Value));
     }
