@@ -92,7 +92,7 @@ public class RpnParser
 
         if (ValidCommands.Contains(item))
         {
-            var commandString = item[..^2];
+            var commandString = ExtractCommandName(item);
             var commandResult = Command.GetCommandSymbol(commandString);
             if (!commandResult.IsSuccessful)
                 return TokenCreationError(commandResult.Error);
@@ -111,7 +111,7 @@ public class RpnParser
 
         if (errors.Count > 0)
         {
-            var errorMessage = "Invalid input: " + string.Join(" ", errors);
+            var errorMessage = FormatInvalidInputMessage(errors);
             return InputValidationError(new Exception(errorMessage));
         }
 
@@ -138,5 +138,15 @@ public class RpnParser
         bool isCommand = ValidCommands.Contains(item);
 
         return !isNumber && !isOperator && !isCommand;
+    }
+
+    private static string ExtractCommandName(string commandWithParentheses)
+    {
+        return commandWithParentheses[..^2]; // Remove "()" suffix
+    }
+
+    private static string FormatInvalidInputMessage(List<string> errors)
+    {
+        return "Invalid input: " + string.Join(" ", errors);
     }
 }
