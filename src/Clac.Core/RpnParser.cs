@@ -70,22 +70,13 @@ public class RpnParser
 
     private static Result<Token> CreateTokenFromString(string item)
     {
-        if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
-            return new Result<Token>(Token.CreateNumber(number));
+        if (IsNumber(item))
+            return CreateNumberToken(item);
 
         if (IsCommand(item))
-        {
-            var commandString = ExtractCommandName(item);
-            var commandResult = Command.GetCommandSymbol(commandString);
-            if (!commandResult.IsSuccessful)
-                return TokenCreationError(commandResult.Error);
-            return new Result<Token>(Token.CreateCommand(commandResult.Value));
-        }
+            return CreateCommandToken(item);
 
-        var operatorResult = Operator.GetOperatorSymbol(item);
-        if (!operatorResult.IsSuccessful)
-            return TokenCreationError(operatorResult.Error);
-        return new Result<Token>(Token.CreateOperator(operatorResult.Value));
+        return CreateOperatorToken(item);
     }
 
     private static Result<string[]> ValidateInput(string[] input)
@@ -135,6 +126,29 @@ public class RpnParser
     private static bool IsNumber(string item)
     {
         return double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+    }
+
+    private static Result<Token> CreateNumberToken(string item)
+    {
+        double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number);
+        return new Result<Token>(Token.CreateNumber(number));
+    }
+
+    private static Result<Token> CreateCommandToken(string item)
+    {
+        var commandString = ExtractCommandName(item);
+        var commandResult = Command.GetCommandSymbol(commandString);
+        if (!commandResult.IsSuccessful)
+            return TokenCreationError(commandResult.Error);
+        return new Result<Token>(Token.CreateCommand(commandResult.Value));
+    }
+
+    private static Result<Token> CreateOperatorToken(string item)
+    {
+        var operatorResult = Operator.GetOperatorSymbol(item);
+        if (!operatorResult.IsSuccessful)
+            return TokenCreationError(operatorResult.Error);
+        return new Result<Token>(Token.CreateOperator(operatorResult.Value));
     }
 
     private static string ExtractCommandName(string commandWithParentheses)
