@@ -30,12 +30,17 @@ public class RpnParser
             var tokenResult = CreateTokenFromString(item);
             if (!tokenResult.IsSuccessful)
             {
-                return new Result<List<Token>>(tokenResult.Error);
+                return TokenParsingError(tokenResult.Error);
             }
             tokens.Add(tokenResult.Value);
         }
 
         return new Result<List<Token>>(tokens);
+    }
+
+    private static Result<List<Token>> TokenParsingError(Exception error)
+    {
+        return new Result<List<Token>>(error);
     }
 
     private static Result<Token> CreateTokenFromString(string item)
