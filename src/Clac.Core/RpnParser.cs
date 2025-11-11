@@ -27,32 +27,41 @@ public class RpnParser
 
         foreach (var item in validationResult.Value)
         {
-            if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
+            var tokenResult = CreateTokenFromString(item);
+            if (!tokenResult.IsSuccessful)
             {
-                tokens.Add(Token.CreateNumber(number));
+                return new Result<List<Token>>(tokenResult.Error);
             }
-            else if (ValidCommands.Contains(item))
-            {
-                var commandString = item[..^2];
-                var commandResult = Command.GetCommandSymbol(commandString);
-                if (!commandResult.IsSuccessful)
-                {
-                    return new Result<List<Token>>(commandResult.Error);
-                }
-                tokens.Add(Token.CreateCommand(commandResult.Value));
-            }
-            else
-            {
-                var operatorResult = Operator.GetOperatorSymbol(item);
-                if (!operatorResult.IsSuccessful)
-                {
-                    return new Result<List<Token>>(operatorResult.Error);
-                }
-                tokens.Add(Token.CreateOperator(operatorResult.Value));
-            }
+            tokens.Add(tokenResult.Value);
         }
 
         return new Result<List<Token>>(tokens);
+    }
+
+    private static Result<Token> CreateTokenFromString(string item)
+    {
+        if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
+        {
+            return new Result<Token>(Token.CreateNumber(number));
+        }
+
+        if (ValidCommands.Contains(item))
+        {
+            var commandString = item[..^2];
+            var commandResult = Command.GetCommandSymbol(commandString);
+            if (!commandResult.IsSuccessful)
+            {
+                return new Result<Token>(commandResult.Error);
+            }
+            return new Result<Token>(Token.CreateCommand(commandResult.Value));
+        }
+
+        var operatorResult = Operator.GetOperatorSymbol(item);
+        if (!operatorResult.IsSuccessful)
+        {
+            return new Result<Token>(operatorResult.Error);
+        }
+        return new Result<Token>(Token.CreateOperator(operatorResult.Value));
     }
 
     private static Result<string[]> ValidateInput(string[] input)
