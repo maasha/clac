@@ -41,9 +41,7 @@ public class RpnParser
     {
         var tokenResult = CreateTokenFromString(item);
         if (!tokenResult.IsSuccessful)
-        {
             return TokenCreationError(tokenResult.Error);
-        }
         return tokenResult;
     }
 
@@ -90,44 +88,26 @@ public class RpnParser
     private static Result<Token> CreateTokenFromString(string item)
     {
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
-        {
             return TokenCreationSuccess(Token.CreateNumber(number));
-        }
 
         if (ValidCommands.Contains(item))
         {
             var commandString = item[..^2];
             var commandResult = Command.GetCommandSymbol(commandString);
             if (!commandResult.IsSuccessful)
-            {
                 return TokenCreationError(commandResult.Error);
-            }
             return TokenCreationSuccess(Token.CreateCommand(commandResult.Value));
         }
 
         var operatorResult = Operator.GetOperatorSymbol(item);
         if (!operatorResult.IsSuccessful)
-        {
             return TokenCreationError(operatorResult.Error);
-        }
         return TokenCreationSuccess(Token.CreateOperator(operatorResult.Value));
     }
 
     private static Result<string[]> ValidateInput(string[] input)
     {
-        var errors = new List<string>();
-
-        foreach (var item in input)
-        {
-            bool isNumber = double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
-            bool isOperator = Operator.IsValidOperator(item);
-            bool isCommand = ValidCommands.Contains(item);
-
-            if (!isNumber && !isOperator && !isCommand)
-            {
-                errors.Add(item);
-            }
-        }
+        var errors = CollectInvalidItems(input);
 
         if (errors.Count > 0)
         {
@@ -136,5 +116,27 @@ public class RpnParser
         }
 
         return InputValidationSuccess(input);
+    }
+
+    private static List<string> CollectInvalidItems(string[] input)
+    {
+        var errors = new List<string>();
+
+        foreach (var item in input)
+        {
+            if (IsInvalidItem(item))
+                errors.Add(item);
+        }
+
+        return errors;
+    }
+
+    private static bool IsInvalidItem(string item)
+    {
+        bool isNumber = double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+        bool isOperator = Operator.IsValidOperator(item);
+        bool isCommand = ValidCommands.Contains(item);
+
+        return !isNumber && !isOperator && !isCommand;
     }
 }
