@@ -6,8 +6,6 @@ namespace Clac.Core;
 
 public class RpnParser
 {
-    private static readonly string[] ValidCommands = ["clear()", "pop()", "swap()", "sum()", "sqrt()", "pow()", "reciprocal()"];
-
     public static Result<List<Token>> Parse(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
@@ -75,7 +73,7 @@ public class RpnParser
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
             return new Result<Token>(Token.CreateNumber(number));
 
-        if (ValidCommands.Contains(item))
+        if (IsCommand(item))
         {
             var commandString = ExtractCommandName(item);
             var commandResult = Command.GetCommandSymbol(commandString);
@@ -120,9 +118,18 @@ public class RpnParser
     {
         bool isNumber = IsNumber(item);
         bool isOperator = Operator.IsValidOperator(item);
-        bool isCommand = ValidCommands.Contains(item);
+        bool isCommand = IsCommand(item);
 
         return !isNumber && !isOperator && !isCommand;
+    }
+
+    private static bool IsCommand(string item)
+    {
+        if (!item.EndsWith("()"))
+            return false;
+
+        var commandName = ExtractCommandName(item);
+        return Command.IsValidCommand(commandName);
     }
 
     private static bool IsNumber(string item)
