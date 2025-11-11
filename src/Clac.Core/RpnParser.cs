@@ -11,31 +11,40 @@ public class RpnParser
     public static Result<List<Token>> Parse(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
-        {
             return ParseEmptyInput();
-        }
 
         var inputItems = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         var validationResult = ValidateInput(inputItems);
 
         if (!validationResult.IsSuccessful)
-        {
             return ValidationError(validationResult.Error);
-        }
 
+        return CreateTokensFromItems(validationResult.Value);
+    }
+
+    private static Result<List<Token>> CreateTokensFromItems(string[] items)
+    {
         var tokens = new List<Token>();
 
-        foreach (var item in validationResult.Value)
+        foreach (var item in items)
         {
-            var tokenResult = CreateTokenFromString(item);
+            var tokenResult = CreateTokenFromItem(item);
             if (!tokenResult.IsSuccessful)
-            {
                 return TokenParsingError(tokenResult.Error);
-            }
             tokens.Add(tokenResult.Value);
         }
 
         return ParseSuccess(tokens);
+    }
+
+    private static Result<Token> CreateTokenFromItem(string item)
+    {
+        var tokenResult = CreateTokenFromString(item);
+        if (!tokenResult.IsSuccessful)
+        {
+            return TokenCreationError(tokenResult.Error);
+        }
+        return tokenResult;
     }
 
     private static Result<List<Token>> ValidationError(Exception error)
