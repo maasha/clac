@@ -70,8 +70,8 @@ public class RpnParser
 
     private static Result<Token> CreateTokenFromString(string item)
     {
-        if (IsNumber(item))
-            return CreateNumberToken(item);
+        if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
+            return CreateNumberToken(number);
 
         if (IsCommand(item))
             return CreateCommandToken(item);
@@ -128,9 +128,8 @@ public class RpnParser
         return double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
     }
 
-    private static Result<Token> CreateNumberToken(string item)
+    private static Result<Token> CreateNumberToken(double number)
     {
-        double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number);
         return new Result<Token>(Token.CreateNumber(number));
     }
 
