@@ -35,7 +35,7 @@ public class RpnParser
             tokens.Add(tokenResult.Value);
         }
 
-        return new Result<List<Token>>(tokens);
+        return ParseSuccess(tokens);
     }
 
     private static Result<List<Token>> ValidationError(Exception error)
@@ -46,6 +46,11 @@ public class RpnParser
     private static Result<List<Token>> TokenParsingError(Exception error)
     {
         return new Result<List<Token>>(error);
+    }
+
+    private static Result<List<Token>> ParseSuccess(List<Token> tokens)
+    {
+        return new Result<List<Token>>(tokens);
     }
 
     private static Result<Token> TokenCreationError(Exception error)
