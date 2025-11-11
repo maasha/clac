@@ -63,6 +63,11 @@ public class RpnParser
         return new Result<Token>(error);
     }
 
+    private static Result<string[]> InputValidationError(Exception error)
+    {
+        return new Result<string[]>(error);
+    }
+
     private static Result<Token> CreateTokenFromString(string item)
     {
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
@@ -108,7 +113,7 @@ public class RpnParser
         if (errors.Count > 0)
         {
             var errorMessage = "Invalid input: " + string.Join(" ", errors);
-            return new Result<string[]>(new Exception(errorMessage));
+            return InputValidationError(new Exception(errorMessage));
         }
 
         return new Result<string[]>(input);
