@@ -97,7 +97,7 @@ public class RpnParser
             {
                 return TokenCreationError(commandResult.Error);
             }
-            return new Result<Token>(Token.CreateCommand(commandResult.Value));
+            return TokenCreationSuccess(Token.CreateCommand(commandResult.Value));
         }
 
         var operatorResult = Operator.GetOperatorSymbol(item);
