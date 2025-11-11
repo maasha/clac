@@ -12,7 +12,7 @@ public class RpnParser
     {
         if (string.IsNullOrWhiteSpace(input))
         {
-            return new Result<List<Token>>([]);
+            return ParseEmptyInput();
         }
 
         var inputItems = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -51,6 +51,11 @@ public class RpnParser
     private static Result<List<Token>> ParseSuccess(List<Token> tokens)
     {
         return new Result<List<Token>>(tokens);
+    }
+
+    private static Result<List<Token>> ParseEmptyInput()
+    {
+        return new Result<List<Token>>([]);
     }
 
     private static Result<Token> TokenCreationError(Exception error)
