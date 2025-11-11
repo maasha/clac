@@ -20,7 +20,7 @@ public class RpnParser
 
         if (!validationResult.IsSuccessful)
         {
-            return new Result<List<Token>>(validationResult.Error);
+            return ValidationError(validationResult.Error);
         }
 
         var tokens = new List<Token>();
@@ -38,9 +38,19 @@ public class RpnParser
         return new Result<List<Token>>(tokens);
     }
 
+    private static Result<List<Token>> ValidationError(Exception error)
+    {
+        return new Result<List<Token>>(error);
+    }
+
     private static Result<List<Token>> TokenParsingError(Exception error)
     {
         return new Result<List<Token>>(error);
+    }
+
+    private static Result<Token> TokenCreationError(Exception error)
+    {
+        return new Result<Token>(error);
     }
 
     private static Result<Token> CreateTokenFromString(string item)
@@ -56,7 +66,7 @@ public class RpnParser
             var commandResult = Command.GetCommandSymbol(commandString);
             if (!commandResult.IsSuccessful)
             {
-                return new Result<Token>(commandResult.Error);
+                return TokenCreationError(commandResult.Error);
             }
             return new Result<Token>(Token.CreateCommand(commandResult.Value));
         }
