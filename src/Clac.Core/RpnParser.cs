@@ -63,6 +63,11 @@ public class RpnParser
         return new Result<Token>(error);
     }
 
+    private static Result<Token> TokenCreationSuccess(Token token)
+    {
+        return new Result<Token>(token);
+    }
+
     private static Result<string[]> InputValidationError(Exception error)
     {
         return new Result<string[]>(error);
@@ -72,7 +77,7 @@ public class RpnParser
     {
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
         {
-            return new Result<Token>(Token.CreateNumber(number));
+            return TokenCreationSuccess(Token.CreateNumber(number));
         }
 
         if (ValidCommands.Contains(item))
