@@ -123,9 +123,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
         PopulateDisplayItems(stack, totalLines, maxIntegerPartLength);
 
-        ScrollBarVisibility = stack.Length > displayLines
-            ? ScrollBarVisibility.Auto
-            : ScrollBarVisibility.Hidden;
+        UpdateScrollBarVisibility(stack.Length, displayLines);
     }
 
     private void PopulateDisplayItems(string[] stack, int totalLines, int maxIntegerPartLength)
@@ -144,6 +142,13 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
             DisplayItems.Add(new StackLineItem(lineNumber, formattedValue));
         }
+    }
+
+    private void UpdateScrollBarVisibility(int stackLength, int displayLines)
+    {
+        ScrollBarVisibility = stackLength > displayLines
+            ? ScrollBarVisibility.Auto
+            : ScrollBarVisibility.Hidden;
     }
 
     public bool HasErrors => _errors.Any();
