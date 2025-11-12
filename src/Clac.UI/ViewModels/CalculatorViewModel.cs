@@ -45,7 +45,12 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         InitializeDisplayItems();
     }
 
-    public string[] StackDisplay => [.. _processor.Stack.ToArray().Select(x => x.ToString())];
+    public string[] StackDisplay => GetStackDisplay();
+
+    private string[] GetStackDisplay()
+    {
+        return [.. _processor.Stack.ToArray().Select(x => x.ToString())];
+    }
 
     public string CurrentInput
     {
@@ -104,7 +109,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private void UpdateDisplayItems()
     {
-        var stack = StackDisplay;
+        var stack = GetStackDisplay();
         int displayLines = SettingsManager.UI.DisplayLines;
         int maxIntegerPartLength = GetMaxIntegerPartLength(stack);
         int totalLines = Math.Max(displayLines, stack.Length);
