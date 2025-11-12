@@ -23,7 +23,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
     private readonly Dictionary<string, List<string>> _errors = new();
-
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
     private ScrollBarVisibility _scrollBarVisibility = ScrollBarVisibility.Hidden;
@@ -118,7 +117,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         UpdateScrollBarVisibility(stack.Length, displayLines);
     }
 
-    private int GetMaxIntegerPartLength(string[] stack)
+    private static int GetMaxIntegerPartLength(string[] stack)
     {
         var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
         return visibleValues.Length > 0
@@ -134,11 +133,15 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             AddDisplayItemForLine(stack, lineNum, totalLines, maxIntegerPartLength);
     }
 
-    private void AddDisplayItemForLine(string[] stack, int lineNum, int totalLines, int maxIntegerPartLength)
+    private static string GetStackValue(string[] stack, int lineNum)
     {
         int stackIndex = stack.Length - lineNum;
-        string value = stackIndex >= 0 ? stack[stackIndex] : "";
+        return stackIndex >= 0 ? stack[stackIndex] : "";
+    }
 
+    private void AddDisplayItemForLine(string[] stack, int lineNum, int totalLines, int maxIntegerPartLength)
+    {
+        string value = GetStackValue(stack, lineNum);
         string lineNumber = DisplayFormatter.FormatLineNumber(lineNum, totalLines);
         string formattedValue = string.IsNullOrEmpty(value)
             ? ""
