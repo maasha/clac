@@ -66,6 +66,9 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     public bool HasError => !string.IsNullOrEmpty(_errorMessage);
     public string ErrorMessage => _errorMessage ?? "";
 
+    private const double ErrorLineHeight = 50.0;
+    public double WindowHeight => SettingsManager.UI.WindowHeight + (HasError ? ErrorLineHeight : 0);
+
     public void AppendToInput(string value)
     {
         _currentInput += value;
@@ -208,6 +211,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         AddError(CurrentInputPropertyName, message);
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
+        OnPropertyChanged(nameof(WindowHeight));
     }
 
     private void ClearInputErrorsAndNotify()
@@ -217,6 +221,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(CurrentInputPropertyName);
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
+        OnPropertyChanged(nameof(WindowHeight));
     }
 
     private void SetCurrentInputAndClearErrors(string value)
@@ -227,6 +232,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(CurrentInputPropertyName);
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
+        OnPropertyChanged(nameof(WindowHeight));
     }
 
     private void ClearInputAndUpdateDisplay()
@@ -243,6 +249,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         ClearInputAndUpdateDisplay();
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
+        OnPropertyChanged(nameof(WindowHeight));
     }
     private bool HasPrefixedSpace()
     {
