@@ -116,7 +116,14 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         int maxIntegerPartLength = GetMaxIntegerPartLength(stack);
         int totalLines = Math.Max(displayLines, stack.Length);
 
-        PopulateDisplayItems(stack, totalLines, maxIntegerPartLength);
+        var context = new DisplayItemContext
+        {
+            Stack = stack,
+            TotalLines = totalLines,
+            MaxIntegerPartLength = maxIntegerPartLength
+        };
+
+        PopulateDisplayItems(context);
         UpdateScrollBarVisibility(stack.Length, displayLines);
     }
 
@@ -128,27 +135,17 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             : 0;
     }
 
-    private void PopulateDisplayItems(string[] stack, int totalLines, int maxIntegerPartLength)
+    private void PopulateDisplayItems(DisplayItemContext context)
     {
         DisplayItems.Clear();
 
-        for (int lineNum = totalLines; lineNum >= 1; lineNum--)
-        {
-            var context = new DisplayItemContext
-            {
-                Stack = stack,
-                LineNum = lineNum,
-                TotalLines = totalLines,
-                MaxIntegerPartLength = maxIntegerPartLength
-            };
-            AddDisplayItemForLine(context);
-        }
+        for (int lineNum = context.TotalLines; lineNum >= 1; lineNum--)
+            AddDisplayItemForLine(context, lineNum);
     }
 
     private struct DisplayItemContext
     {
         public string[] Stack { get; init; }
-        public int LineNum { get; init; }
         public int TotalLines { get; init; }
         public int MaxIntegerPartLength { get; init; }
     }
@@ -159,10 +156,10 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         return stackIndex >= 0 ? stack[stackIndex] : "";
     }
 
-    private void AddDisplayItemForLine(DisplayItemContext context)
+    private void AddDisplayItemForLine(DisplayItemContext context, int lineNum)
     {
-        string value = GetStackValue(context.Stack, context.LineNum);
-        string lineNumber = DisplayFormatter.FormatLineNumber(context.LineNum, context.TotalLines);
+        string value = GetStackValue(context.Stack, lineNum);
+        string lineNumber = DisplayFormatter.FormatLineNumber(lineNum, context.TotalLines);
         string formattedValue = string.IsNullOrEmpty(value)
             ? ""
             : DisplayFormatter.FormatValue(value, context.MaxIntegerPartLength);
@@ -271,9 +268,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         var tokens = RpnParser.Parse(_currentInput);
         if (!tokens.IsSuccessful)
-        {
             SetErrorMessageAndNotify(tokens.Error.Message);
-        }
         return tokens;
     }
 
