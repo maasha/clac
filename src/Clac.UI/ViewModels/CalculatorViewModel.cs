@@ -45,9 +45,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         InitializeDisplayItems();
     }
 
-    public string[] StackDisplay => _processor.Stack.ToArray()
-    .Select(x => x.ToString())
-    .ToArray();
+    public string[] StackDisplay => [.. _processor.Stack.ToArray().Select(x => x.ToString())];
 
     public string CurrentInput
     {
