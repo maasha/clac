@@ -11,9 +11,7 @@ public class RpnStack
     public Result<double> Peek()
     {
         if (_stack.Count == 0)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
-        }
 
         return new Result<double>(_stack[^1]);
     }
@@ -31,9 +29,7 @@ public class RpnStack
     public Result<double> Pop()
     {
         if (_stack.Count == 0)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
-        }
 
         var value = _stack[^1];
         _stack.RemoveAt(_stack.Count - 1);
@@ -43,9 +39,7 @@ public class RpnStack
     public Result<double> Swap()
     {
         if (_stack.Count < 2)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.StackHasLessThanTwoNumbers));
-        }
 
         var last = _stack[^1];
         var secondLast = _stack[^2];
@@ -57,9 +51,7 @@ public class RpnStack
     public Result<double> Sum()
     {
         if (_stack.Count == 0)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
-        }
 
         return new Result<double>(_stack.Sum());
     }
@@ -67,14 +59,10 @@ public class RpnStack
     public Result<double> Sqrt()
     {
         if (_stack.Count == 0)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
-        }
 
         if (_stack[^1] < 0)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.InvalidNegativeSquareRoot));
-        }
 
         return new Result<double>(Math.Sqrt(_stack[^1]));
     }
@@ -82,9 +70,7 @@ public class RpnStack
     public Result<double> Pow()
     {
         if (_stack.Count < 2)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.StackHasLessThanTwoNumbers));
-        }
 
         var exponent = _stack[^1];
         var baseValue = _stack[^2];
@@ -94,14 +80,10 @@ public class RpnStack
     public Result<double> Reciprocal()
     {
         if (_stack.Count == 0)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
-        }
 
         if (_stack[^1] == 0)
-        {
             return new Result<double>(new InvalidOperationException(ErrorMessages.DivisionByZero));
-        }
 
         return new Result<double>(1.0 / _stack[^1]);
     }
