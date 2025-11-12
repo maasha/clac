@@ -4,6 +4,7 @@ namespace Clac.Core;
 
 public class RpnStack
 {
+    private const string ErrorStackEmpty = "Stack is empty";
     private readonly List<double> _stack = [];
 
     public double[] ToArray() => [.. _stack];
@@ -12,7 +13,7 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException("Stack is empty"));
+            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
         }
 
         return new Result<double>(_stack[^1]);
@@ -32,7 +33,7 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException("Stack is empty"));
+            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
         }
 
         var value = _stack[^1];
@@ -58,7 +59,7 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException("Stack is empty"));
+            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
         }
 
         return new Result<double>(_stack.Sum());
@@ -68,7 +69,7 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException("Stack is empty"));
+            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
         }
 
         if (_stack[^1] < 0)
@@ -95,7 +96,7 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException("Stack is empty"));
+            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
         }
 
         if (_stack[^1] == 0)
