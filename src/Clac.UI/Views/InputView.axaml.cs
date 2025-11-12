@@ -14,8 +14,6 @@ public partial class InputView : UserControl
     private void OnInputKeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter && DataContext is CalculatorViewModel viewModel)
-        {
             viewModel.Enter();
-        }
     }
 }

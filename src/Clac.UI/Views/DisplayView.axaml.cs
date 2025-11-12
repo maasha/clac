@@ -23,9 +23,7 @@ public partial class DisplayView : UserControl
     private void OnDataContextChanged(object? sender, System.EventArgs e)
     {
         if (DataContext is CalculatorViewModel viewModel)
-        {
             viewModel.DisplayItems.CollectionChanged += OnDisplayItemsChanged;
-        }
     }
 
     private void OnDisplayItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
