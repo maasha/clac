@@ -88,11 +88,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         var charsToRemove = hasPrefixedSpace ? 2 : 1;
         _currentInput = _currentInput.Substring(0, _currentInput.Length - charsToRemove);
 
-        ClearErrors(nameof(CurrentInput));
-        _errorMessage = null;
-        OnPropertyChanged(nameof(CurrentInput));
-        OnPropertyChanged(nameof(HasError));
-        OnPropertyChanged(nameof(ErrorMessage));
+        ClearInputErrorsAndNotify();
     }
 
     public void Enter()
@@ -191,6 +187,15 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         _errorMessage = message;
         AddError(nameof(CurrentInput), message);
+        OnPropertyChanged(nameof(HasError));
+        OnPropertyChanged(nameof(ErrorMessage));
+    }
+
+    private void ClearInputErrorsAndNotify()
+    {
+        ClearErrors(nameof(CurrentInput));
+        _errorMessage = null;
+        OnPropertyChanged(nameof(CurrentInput));
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
     }
