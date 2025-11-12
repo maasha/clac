@@ -46,7 +46,7 @@ public class RpnParser
     private static Result<Token> CreateTokenFromString(string item)
     {
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
-            return CreateNumberToken(number);
+            return new Result<Token>(Token.CreateNumber(number));
 
         if (IsCommand(item))
             return CreateCommandToken(item);
@@ -101,11 +101,6 @@ public class RpnParser
     private static bool IsNumber(string item)
     {
         return double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
-    }
-
-    private static Result<Token> CreateNumberToken(double number)
-    {
-        return new Result<Token>(Token.CreateNumber(number));
     }
 
     private static Result<Token> CreateCommandToken(string item)
