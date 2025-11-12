@@ -4,7 +4,6 @@ public enum KeyType
 {
     Number,
     Operator,
-    Function,
     Command,
     Enter
 }
