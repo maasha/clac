@@ -102,13 +102,15 @@ package "Clac.UI" UI_COLOR {
         -_errorMessage: string?
         -_processor: RpnProcessor
         -_errors: Dictionary<string, List<string>>
-        -_scrollBarVisibility: ScrollBarVisibility
+        -_showScrollBar: bool
         +DisplayItems: ObservableCollection<StackLineItem>
         +StackDisplay: string[]
         +CurrentInput: string
         +HasError: bool
         +ErrorMessage: string
-        +ScrollBarVisibility: ScrollBarVisibility
+        +ShowScrollBar: bool
+        +WindowHeight: double
+        +DisplayHeight: double
         +HasErrors: bool
         +AppendToInput(string): void
         +DeleteFromInput(): void
@@ -160,27 +162,40 @@ package "Clac.UI" UI_COLOR {
         Enter
     }
     
+    class App {
+        +Initialize(): void
+        +OnFrameworkInitializationCompleted(): void
+    }
+    
     class MainWindow {
-        -ErrorLineHeight: double
-        -_baseWindowHeight: double
-        -_viewModel: CalculatorViewModel?
-        +OnWindowLoaded(object?, RoutedEventArgs): void
-        -OnViewModelPropertyChanged(object?, PropertyChangedEventArgs): void
+        +MainWindow(CalculatorViewModel): void
+        +MainWindow(): void
     }
     
     class CalculatorView {
     }
     
     class DisplayView {
+        -OnDataContextChanged(object?, EventArgs): void
+        -OnViewModelPropertyChanged(object?, PropertyChangedEventArgs): void
+        -UpdateScrollBarVisibility(CalculatorViewModel): void
+        -OnDisplayItemsChanged(object?, NotifyCollectionChangedEventArgs): void
     }
     
     class InputView {
+        -OnInputKeyDown(object?, KeyEventArgs): void
     }
     
     class KeyboardView {
+        -OnDataContextChanged(object?, EventArgs): void
+        -SetViewModelOnAllKeys(CalculatorViewModel): void
     }
     
     class KeyboardKeyView {
+        +ViewModel: CalculatorViewModel?
+        {static} +ViewModelProperty: StyledProperty<CalculatorViewModel?>
+        -OnKeyButtonClick(object?, RoutedEventArgs): void
+        -FindCalculatorViewModel(): CalculatorViewModel?
     }
     
     CalculatorViewModel --> RpnProcessor : uses
@@ -193,7 +208,10 @@ package "Clac.UI" UI_COLOR {
     
     SettingsManager --> UISettings : provides
     
-    MainWindow --> CalculatorViewModel : contains
+    App --> CalculatorViewModel : creates
+    App --> MainWindow : creates
+    
+    MainWindow --> CalculatorViewModel : receives via constructor
     MainWindow --> CalculatorView : contains
     MainWindow ..> SettingsManager : uses
     
@@ -202,7 +220,12 @@ package "Clac.UI" UI_COLOR {
     CalculatorView --> KeyboardView : contains
     
     KeyboardView --> KeyboardKeyView : contains
+    KeyboardView ..> CalculatorViewModel : sets ViewModel on children
+    
+    KeyboardKeyView --> CalculatorViewModel : receives via dependency property
     KeyboardKeyView ..> KeyboardKey : uses
+    
+    DisplayView ..> CalculatorViewModel : subscribes to PropertyChanged
 }
 
 CalculatorViewModel ..> "Clac.Core" : depends on
@@ -226,6 +249,22 @@ note right of CalculatorViewModel
   - Implements INotifyPropertyChanged
   - Implements INotifyDataErrorInfo
   - Bridges UI and Core logic
+  - UI Framework Agnostic (no Avalonia types)
+  - Exposes ShowScrollBar (bool) instead of ScrollBarVisibility
+  - Computes WindowHeight and DisplayHeight
+end note
+
+note right of App
+  Application Layer:
+  - Creates ViewModel instance
+  - Injects ViewModel into MainWindow
+  - Controls ViewModel lifecycle
+end note
+
+note right of KeyboardKeyView
+  View receives ViewModel via:
+  - Dependency Property (preferred)
+  - Fallback tree traversal (tests only)
 end note
 
 @enduml

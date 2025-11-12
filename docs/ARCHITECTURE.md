@@ -57,11 +57,13 @@ The UI layer uses Avalonia framework and follows MVVM pattern.
 **CalculatorViewModel**
 - Main ViewModel implementing `INotifyPropertyChanged` and `INotifyDataErrorInfo`
 - Bridges UI and Core logic
+- **UI Framework Agnostic**: No references to Avalonia types (uses `bool ShowScrollBar` instead of `ScrollBarVisibility`)
 - Manages:
   - Current input string
   - Stack display
   - Error messages
   - Display formatting
+  - Window height (computed property based on error state)
 - Uses `RpnProcessor` for calculations
 - Uses `DisplayFormatter` for formatting
 - Uses `SettingsManager` for configuration
@@ -81,12 +83,12 @@ The UI layer uses Avalonia framework and follows MVVM pattern.
 - **KeyType**: Defines key types (Number, Operator, Function, Command, Enter)
 
 **Views (Avalonia UserControls):**
-- **MainWindow**: Root window
+- **MainWindow**: Root window (uses data binding for window height)
 - **CalculatorView**: Main calculator container
-- **DisplayView**: Stack display area
+- **DisplayView**: Stack display area (converts ViewModel boolean to ScrollBarVisibility)
 - **InputView**: Input field
-- **KeyboardView**: Keyboard container
-- **KeyboardKeyView**: Individual key view
+- **KeyboardView**: Keyboard container (sets ViewModel on child views via dependency property)
+- **KeyboardKeyView**: Individual key view (receives ViewModel via dependency property)
 
 ## Design Patterns
 
@@ -101,6 +103,9 @@ Used throughout the Core layer for error handling instead of exceptions:
 - **Model**: Core domain classes (Clac.Core)
 - **View**: Avalonia XAML views
 - **ViewModel**: `CalculatorViewModel` bridges View and Model
+- **Compliance**: ViewModel is UI framework agnostic (uses `bool ShowScrollBar` instead of `ScrollBarVisibility`)
+- **Data Binding**: Window height and scroll bar visibility controlled via ViewModel properties
+- **ViewModel Access**: Views receive ViewModel via dependency properties (no tree traversal in production)
 
 ### 3. Factory Pattern
 - `Token` uses static factory methods: `CreateNumber`, `CreateOperator`, `CreateCommand`
@@ -129,10 +134,22 @@ Used throughout the Core layer for error handling instead of exceptions:
 
 - **Clac.Core**: No external dependencies (except DotNext for Result pattern)
 - **Clac.UI**: Depends on Clac.Core and Avalonia UI framework
+- **ViewModel Independence**: CalculatorViewModel has no references to Avalonia types, ensuring testability and framework independence
 
 ## Extensibility
 
 1. **Adding Operators**: Extend `Operator` class and `OperatorSymbol` enum
 2. **Adding Commands**: Add handler to `RpnProcessor._commandHandlers` dictionary
 3. **UI Customization**: Modify `UISettings` and XAML views
+4. **Adding Keyboard Keys**: Add to `KeyboardView` initialization and set ViewModel property
+
+## MVVM Compliance
+
+The application follows MVVM principles with the following characteristics:
+
+- ✅ **ViewModel Independence**: ViewModel has no UI framework dependencies
+- ✅ **Data Binding**: View state controlled via ViewModel properties bound in XAML
+- ✅ **Explicit ViewModel Passing**: Views receive ViewModel via dependency properties
+- ✅ **Separation of Concerns**: View handles UI-specific conversions (e.g., boolean to ScrollBarVisibility)
+- ⚠️ **Minor Issues**: Some views access configuration directly; could be improved with ViewModel properties
 
