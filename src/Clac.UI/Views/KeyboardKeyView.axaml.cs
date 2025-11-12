@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Clac.UI.ViewModels;
@@ -9,6 +11,15 @@ namespace Clac.UI.Views;
 public partial class KeyboardKeyView : UserControl
 {
     private const string DeleteCommand = "del()";
+
+    private static readonly Dictionary<KeyType, Action<KeyboardKey, CalculatorViewModel>> KeyHandlers = new()
+    {
+        { KeyType.Command, HandleCommandKey },
+        { KeyType.Enter, HandleEnterKey },
+        { KeyType.Operator, HandleOperatorKey },
+        { KeyType.Number, HandleNumberKey },
+        { KeyType.Function, HandleFunctionKey }
+    };
 
     public KeyboardKeyView()
     {
@@ -23,25 +34,14 @@ public partial class KeyboardKeyView : UserControl
         var viewModel = FindCalculatorViewModel();
         if (viewModel != null)
         {
-            switch (key.Type)
-            {
-                case KeyType.Command:
-                    HandleCommandKey(key, viewModel);
-                    break;
-                case KeyType.Enter:
-                    viewModel.Enter();
-                    break;
-                case KeyType.Operator:
-                    HandleOperatorKey(key, viewModel);
-                    break;
-                default:
-                    viewModel.AppendToInput(key.Value);
-                    break;
-            }
+            if (KeyHandlers.TryGetValue(key.Type, out var handler))
+                handler(key, viewModel);
+            else
+                viewModel.AppendToInput(key.Value);
         }
     }
 
-    private void HandleCommandKey(KeyboardKey key, CalculatorViewModel viewModel)
+    private static void HandleCommandKey(KeyboardKey key, CalculatorViewModel viewModel)
     {
         if (key.Value == DeleteCommand)
         {
@@ -55,10 +55,25 @@ public partial class KeyboardKeyView : UserControl
         }
     }
 
-    private void HandleOperatorKey(KeyboardKey key, CalculatorViewModel viewModel)
+    private static void HandleEnterKey(KeyboardKey key, CalculatorViewModel viewModel)
+    {
+        viewModel.Enter();
+    }
+
+    private static void HandleOperatorKey(KeyboardKey key, CalculatorViewModel viewModel)
     {
         var prefix = GetOperatorPrefix(viewModel);
         viewModel.AppendToInput(prefix + key.Value);
+    }
+
+    private static void HandleNumberKey(KeyboardKey key, CalculatorViewModel viewModel)
+    {
+        viewModel.AppendToInput(key.Value);
+    }
+
+    private static void HandleFunctionKey(KeyboardKey key, CalculatorViewModel viewModel)
+    {
+        viewModel.AppendToInput(key.Value);
     }
 
     private static string GetOperatorPrefix(CalculatorViewModel viewModel)
