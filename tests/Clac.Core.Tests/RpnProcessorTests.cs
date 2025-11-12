@@ -20,7 +20,7 @@ public class RpnProcessorTests
         var stackLength = _processor.Stack.Count;
         var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
-        Assert.Contains("No result on stack", result.Error.Message);
+        Assert.Contains(ErrorMessages.NoResultOnStack, result.Error.Message);
         Assert.Equal(stackLength, _processor.Stack.Count);
     }
 
@@ -40,7 +40,7 @@ public class RpnProcessorTests
         var tokens = RpnParser.Parse("1 +").Value;
         var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack has less than two numbers", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, result.Error.Message);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class RpnProcessorTests
         var tokens = RpnParser.Parse("+").Value;
         var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack has less than two numbers", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, result.Error.Message);
         Assert.Single(_processor.Stack.ToArray());
         Assert.Equal(8, _processor.Stack.Peek().Value);
     }
@@ -174,7 +174,7 @@ public class RpnProcessorTests
         Assert.Equal(-1, _processor.Stack.Peek().Value);
         var result = _processor.Process(RpnParser.Parse("sqrt()").Value);
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Invalid: negative square root", result.Error.Message);
+        Assert.Contains(ErrorMessages.InvalidNegativeSquareRoot, result.Error.Message);
     }
 
     [Fact]

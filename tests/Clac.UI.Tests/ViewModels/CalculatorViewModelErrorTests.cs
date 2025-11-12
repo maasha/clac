@@ -1,5 +1,6 @@
 using Xunit;
 using Clac.UI.ViewModels;
+using Clac.Core;
 using System.ComponentModel;
 using System.Linq;
 
@@ -85,7 +86,7 @@ public class CalculatorViewModelErrorTests
         _vm.Enter();
 
         Assert.True(_vm.HasError);
-        Assert.Contains("Stack has less than two numbers", _vm.ErrorMessage);
+        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, _vm.ErrorMessage);
         Assert.Single(_vm.StackDisplay);
         Assert.Equal("8", _vm.StackDisplay[0]);
     }
@@ -104,7 +105,7 @@ public class CalculatorViewModelErrorTests
         _vm.Enter();
 
         Assert.True(_vm.HasError);
-        Assert.Contains("Stack has less than two numbers", _vm.ErrorMessage);
+        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, _vm.ErrorMessage);
         var displayItem = Assert.Single(_vm.DisplayItems, item => !string.IsNullOrEmpty(item.FormattedValue));
         Assert.Equal("8", displayItem.FormattedValue.Trim());
     }
@@ -120,7 +121,7 @@ public class CalculatorViewModelErrorTests
         _vm.Enter();
 
         Assert.True(_vm.HasError);
-        Assert.Contains("Stack has less than two numbers", _vm.ErrorMessage);
+        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, _vm.ErrorMessage);
 
         _vm.CurrentInput = "1";
 

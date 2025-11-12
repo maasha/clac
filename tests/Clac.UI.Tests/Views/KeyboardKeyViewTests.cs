@@ -5,6 +5,7 @@ using Clac.UI.Views;
 using Clac.UI.Models;
 using Clac.UI.Enums;
 using Clac.UI.ViewModels;
+using Clac.Core;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
@@ -928,7 +929,7 @@ public class KeyboardKeyViewTests
         Assert.Single(_vm.StackDisplay);
         Assert.Equal("-1", _vm.StackDisplay[0]);
         Assert.True(_vm.HasError);
-        Assert.Contains("Invalid: negative square root", _vm.ErrorMessage);
+        Assert.Contains(ErrorMessages.InvalidNegativeSquareRoot, _vm.ErrorMessage);
     }
 
     [Fact]
@@ -1159,7 +1160,7 @@ public class KeyboardKeyViewTests
         Assert.Single(_vm.StackDisplay);
         Assert.Equal("0", _vm.StackDisplay[0]);
         Assert.True(_vm.HasError);
-        Assert.Contains("Division by zero", _vm.ErrorMessage);
+        Assert.Contains(ErrorMessages.DivisionByZero, _vm.ErrorMessage);
     }
 
     [Fact]

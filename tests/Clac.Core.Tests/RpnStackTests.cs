@@ -17,7 +17,7 @@ public class RpnStackTests
     {
         var result = _stack.Peek();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack is empty", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class RpnStackTests
         _stack.Clear();
         var result = _stack.Peek();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack is empty", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class RpnStackTests
     {
         var result = _stack.Pop();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack is empty", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -85,7 +85,7 @@ public class RpnStackTests
         _stack.Push(1);
         var result = _stack.Swap();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack has less than two numbers", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, result.Error.Message);
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public class RpnStackTests
     {
         var result = _stack.Sum();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack is empty", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -111,7 +111,7 @@ public class RpnStackTests
     {
         var result = _stack.Sqrt();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack is empty", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -129,7 +129,7 @@ public class RpnStackTests
         _stack.Push(-1);
         var result = _stack.Sqrt();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Invalid: negative square root", result.Error.Message);
+        Assert.Contains(ErrorMessages.InvalidNegativeSquareRoot, result.Error.Message);
     }
 
     [Fact]
@@ -138,7 +138,7 @@ public class RpnStackTests
         _stack.Push(2);
         var result = _stack.Pow();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack has less than two numbers", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, result.Error.Message);
     }
 
     [Fact]
@@ -165,7 +165,7 @@ public class RpnStackTests
     {
         var result = _stack.Reciprocal();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack is empty", result.Error.Message);
+        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -174,6 +174,6 @@ public class RpnStackTests
         _stack.Push(0);
         var result = _stack.Reciprocal();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Division by zero", result.Error.Message);
+        Assert.Contains(ErrorMessages.DivisionByZero, result.Error.Message);
     }
 }

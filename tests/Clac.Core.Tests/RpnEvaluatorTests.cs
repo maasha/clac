@@ -12,7 +12,7 @@ public class RpnEvaluatorTests
         var badOperator = (OperatorSymbol)999;
         var result = RpnEvaluator.Evaluate(1, 2, badOperator);
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Unknown operator", result.Error.Message);
+        Assert.Contains(ErrorMessages.UnknownOperator(badOperator), result.Error.Message);
     }
 
     [Fact]
@@ -52,6 +52,6 @@ public class RpnEvaluatorTests
     {
         var result = RpnEvaluator.Evaluate(1, 0, OperatorSymbol.Divide);
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Division by zero", result.Error.Message);
+        Assert.Contains(ErrorMessages.DivisionByZero, result.Error.Message);
     }
 }
