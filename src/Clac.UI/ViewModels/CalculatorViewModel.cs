@@ -120,10 +120,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             return;
         }
 
-        _errorMessage = null;
-        ClearInputAndUpdateDisplay();
-        OnPropertyChanged(nameof(HasError));
-        OnPropertyChanged(nameof(ErrorMessage));
+        ClearSuccessState();
     }
 
     private void InitializeDisplayItems()
@@ -214,6 +211,14 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         UpdateDisplayItems();
         OnPropertyChanged(nameof(CurrentInput));
         OnPropertyChanged(nameof(StackDisplay));
+    }
+
+    private void ClearSuccessState()
+    {
+        _errorMessage = null;
+        ClearInputAndUpdateDisplay();
+        OnPropertyChanged(nameof(HasError));
+        OnPropertyChanged(nameof(ErrorMessage));
     }
 
     private void OnErrorsChanged(string propertyName)
