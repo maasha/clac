@@ -84,7 +84,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             return;
 
         var lastChar = _currentInput[_currentInput.Length - 1];
-        var isOperator = lastChar == '+' || lastChar == '-' || lastChar == '*' || lastChar == '/';
+        var isOperator = Operator.IsValidOperator(lastChar.ToString());
         var hasPrefixedSpace = isOperator && _currentInput.Length >= 2 && _currentInput[_currentInput.Length - 2] == ' ';
 
         var charsToRemove = hasPrefixedSpace ? 2 : 1;
