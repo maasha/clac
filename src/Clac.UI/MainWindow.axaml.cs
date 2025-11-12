@@ -6,12 +6,14 @@ namespace Clac.UI;
 
 public partial class MainWindow : Window
 {
+    public MainWindow(CalculatorViewModel viewModel) : this()
+    {
+        DataContext = viewModel;
+    }
+
     public MainWindow()
     {
         InitializeComponent();
-        var viewModel = new CalculatorViewModel();
-        DataContext = viewModel;
-
         Width = SettingsManager.UI.WindowWidth;
     }
 }
