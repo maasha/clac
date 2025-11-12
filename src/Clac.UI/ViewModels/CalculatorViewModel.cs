@@ -83,11 +83,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (string.IsNullOrEmpty(_currentInput))
             return;
 
-        var hasPrefixedSpace = HasPrefixedSpace();
-
-        var charsToRemove = hasPrefixedSpace ? 2 : 1;
-        _currentInput = _currentInput.Substring(0, _currentInput.Length - charsToRemove);
-
+        RemoveLastChars();
         ClearInputErrorsAndNotify();
     }
 
@@ -224,6 +220,13 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         var lastChar = _currentInput[_currentInput.Length - 1];
         return Operator.IsValidOperator(lastChar.ToString())
             && _currentInput[_currentInput.Length - 2] == ' ';
+    }
+
+    private void RemoveLastChars()
+    {
+        var hasPrefixedSpace = HasPrefixedSpace();
+        var charsToRemove = hasPrefixedSpace ? 2 : 1;
+        _currentInput = _currentInput.Substring(0, _currentInput.Length - charsToRemove);
     }
 
     private Result<List<Token>> ParseInput()
