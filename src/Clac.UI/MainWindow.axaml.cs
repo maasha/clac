@@ -36,13 +36,9 @@ public partial class MainWindow : Window
         if (e.PropertyName == nameof(CalculatorViewModel.HasError) && _viewModel != null)
         {
             if (_viewModel.HasError)
-            {
                 Height = _baseWindowHeight + ErrorLineHeight;
-            }
             else
-            {
                 Height = _baseWindowHeight;
-            }
         }
     }
 }
