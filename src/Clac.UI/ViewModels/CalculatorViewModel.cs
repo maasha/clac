@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Avalonia.Controls.Primitives;
+using DotNext;
 using Clac.Core;
 using Clac.UI.Configuration;
 using Clac.UI.Helpers;
@@ -103,13 +104,9 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
         ClearErrors(nameof(CurrentInput));
 
-        var tokens = RpnParser.Parse(_currentInput);
-
+        var tokens = ParseInput();
         if (!tokens.IsSuccessful)
-        {
-            SetErrorMessageAndNotify(tokens.Error.Message);
             return;
-        }
 
         var result = _processor.Process(tokens.Value);
 
@@ -219,6 +216,16 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         ClearInputAndUpdateDisplay();
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
+    }
+
+    private Result<List<Token>> ParseInput()
+    {
+        var tokens = RpnParser.Parse(_currentInput);
+        if (!tokens.IsSuccessful)
+        {
+            SetErrorMessageAndNotify(tokens.Error.Message);
+        }
+        return tokens;
     }
 
     private void OnErrorsChanged(string propertyName)
