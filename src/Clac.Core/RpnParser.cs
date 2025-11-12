@@ -122,7 +122,8 @@ public class RpnParser
 
     private static string ExtractCommandName(string commandWithParentheses)
     {
-        return commandWithParentheses[..^2]; // Remove "()" suffix
+        // Remove "()" suffix and lowercase command name
+        return commandWithParentheses[..^2].ToLowerInvariant();
     }
 
     private static string FormatInvalidInputMessage(List<string> errors)

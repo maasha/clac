@@ -122,4 +122,13 @@ public class RpnParserTests
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
     }
+
+    [Fact]
+    public void Parse_UppercaseCommand_ShouldReturnCommandToken()
+    {
+        var result = RpnParser.Parse("RECIPROCAL()");
+        Assert.True(result.IsSuccessful);
+        Assert.Single(result.Value);
+        Assert.IsType<Token.CommandToken>(result.Value[0]);
+    }
 }
