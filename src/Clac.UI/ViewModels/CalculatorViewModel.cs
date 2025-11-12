@@ -108,14 +108,9 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (!tokens.IsSuccessful)
             return;
 
-        var result = _processor.Process(tokens.Value);
-
-        if (!result.IsSuccessful)
-        {
-            SetErrorMessageAndNotify(result.Error.Message);
-            ClearInputAndUpdateDisplay();
+        var result = ProcessTokens(tokens.Value);
+        if (result == null)
             return;
-        }
 
         ClearSuccessState();
     }
@@ -226,6 +221,18 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             SetErrorMessageAndNotify(tokens.Error.Message);
         }
         return tokens;
+    }
+
+    private Result<double>? ProcessTokens(List<Token> tokens)
+    {
+        var result = _processor.Process(tokens);
+        if (!result.IsSuccessful)
+        {
+            SetErrorMessageAndNotify(result.Error.Message);
+            ClearInputAndUpdateDisplay();
+            return null;
+        }
+        return result;
     }
 
     private void OnErrorsChanged(string propertyName)
