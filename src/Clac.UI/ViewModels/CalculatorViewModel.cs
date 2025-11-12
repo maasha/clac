@@ -19,6 +19,8 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
+    private static readonly string CurrentInputPropertyName = nameof(CurrentInput);
+
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
@@ -85,7 +87,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (string.IsNullOrWhiteSpace(_currentInput))
             return;
 
-        ClearErrors(nameof(CurrentInput));
+        ClearErrors(CurrentInputPropertyName);
 
         var tokens = ParseInput();
         if (!tokens.IsSuccessful)
@@ -209,16 +211,16 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private void SetErrorMessageAndNotify(string message)
     {
         _errorMessage = message;
-        AddError(nameof(CurrentInput), message);
+        AddError(CurrentInputPropertyName, message);
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
     }
 
     private void ClearInputErrorsAndNotify()
     {
-        ClearErrors(nameof(CurrentInput));
+        ClearErrors(CurrentInputPropertyName);
         _errorMessage = null;
-        OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(CurrentInputPropertyName);
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
     }
@@ -226,9 +228,9 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private void SetCurrentInputAndClearErrors(string value)
     {
         _currentInput = value;
-        ClearErrors(nameof(CurrentInput));
+        ClearErrors(CurrentInputPropertyName);
         _errorMessage = null;
-        OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(CurrentInputPropertyName);
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
     }
@@ -237,7 +239,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         _currentInput = "";
         UpdateDisplayItems();
-        OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(CurrentInputPropertyName);
         OnPropertyChanged(nameof(StackDisplay));
     }
 
@@ -248,7 +250,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
     }
-
     private bool HasPrefixedSpace()
     {
         if (_currentInput.Length < 2)
