@@ -55,12 +55,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         {
             if (_currentInput != value)
             {
-                _currentInput = value;
-                ClearErrors(nameof(CurrentInput));
-                _errorMessage = null;
-                OnPropertyChanged(nameof(CurrentInput));
-                OnPropertyChanged(nameof(HasError));
-                OnPropertyChanged(nameof(ErrorMessage));
+                SetCurrentInputAndClearErrors(value);
             }
         }
     }
@@ -189,6 +184,16 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private void ClearInputErrorsAndNotify()
     {
+        ClearErrors(nameof(CurrentInput));
+        _errorMessage = null;
+        OnPropertyChanged(nameof(CurrentInput));
+        OnPropertyChanged(nameof(HasError));
+        OnPropertyChanged(nameof(ErrorMessage));
+    }
+
+    private void SetCurrentInputAndClearErrors(string value)
+    {
+        _currentInput = value;
         ClearErrors(nameof(CurrentInput));
         _errorMessage = null;
         OnPropertyChanged(nameof(CurrentInput));
