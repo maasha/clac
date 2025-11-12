@@ -54,9 +54,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         set
         {
             if (_currentInput != value)
-            {
                 SetCurrentInputAndClearErrors(value);
-            }
         }
     }
 
@@ -123,6 +121,15 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
         int totalLines = Math.Max(displayLines, stack.Length);
 
+        PopulateDisplayItems(stack, totalLines, maxIntegerPartLength);
+
+        ScrollBarVisibility = stack.Length > displayLines
+            ? ScrollBarVisibility.Auto
+            : ScrollBarVisibility.Hidden;
+    }
+
+    private void PopulateDisplayItems(string[] stack, int totalLines, int maxIntegerPartLength)
+    {
         DisplayItems.Clear();
 
         for (int lineNum = totalLines; lineNum >= 1; lineNum--)
@@ -137,10 +144,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
             DisplayItems.Add(new StackLineItem(lineNumber, formattedValue));
         }
-
-        ScrollBarVisibility = stack.Length > displayLines
-            ? ScrollBarVisibility.Auto
-            : ScrollBarVisibility.Hidden;
     }
 
     public bool HasErrors => _errors.Any();
