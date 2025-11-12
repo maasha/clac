@@ -20,7 +20,7 @@
         </Style>
     </UserControl.Styles>
     
-    <Border Name="DisplayBorder" BorderBrush="Gray" BorderThickness="2,2,2,0" Background="#e6e6e6">
+    <Border Name="DisplayBorder" BorderBrush="Gray" BorderThickness="2,2,2,0" Background="#e6e6e6" Height="{Binding DisplayHeight}">
         <ScrollViewer Name="StackScrollViewer"
                       HorizontalScrollBarVisibility="Disabled"
                       AllowAutoHide="False">

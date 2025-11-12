@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
-using Clac.UI.Configuration;
 using Clac.UI.ViewModels;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -13,11 +12,6 @@ public partial class DisplayView : UserControl
     public DisplayView()
     {
         InitializeComponent();
-
-        int displayLines = SettingsManager.UI.DisplayLines;
-        int lineHeight = SettingsManager.UI.LineHeight;
-        int borderThickness = SettingsManager.UI.BorderThickness;
-        DisplayBorder.Height = (displayLines * lineHeight) + borderThickness;
 
         DataContextChanged += OnDataContextChanged;
     }
