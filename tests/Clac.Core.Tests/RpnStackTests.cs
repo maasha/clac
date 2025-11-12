@@ -64,7 +64,7 @@ public class RpnStackTests
     }
 
     [Fact]
-    public void Count_ShouldReturnTheNumberOfElementsOnTheStack()
+    public void Count_ShouldReturnTheNumberOfNumbersOnTheStack()
     {
         _stack.Push(1);
         _stack.Push(2);
@@ -80,7 +80,7 @@ public class RpnStackTests
     }
 
     [Fact]
-    public void Swap_WithLessThanTwoElements_ShouldReturnError()
+    public void Swap_WithLessThanTwoNumbers_ShouldReturnError()
     {
         _stack.Push(1);
         var result = _stack.Swap();
@@ -97,7 +97,7 @@ public class RpnStackTests
     }
 
     [Fact]
-    public void Sum_WithNonEmptyStack_ShouldReturnSumOfElements()
+    public void Sum_WithNonEmptyStack_ShouldReturnSumOfNumbers()
     {
         _stack.Push(1);
         _stack.Push(2);
@@ -133,7 +133,7 @@ public class RpnStackTests
     }
 
     [Fact]
-    public void Pow_WithLessThanTwoElements_ShouldReturnError()
+    public void Pow_WithLessThanTwoNumbers_ShouldReturnError()
     {
         _stack.Push(2);
         var result = _stack.Pow();
@@ -142,7 +142,7 @@ public class RpnStackTests
     }
 
     [Fact]
-    public void Pow_WithTwoElements_ShouldReturnPowerOfLastTwoElements()
+    public void Pow_WithTwoNumbers_ShouldReturnPowerOfLastTwoNumbers()
     {
         _stack.Push(2);
         _stack.Push(3);

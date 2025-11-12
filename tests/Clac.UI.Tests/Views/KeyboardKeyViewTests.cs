@@ -967,7 +967,7 @@ public class KeyboardKeyViewTests
     }
 
     [Fact]
-    public void PowKeyClick_ShouldCalculatePowerOfLastTwoElements_WhenPowKeyIsClicked()
+    public void PowKeyClick_ShouldCalculatePowerOfLastTwoNumbers_WhenPowKeyIsClicked()
     {
 
         _vm.CurrentInput = "2";
@@ -1002,7 +1002,7 @@ public class KeyboardKeyViewTests
     }
 
     [Fact]
-    public void PowKeyClick_ShouldDoNothing_WhenStackHasLessThanTwoElements()
+    public void PowKeyClick_ShouldDoNothing_WhenStackHasLessThanTwoNumbers()
     {
 
         _vm.CurrentInput = "2";

@@ -131,7 +131,7 @@ public class RpnProcessorTests
     }
 
     [Fact]
-    public void Process_SwapCommand_ShouldSwapLastTwoElementsOfStack()
+    public void Process_SwapCommand_ShouldSwapLastTwoNumbersOfStack()
     {
         _processor.Process(RpnParser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
@@ -178,7 +178,7 @@ public class RpnProcessorTests
     }
 
     [Fact]
-    public void Process_PowCommand_ShouldCalculatePowerOfLastTwoElementsAndPushResult()
+    public void Process_PowCommand_ShouldCalculatePowerOfLastTwoNumbersAndPushResult()
     {
         _processor.Process(RpnParser.Parse("2 3").Value);
         Assert.Equal(2, _processor.Stack.Count);

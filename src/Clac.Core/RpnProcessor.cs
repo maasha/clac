@@ -7,7 +7,7 @@ public class RpnProcessor
 {
     private const string ErrorStackEmpty = "Stack is empty";
     private const string ErrorNoResultOnStack = "No result on stack";
-    private const string ErrorStackHasLessThanTwoElements = "Stack has less than two numbers";
+    private const string ErrorStackHasLessThanTwoNumbers = "Stack has less than two numbers";
     private const int MinimumStackSizeForBinaryOperation = 2;
     private readonly RpnStack _stack = new();
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
@@ -175,7 +175,7 @@ public class RpnProcessor
         return HandleStackOperation(
             () => _stack.Pow(),
             popCount: 2,
-            shouldIgnoreError: error => IsStackEmptyError(error) || IsStackInsufficientElementsError(error));
+            shouldIgnoreError: error => IsStackEmptyError(error) || IsStackInsufficientNumbersError(error));
     }
 
     private Result<double>? HandleReciprocal()
@@ -191,9 +191,9 @@ public class RpnProcessor
         return error is InvalidOperationException && error.Message == ErrorStackEmpty;
     }
 
-    private bool IsStackInsufficientElementsError(Exception error)
+    private bool IsStackInsufficientNumbersError(Exception error)
     {
-        return error is InvalidOperationException && error.Message == ErrorStackHasLessThanTwoElements;
+        return error is InvalidOperationException && error.Message == ErrorStackHasLessThanTwoNumbers;
     }
 
     private Result<double>? HandleStackOperation(
@@ -221,7 +221,7 @@ public class RpnProcessor
     private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
     {
         if (_stack.Count < MinimumStackSizeForBinaryOperation)
-            return new Result<double>(new InvalidOperationException(ErrorStackHasLessThanTwoElements));
+            return new Result<double>(new InvalidOperationException(ErrorStackHasLessThanTwoNumbers));
 
         var number1 = _stack.Pop();
         var number2 = _stack.Pop();
