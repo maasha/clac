@@ -53,12 +53,16 @@ public partial class KeyboardKeyView : UserControl
 
     private CalculatorViewModel? FindCalculatorViewModel()
     {
+        const int maxDepth = 50;
         var current = Parent;
-        while (current != null)
+        int depth = 0;
+
+        while (current != null && depth < maxDepth)
         {
             if (current.DataContext is CalculatorViewModel viewModel)
                 return viewModel;
             current = current.Parent;
+            depth++;
         }
         return null;
     }

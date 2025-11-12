@@ -1197,5 +1197,42 @@ public class KeyboardKeyViewTests
         Assert.Equal("0.125", _vm.StackDisplay[1]);
         Assert.False(_vm.HasError);
     }
+
+    [Fact]
+    public void ButtonClick_ShouldNotCrash_WhenParentChainExceedsMaxDepth()
+    {
+        var viewModel = new CalculatorViewModel();
+        viewModel.CurrentInput = "123";
+
+        var topParent = new UserControl { DataContext = viewModel };
+        var current = topParent;
+
+        for (int i = 0; i < 100; i++)
+        {
+            var next = new UserControl();
+            current.Content = next;
+            current = next;
+        }
+
+        var view = new KeyboardKeyView();
+        var key = new KeyboardKey
+        {
+            Label = "7",
+            Value = "7",
+            Type = KeyType.Number
+        };
+        view.DataContext = key;
+        current.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        var originalInput = viewModel.CurrentInput;
+
+        var exception = Record.Exception(() => button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent)));
+
+        Assert.Null(exception);
+    }
 }
 
