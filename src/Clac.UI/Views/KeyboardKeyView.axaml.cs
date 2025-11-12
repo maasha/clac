@@ -23,21 +23,20 @@ public partial class KeyboardKeyView : UserControl
         var viewModel = FindCalculatorViewModel();
         if (viewModel != null)
         {
-            if (key.Type == KeyType.Command)
+            switch (key.Type)
             {
-                HandleCommandKey(key, viewModel);
-            }
-            else if (key.Type == KeyType.Enter)
-            {
-                viewModel.Enter();
-            }
-            else if (key.Type == KeyType.Operator)
-            {
-                HandleOperatorKey(key, viewModel);
-            }
-            else
-            {
-                viewModel.AppendToInput(key.Value);
+                case KeyType.Command:
+                    HandleCommandKey(key, viewModel);
+                    break;
+                case KeyType.Enter:
+                    viewModel.Enter();
+                    break;
+                case KeyType.Operator:
+                    HandleOperatorKey(key, viewModel);
+                    break;
+                default:
+                    viewModel.AppendToInput(key.Value);
+                    break;
             }
         }
     }
