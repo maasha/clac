@@ -104,26 +104,26 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         DisplayItems.Clear();
 
         for (int lineNum = displayLines; lineNum >= 1; lineNum--)
-        {
             DisplayItems.Add(new StackLineItem($"{lineNum}:", ""));
-        }
     }
 
     private void UpdateDisplayItems()
     {
         var stack = StackDisplay;
         int displayLines = SettingsManager.UI.DisplayLines;
-
-        var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
-        int maxIntegerPartLength = visibleValues.Length > 0
-            ? DisplayFormatter.GetMaxIntegerPartLength(visibleValues)
-            : 0;
-
+        int maxIntegerPartLength = GetMaxIntegerPartLength(stack);
         int totalLines = Math.Max(displayLines, stack.Length);
 
         PopulateDisplayItems(stack, totalLines, maxIntegerPartLength);
-
         UpdateScrollBarVisibility(stack.Length, displayLines);
+    }
+
+    private int GetMaxIntegerPartLength(string[] stack)
+    {
+        var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
+        return visibleValues.Length > 0
+            ? DisplayFormatter.GetMaxIntegerPartLength(visibleValues)
+            : 0;
     }
 
     private void PopulateDisplayItems(string[] stack, int totalLines, int maxIntegerPartLength)
