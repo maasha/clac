@@ -9,13 +9,13 @@ public class RpnParser
     public static Result<List<Token>> Parse(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
-            return ParseEmptyInput();
+            return new Result<List<Token>>([]);
 
         var inputItems = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         var validationResult = ValidateInput(inputItems);
 
         if (!validationResult.IsSuccessful)
-            return ValidationError(validationResult.Error);
+            return new Result<List<Token>>(validationResult.Error);
 
         return CreateTokensFromItems(validationResult.Value);
     }
@@ -28,7 +28,7 @@ public class RpnParser
         {
             var tokenResult = CreateTokenFromItem(item);
             if (!tokenResult.IsSuccessful)
-                return TokenParsingError(tokenResult.Error);
+                return new Result<List<Token>>(tokenResult.Error);
             tokens.Add(tokenResult.Value);
         }
 
@@ -39,33 +39,8 @@ public class RpnParser
     {
         var tokenResult = CreateTokenFromString(item);
         if (!tokenResult.IsSuccessful)
-            return TokenCreationError(tokenResult.Error);
+            return new Result<Token>(tokenResult.Error);
         return tokenResult;
-    }
-
-    private static Result<List<Token>> ValidationError(Exception error)
-    {
-        return new Result<List<Token>>(error);
-    }
-
-    private static Result<List<Token>> TokenParsingError(Exception error)
-    {
-        return new Result<List<Token>>(error);
-    }
-
-    private static Result<List<Token>> ParseEmptyInput()
-    {
-        return new Result<List<Token>>([]);
-    }
-
-    private static Result<Token> TokenCreationError(Exception error)
-    {
-        return new Result<Token>(error);
-    }
-
-    private static Result<string[]> InputValidationError(Exception error)
-    {
-        return new Result<string[]>(error);
     }
 
     private static Result<Token> CreateTokenFromString(string item)
@@ -86,7 +61,7 @@ public class RpnParser
         if (errors.Count > 0)
         {
             var errorMessage = FormatInvalidInputMessage(errors);
-            return InputValidationError(new Exception(errorMessage));
+            return new Result<string[]>(new Exception(errorMessage));
         }
 
         return new Result<string[]>(input);
@@ -138,7 +113,7 @@ public class RpnParser
         var commandString = ExtractCommandName(item);
         var commandResult = Command.GetCommandSymbol(commandString);
         if (!commandResult.IsSuccessful)
-            return TokenCreationError(commandResult.Error);
+            return new Result<Token>(commandResult.Error);
         return new Result<Token>(Token.CreateCommand(commandResult.Value));
     }
 
@@ -146,7 +121,7 @@ public class RpnParser
     {
         var operatorResult = Operator.GetOperatorSymbol(item);
         if (!operatorResult.IsSuccessful)
-            return TokenCreationError(operatorResult.Error);
+            return new Result<Token>(operatorResult.Error);
         return new Result<Token>(Token.CreateOperator(operatorResult.Value));
     }
 
