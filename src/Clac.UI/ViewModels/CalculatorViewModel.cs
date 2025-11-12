@@ -63,11 +63,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     public void AppendToInput(string value)
     {
         _currentInput += value;
-        ClearErrors(nameof(CurrentInput));
-        _errorMessage = null;
-        OnPropertyChanged(nameof(CurrentInput));
-        OnPropertyChanged(nameof(HasError));
-        OnPropertyChanged(nameof(ErrorMessage));
+        ClearInputErrorsAndNotify();
     }
 
     public void DeleteFromInput()
