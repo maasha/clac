@@ -131,7 +131,24 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         DisplayItems.Clear();
 
         for (int lineNum = totalLines; lineNum >= 1; lineNum--)
-            AddDisplayItemForLine(stack, lineNum, totalLines, maxIntegerPartLength);
+        {
+            var context = new DisplayItemContext
+            {
+                Stack = stack,
+                LineNum = lineNum,
+                TotalLines = totalLines,
+                MaxIntegerPartLength = maxIntegerPartLength
+            };
+            AddDisplayItemForLine(context);
+        }
+    }
+
+    private struct DisplayItemContext
+    {
+        public string[] Stack { get; init; }
+        public int LineNum { get; init; }
+        public int TotalLines { get; init; }
+        public int MaxIntegerPartLength { get; init; }
     }
 
     private static string GetStackValue(string[] stack, int lineNum)
@@ -140,13 +157,13 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         return stackIndex >= 0 ? stack[stackIndex] : "";
     }
 
-    private void AddDisplayItemForLine(string[] stack, int lineNum, int totalLines, int maxIntegerPartLength)
+    private void AddDisplayItemForLine(DisplayItemContext context)
     {
-        string value = GetStackValue(stack, lineNum);
-        string lineNumber = DisplayFormatter.FormatLineNumber(lineNum, totalLines);
+        string value = GetStackValue(context.Stack, context.LineNum);
+        string lineNumber = DisplayFormatter.FormatLineNumber(context.LineNum, context.TotalLines);
         string formattedValue = string.IsNullOrEmpty(value)
             ? ""
-            : DisplayFormatter.FormatValue(value, maxIntegerPartLength);
+            : DisplayFormatter.FormatValue(value, context.MaxIntegerPartLength);
 
         DisplayItems.Add(new StackLineItem(lineNumber, formattedValue));
     }
