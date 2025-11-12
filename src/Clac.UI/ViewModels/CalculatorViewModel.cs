@@ -131,17 +131,20 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         DisplayItems.Clear();
 
         for (int lineNum = totalLines; lineNum >= 1; lineNum--)
-        {
-            int stackIndex = stack.Length - lineNum;
-            string value = stackIndex >= 0 ? stack[stackIndex] : "";
+            AddDisplayItemForLine(stack, lineNum, totalLines, maxIntegerPartLength);
+    }
 
-            string lineNumber = DisplayFormatter.FormatLineNumber(lineNum, totalLines);
-            string formattedValue = string.IsNullOrEmpty(value)
-                ? ""
-                : DisplayFormatter.FormatValue(value, maxIntegerPartLength);
+    private void AddDisplayItemForLine(string[] stack, int lineNum, int totalLines, int maxIntegerPartLength)
+    {
+        int stackIndex = stack.Length - lineNum;
+        string value = stackIndex >= 0 ? stack[stackIndex] : "";
 
-            DisplayItems.Add(new StackLineItem(lineNumber, formattedValue));
-        }
+        string lineNumber = DisplayFormatter.FormatLineNumber(lineNum, totalLines);
+        string formattedValue = string.IsNullOrEmpty(value)
+            ? ""
+            : DisplayFormatter.FormatValue(value, maxIntegerPartLength);
+
+        DisplayItems.Add(new StackLineItem(lineNumber, formattedValue));
     }
 
     private void UpdateScrollBarVisibility(int stackLength, int displayLines)
