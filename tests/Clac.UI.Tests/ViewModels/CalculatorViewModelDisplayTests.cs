@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using Avalonia.Controls.Primitives;
 using Clac.UI.ViewModels;
 using Clac.UI.Configuration;
 
@@ -40,7 +39,7 @@ public class CalculatorViewModelDisplayTests
     }
 
     [Fact]
-    public void ScrollBarVisibility_ShouldBeHidden_WhenStackIsWithinDisplayLines()
+    public void ShowScrollBar_ShouldBeFalse_WhenStackIsWithinDisplayLines()
     {
         int displayLines = SettingsManager.UI.DisplayLines;
         int valuesToAdd = Math.Max(1, displayLines - 1); // Add fewer than displayLines
@@ -52,11 +51,11 @@ public class CalculatorViewModelDisplayTests
             _vm.Enter();
         }
 
-        Assert.Equal(ScrollBarVisibility.Hidden, _vm.ScrollBarVisibility);
+        Assert.False(_vm.ShowScrollBar);
     }
 
     [Fact]
-    public void ScrollBarVisibility_ShouldBeAuto_WhenStackExceedsDisplayLines()
+    public void ShowScrollBar_ShouldBeTrue_WhenStackExceedsDisplayLines()
     {
         int displayLines = SettingsManager.UI.DisplayLines;
         int stackSize = displayLines + 1; // Exceed display lines by at least 1
@@ -68,7 +67,7 @@ public class CalculatorViewModelDisplayTests
             _vm.Enter();
         }
 
-        Assert.Equal(ScrollBarVisibility.Auto, _vm.ScrollBarVisibility);
+        Assert.True(_vm.ShowScrollBar);
     }
 }
 

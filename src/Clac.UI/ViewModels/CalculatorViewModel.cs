@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Avalonia.Controls.Primitives;
 using DotNext;
 using Clac.Core;
 using Clac.UI.Configuration;
@@ -27,15 +26,15 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private readonly Dictionary<string, List<string>> _errors = new();
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
-    private ScrollBarVisibility _scrollBarVisibility = ScrollBarVisibility.Hidden;
-    public ScrollBarVisibility ScrollBarVisibility
+    private bool _showScrollBar = false;
+    public bool ShowScrollBar
     {
-        get => _scrollBarVisibility;
+        get => _showScrollBar;
         private set
         {
-            if (_scrollBarVisibility != value)
+            if (_showScrollBar != value)
             {
-                _scrollBarVisibility = value;
+                _showScrollBar = value;
                 OnPropertyChanged();
             }
         }
@@ -169,9 +168,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private void UpdateScrollBarVisibility(int stackLength, int displayLines)
     {
-        ScrollBarVisibility = stackLength > displayLines
-            ? ScrollBarVisibility.Auto
-            : ScrollBarVisibility.Hidden;
+        ShowScrollBar = stackLength > displayLines;
     }
 
     public bool HasErrors => _errors.Any();
