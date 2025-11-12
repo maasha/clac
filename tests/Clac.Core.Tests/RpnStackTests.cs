@@ -85,7 +85,7 @@ public class RpnStackTests
         _stack.Push(1);
         var result = _stack.Swap();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack has less than two elements", result.Error.Message);
+        Assert.Contains("Stack has less than two numbers", result.Error.Message);
     }
 
     [Fact]
@@ -138,7 +138,7 @@ public class RpnStackTests
         _stack.Push(2);
         var result = _stack.Pow();
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Stack has less than two elements", result.Error.Message);
+        Assert.Contains("Stack has less than two numbers", result.Error.Message);
     }
 
     [Fact]

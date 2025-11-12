@@ -44,7 +44,7 @@ public class RpnStack
     {
         if (_stack.Count < 2)
         {
-            return new Result<double>(new InvalidOperationException("Stack has less than two elements"));
+            return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
         }
 
         var last = _stack[^1];
@@ -83,7 +83,7 @@ public class RpnStack
     {
         if (_stack.Count < 2)
         {
-            return new Result<double>(new InvalidOperationException("Stack has less than two elements"));
+            return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
         }
 
         var exponent = _stack[^1];
