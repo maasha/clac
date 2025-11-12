@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Clac.UI.Enums;
 using Clac.UI.Models;
+using Clac.UI.ViewModels;
 
 namespace Clac.UI.Views;
 
@@ -9,6 +10,8 @@ public partial class KeyboardView : UserControl
     public KeyboardView()
     {
         InitializeComponent();
+
+        DataContextChanged += OnDataContextChanged;
 
         SqrtKeyView.DataContext = new KeyboardKey { Label = "√", Value = "sqrt()", Type = KeyType.Command };
         PowKeyView.DataContext = new KeyboardKey { Label = "xʸ", Value = "pow()", Type = KeyType.Command };
@@ -40,5 +43,42 @@ public partial class KeyboardView : UserControl
         SwapKeyView.DataContext = new KeyboardKey { Label = "SWAP", Value = "swap()", Type = KeyType.Command };
 
         EnterKeyView.DataContext = new KeyboardKey { Label = "ENTER", Value = "", Type = KeyType.Enter };
+    }
+
+    private void OnDataContextChanged(object? sender, System.EventArgs e)
+    {
+        if (DataContext is CalculatorViewModel viewModel)
+        {
+            SetViewModelOnAllKeys(viewModel);
+        }
+    }
+
+    private void SetViewModelOnAllKeys(CalculatorViewModel viewModel)
+    {
+        SqrtKeyView.ViewModel = viewModel;
+        PowKeyView.ViewModel = viewModel;
+        ReciprocalKeyView.ViewModel = viewModel;
+        DivideKeyView.ViewModel = viewModel;
+        DeleteKeyView.ViewModel = viewModel;
+        Key7View.ViewModel = viewModel;
+        Key8View.ViewModel = viewModel;
+        Key9View.ViewModel = viewModel;
+        MultiplyKeyView.ViewModel = viewModel;
+        ClearKeyView.ViewModel = viewModel;
+        Key4View.ViewModel = viewModel;
+        Key5View.ViewModel = viewModel;
+        Key6View.ViewModel = viewModel;
+        MinusKeyView.ViewModel = viewModel;
+        UndoKeyView.ViewModel = viewModel;
+        Key1View.ViewModel = viewModel;
+        Key2View.ViewModel = viewModel;
+        Key3View.ViewModel = viewModel;
+        PlusKeyView.ViewModel = viewModel;
+        PopKeyView.ViewModel = viewModel;
+        Key0View.ViewModel = viewModel;
+        DecimalKeyView.ViewModel = viewModel;
+        SumKeyView.ViewModel = viewModel;
+        SwapKeyView.ViewModel = viewModel;
+        EnterKeyView.ViewModel = viewModel;
     }
 }

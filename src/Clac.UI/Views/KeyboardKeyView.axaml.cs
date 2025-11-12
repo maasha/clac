@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Clac.UI.ViewModels;
@@ -11,6 +12,15 @@ namespace Clac.UI.Views;
 public partial class KeyboardKeyView : UserControl
 {
     private const string DeleteCommand = "del()";
+
+    public static readonly StyledProperty<CalculatorViewModel?> ViewModelProperty =
+        AvaloniaProperty.Register<KeyboardKeyView, CalculatorViewModel?>(nameof(ViewModel));
+
+    public CalculatorViewModel? ViewModel
+    {
+        get => GetValue(ViewModelProperty);
+        set => SetValue(ViewModelProperty, value);
+    }
 
     private static readonly Dictionary<KeyType, Action<KeyboardKey, CalculatorViewModel>> KeyHandlers = new()
     {
@@ -29,7 +39,7 @@ public partial class KeyboardKeyView : UserControl
         if (DataContext is not KeyboardKey key)
             return;
 
-        var viewModel = FindCalculatorViewModel();
+        var viewModel = ViewModel ?? FindCalculatorViewModel();
         if (viewModel == null)
             return;
 
@@ -71,8 +81,8 @@ public partial class KeyboardKeyView : UserControl
 
     private CalculatorViewModel? FindCalculatorViewModel()
     {
-        const int maxDepth = 50;
         var current = Parent;
+        const int maxDepth = 50;
         int depth = 0;
 
         while (current != null && depth < maxDepth)
