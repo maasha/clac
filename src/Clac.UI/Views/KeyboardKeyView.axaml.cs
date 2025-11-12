@@ -16,9 +16,7 @@ public partial class KeyboardKeyView : UserControl
     {
         { KeyType.Command, HandleCommandKey },
         { KeyType.Enter, HandleEnterKey },
-        { KeyType.Operator, HandleOperatorKey },
-        { KeyType.Number, HandleNumberKey },
-        { KeyType.Function, HandleFunctionKey }
+        { KeyType.Operator, HandleOperatorKey }
     };
 
     public KeyboardKeyView()
@@ -32,13 +30,13 @@ public partial class KeyboardKeyView : UserControl
             return;
 
         var viewModel = FindCalculatorViewModel();
-        if (viewModel != null)
-        {
-            if (KeyHandlers.TryGetValue(key.Type, out var handler))
-                handler(key, viewModel);
-            else
-                viewModel.AppendToInput(key.Value);
-        }
+        if (viewModel == null)
+            return;
+
+        if (KeyHandlers.TryGetValue(key.Type, out var handler))
+            handler(key, viewModel);
+        else
+            viewModel.AppendToInput(key.Value);
     }
 
     private static void HandleCommandKey(KeyboardKey key, CalculatorViewModel viewModel)
@@ -55,7 +53,7 @@ public partial class KeyboardKeyView : UserControl
         }
     }
 
-    private static void HandleEnterKey(KeyboardKey key, CalculatorViewModel viewModel)
+    private static void HandleEnterKey(KeyboardKey _, CalculatorViewModel viewModel)
     {
         viewModel.Enter();
     }
@@ -64,16 +62,6 @@ public partial class KeyboardKeyView : UserControl
     {
         var prefix = GetOperatorPrefix(viewModel);
         viewModel.AppendToInput(prefix + key.Value);
-    }
-
-    private static void HandleNumberKey(KeyboardKey key, CalculatorViewModel viewModel)
-    {
-        viewModel.AppendToInput(key.Value);
-    }
-
-    private static void HandleFunctionKey(KeyboardKey key, CalculatorViewModel viewModel)
-    {
-        viewModel.AppendToInput(key.Value);
     }
 
     private static string GetOperatorPrefix(CalculatorViewModel viewModel)
