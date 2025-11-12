@@ -13,8 +13,8 @@ public class RpnEvaluator
             OperatorSymbol.Subtract => number1 - number2,
             OperatorSymbol.Multiply => number1 * number2,
             OperatorSymbol.Divide when number2 != 0 => number1 / number2,
-            OperatorSymbol.Divide => new Result<double>(new DivideByZeroException("Division by zero")),
-            _ => new Result<double>(new InvalidOperationException($"Unknown operator: {op}")),
+            OperatorSymbol.Divide => new Result<double>(new DivideByZeroException(ErrorMessages.DivisionByZero)),
+            _ => new Result<double>(new InvalidOperationException(ErrorMessages.UnknownOperator(op))),
         };
     }
 }

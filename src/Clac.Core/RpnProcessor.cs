@@ -5,9 +5,6 @@ namespace Clac.Core;
 
 public class RpnProcessor
 {
-    private const string ErrorStackEmpty = "Stack is empty";
-    private const string ErrorNoResultOnStack = "No result on stack";
-    private const string ErrorStackHasLessThanTwoNumbers = "Stack has less than two numbers";
     private const int MinimumStackSizeForBinaryOperation = 2;
     private readonly RpnStack _stack = new();
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
@@ -104,7 +101,7 @@ public class RpnProcessor
         var finalResult = _stack.Peek();
         return finalResult.IsSuccessful
             ? finalResult
-            : new Result<double>(new InvalidOperationException(ErrorNoResultOnStack));
+            : new Result<double>(new InvalidOperationException(ErrorMessages.NoResultOnStack));
     }
 
     private Result<(bool commandExecuted, double commandResult)?> ProcessCommandToken(Token.CommandToken commandToken)
@@ -188,12 +185,12 @@ public class RpnProcessor
 
     private bool IsStackEmptyError(Exception error)
     {
-        return error is InvalidOperationException && error.Message == ErrorStackEmpty;
+        return error is InvalidOperationException && error.Message == ErrorMessages.StackEmpty;
     }
 
     private bool IsStackInsufficientNumbersError(Exception error)
     {
-        return error is InvalidOperationException && error.Message == ErrorStackHasLessThanTwoNumbers;
+        return error is InvalidOperationException && error.Message == ErrorMessages.StackHasLessThanTwoNumbers;
     }
 
     private Result<double>? HandleStackOperation(
@@ -221,7 +218,7 @@ public class RpnProcessor
     private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
     {
         if (_stack.Count < MinimumStackSizeForBinaryOperation)
-            return new Result<double>(new InvalidOperationException(ErrorStackHasLessThanTwoNumbers));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.StackHasLessThanTwoNumbers));
 
         var number1 = _stack.Pop();
         var number2 = _stack.Pop();

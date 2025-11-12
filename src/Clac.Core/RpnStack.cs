@@ -4,7 +4,6 @@ namespace Clac.Core;
 
 public class RpnStack
 {
-    private const string ErrorStackEmpty = "Stack is empty";
     private readonly List<double> _stack = [];
 
     public double[] ToArray() => [.. _stack];
@@ -13,7 +12,7 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
         }
 
         return new Result<double>(_stack[^1]);
@@ -33,7 +32,7 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
         }
 
         var value = _stack[^1];
@@ -45,7 +44,7 @@ public class RpnStack
     {
         if (_stack.Count < 2)
         {
-            return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.StackHasLessThanTwoNumbers));
         }
 
         var last = _stack[^1];
@@ -59,7 +58,7 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
         }
 
         return new Result<double>(_stack.Sum());
@@ -69,12 +68,12 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
         }
 
         if (_stack[^1] < 0)
         {
-            return new Result<double>(new InvalidOperationException("Invalid: negative square root"));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.InvalidNegativeSquareRoot));
         }
 
         return new Result<double>(Math.Sqrt(_stack[^1]));
@@ -84,7 +83,7 @@ public class RpnStack
     {
         if (_stack.Count < 2)
         {
-            return new Result<double>(new InvalidOperationException("Stack has less than two numbers"));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.StackHasLessThanTwoNumbers));
         }
 
         var exponent = _stack[^1];
@@ -96,12 +95,12 @@ public class RpnStack
     {
         if (_stack.Count == 0)
         {
-            return new Result<double>(new InvalidOperationException(ErrorStackEmpty));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.StackEmpty));
         }
 
         if (_stack[^1] == 0)
         {
-            return new Result<double>(new InvalidOperationException("Division by zero"));
+            return new Result<double>(new InvalidOperationException(ErrorMessages.DivisionByZero));
         }
 
         return new Result<double>(1.0 / _stack[^1]);
