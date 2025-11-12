@@ -113,7 +113,7 @@ public class KeyboardKeyViewTests
     {
         _vm.CurrentInput = "1";
         var parent = new UserControl { DataContext = _vm };
-        var view = _view;
+        var view = new KeyboardKeyView();
         var key = new KeyboardKey
         {
             Label = "+",
