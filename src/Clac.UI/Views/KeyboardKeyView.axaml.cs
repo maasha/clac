@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Clac.UI.ViewModels;
 using Clac.UI.Models;
@@ -9,6 +8,8 @@ namespace Clac.UI.Views;
 
 public partial class KeyboardKeyView : UserControl
 {
+    private const string DeleteCommand = "del()";
+
     public KeyboardKeyView()
     {
         InitializeComponent();
@@ -24,16 +25,7 @@ public partial class KeyboardKeyView : UserControl
         {
             if (key.Type == KeyType.Command)
             {
-                if (key.Value == "del()")
-                {
-                    viewModel.DeleteFromInput();
-                }
-                else
-                {
-                    var prefix = string.IsNullOrWhiteSpace(viewModel.CurrentInput) ? "" : " ";
-                    viewModel.AppendToInput(prefix + key.Value);
-                    viewModel.Enter();
-                }
+                HandleCommandKey(key, viewModel);
             }
             else if (key.Type == KeyType.Enter)
             {
@@ -41,14 +33,38 @@ public partial class KeyboardKeyView : UserControl
             }
             else if (key.Type == KeyType.Operator)
             {
-                var prefix = string.IsNullOrWhiteSpace(viewModel.CurrentInput) ? "" : " ";
-                viewModel.AppendToInput(prefix + key.Value);
+                HandleOperatorKey(key, viewModel);
             }
             else
             {
                 viewModel.AppendToInput(key.Value);
             }
         }
+    }
+
+    private void HandleCommandKey(KeyboardKey key, CalculatorViewModel viewModel)
+    {
+        if (key.Value == DeleteCommand)
+        {
+            viewModel.DeleteFromInput();
+        }
+        else
+        {
+            var prefix = GetOperatorPrefix(viewModel);
+            viewModel.AppendToInput(prefix + key.Value);
+            viewModel.Enter();
+        }
+    }
+
+    private void HandleOperatorKey(KeyboardKey key, CalculatorViewModel viewModel)
+    {
+        var prefix = GetOperatorPrefix(viewModel);
+        viewModel.AppendToInput(prefix + key.Value);
+    }
+
+    private static string GetOperatorPrefix(CalculatorViewModel viewModel)
+    {
+        return string.IsNullOrWhiteSpace(viewModel.CurrentInput) ? "" : " ";
     }
 
     private CalculatorViewModel? FindCalculatorViewModel()
@@ -64,6 +80,7 @@ public partial class KeyboardKeyView : UserControl
             current = current.Parent;
             depth++;
         }
+
         return null;
     }
 }
