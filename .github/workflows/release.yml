@@ -36,17 +36,31 @@ jobs:
             -p:IncludeNativeLibrariesForSelfExtract=true \
             -o publish/${{ matrix.runtime }}
 
+      - name: Create macOS app bundle
+        run: |
+          chmod +x scripts/create-macos-app.sh
+          ./scripts/create-macos-app.sh ${{ matrix.runtime }}
+
+      - name: Ad-hoc sign app bundle
+        run: |
+          codesign --force --deep --sign - Clac.app
+
       - name: Create artifact
         run: |
-          cd publish/${{ matrix.runtime }}
-          zip -r ../../clac-macos-${{ matrix.runtime }}.zip .
-          cd ../..
+          zip -r clac-macos-${{ matrix.runtime }}.zip Clac.app
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: clac-macos-${{ matrix.runtime }}
           path: clac-macos-${{ matrix.runtime }}.zip
+          retention-days: 90
+
+      - name: Upload app bundle for release
+        uses: actions/upload-artifact@v4
+        with:
+          name: clac-app-${{ matrix.runtime }}
+          path: Clac.app
           retention-days: 90
 
   create-release:
