@@ -5,8 +5,12 @@ on:
     branches: [ main ]
 
 jobs:
+  pre-build:
+    uses: ./.github/workflows/pre-build.yml
+
   build-and-upload:
     runs-on: macos-latest
+    needs: pre-build
     strategy:
       matrix:
         runtime: [osx-x64, osx-arm64]
@@ -20,9 +24,6 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-
-      - name: Run tests
-        run: dotnet test --no-restore --verbosity normal
 
       - name: Build macOS binary
         run: |

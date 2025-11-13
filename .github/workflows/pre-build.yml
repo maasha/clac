@@ -1,16 +1,11 @@
-name: Build and Test PR
+name: Pre-Build Validation
 
 on:
-  pull_request:
-    branches: [ main ]
+  workflow_call:
 
 jobs:
   pre-build:
-    uses: ./.github/workflows/pre-build.yml
-
-  build:
     runs-on: macos-latest
-    needs: pre-build
     steps:
       - uses: actions/checkout@v4
 
@@ -22,6 +17,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build (validation)
-        run: dotnet build -c Release --no-restore
+      - name: Run linter
+        run: dotnet format --verify-no-changes --verbosity normal
+
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal
 
