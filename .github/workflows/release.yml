@@ -5,6 +5,9 @@ on:
     tags: [ 'v*' ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   pre-build:
     uses: ./.github/workflows/pre-build.yml
@@ -78,12 +81,13 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tag_name: ${{ github.ref_name }}
           files: |
             artifacts/clac-macos-osx-x64/clac-macos-osx-x64.zip
             artifacts/clac-macos-osx-arm64/clac-macos-osx-arm64.zip
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
