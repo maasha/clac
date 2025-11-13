@@ -372,4 +372,5 @@ Goal: Add Linux build support to the existing CI/CD pipeline.
 - Linux package formats (AppImage, DEB, RPM)
 - Automated versioning with GitVersion
 - Multi-arch support (ARM64 for all platforms)
+- **Spell checker in CI/CD pipeline** - Add spell checking step to PR workflow (e.g., using typos or check-spelling action) to catch misspellings in code and documentation before merging
 
