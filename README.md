@@ -9,6 +9,32 @@ A reverse-Polish notation calculator written in C#
 - Avalonia UI
 - xunit
 
+## Downloads
+
+macOS binaries are available in the [Releases](https://github.com/maasha/clac/releases) section.
+
+### macOS Installation
+
+1. **Download the appropriate version:**
+   - **Intel Macs (x64):** Download `clac-macos-osx-x64.zip`
+   - **Apple Silicon Macs (arm64):** Download `clac-macos-osx-arm64.zip`
+
+2. **Extract the ZIP file:**
+   - Double-click the downloaded ZIP file to extract `Clac.app`
+
+3. **Run the application:**
+   - macOS Gatekeeper will block the app initially (it's ad-hoc signed, not notarized)
+   - **Option 1 (Recommended):** Right-click `Clac.app` → Select "Open" → Click "Open" in the dialog
+   - **Option 2:** Remove quarantine attribute:
+     ```bash
+     xattr -d com.apple.quarantine /path/to/Clac.app
+     ```
+     Then double-click `Clac.app` normally
+
+4. **Move to Applications (optional):**
+   - Drag `Clac.app` to your Applications folder for easy access
+
+**Note:** The app is ad-hoc signed (not notarized) because we don't have an Apple Developer certificate. This is common for open-source projects. After the first launch using the right-click method, macOS will remember your choice and allow normal double-clicking.
 
 ## Boiler plate
 
