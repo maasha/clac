@@ -6,8 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  pre-build:
+    uses: ./.github/workflows/pre-build.yml
+
   release:
     runs-on: macos-latest
+    needs: pre-build
     strategy:
       matrix:
         runtime: [osx-x64, osx-arm64]
@@ -21,9 +25,6 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-
-      - name: Run tests
-        run: dotnet test --no-restore --verbosity normal
 
       - name: Build macOS binary
         run: |
@@ -49,7 +50,7 @@ jobs:
           retention-days: 90
 
   create-release:
-    needs: release
+    needs: [pre-build, release]
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
