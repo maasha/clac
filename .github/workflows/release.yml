@@ -1,0 +1,70 @@
+name: Release macOS
+
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        runtime: [osx-x64, osx-arm64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal
+
+      - name: Build macOS binary
+        run: |
+          dotnet publish src/Clac.UI/Clac.UI.csproj \
+            -c Release \
+            -r ${{ matrix.runtime }} \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -o publish/${{ matrix.runtime }}
+
+      - name: Create artifact
+        run: |
+          cd publish/${{ matrix.runtime }}
+          zip -r ../../clac-macos-${{ matrix.runtime }}.zip .
+          cd ../..
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clac-macos-${{ matrix.runtime }}
+          path: clac-macos-${{ matrix.runtime }}.zip
+          retention-days: 90
+
+  create-release:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/clac-macos-osx-x64/clac-macos-osx-x64.zip
+            artifacts/clac-macos-osx-arm64/clac-macos-osx-arm64.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
