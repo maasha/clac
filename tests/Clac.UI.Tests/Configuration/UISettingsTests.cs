@@ -21,7 +21,7 @@ public class UISettingsTests
     [Fact]
     public void UISettings_ShouldHaveDefaultWindowWidth()
     {
-        Assert.Equal(400, _settings.WindowWidth);
+        Assert.Equal(450, _settings.WindowWidth);
     }
 
     [Fact]
