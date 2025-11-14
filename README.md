@@ -15,7 +15,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Downloads
 
-macOS and Windows binaries are available in the [Releases](https://github.com/maasha/clac/releases) section.
+macOS, Windows, and Linux binaries are available in the [Releases](https://github.com/maasha/clac/releases) section.
 
 ### macOS Installation
 
@@ -64,9 +64,36 @@ macOS and Windows binaries are available in the [Releases](https://github.com/ma
 
 **Note:** Windows binaries are self-contained and don't require .NET to be installed. Windows Defender may show a warning on first launch since the app isn't code-signed. Click "More info" → "Run anyway" if this occurs.
 
+### Linux Installation
+
+1. **Download the appropriate version:**
+   - **64-bit Linux (x64):** Download `clac-linux-linux-x64.tar.gz`
+   - **ARM64 Linux:** Download `clac-linux-linux-arm64.tar.gz`
+
+2. **Extract the tarball:**
+   ```bash
+   tar -xzf clac-linux-linux-x64.tar.gz
+   ```
+
+3. **Run the application:**
+   ```bash
+   ./Clac
+   ```
+
+4. **Optional: Install system-wide:**
+   ```bash
+   # Move to a system directory (requires sudo)
+   sudo mv Clac /usr/local/bin/
+   
+   # Or create a symlink
+   sudo ln -s $(pwd)/Clac /usr/local/bin/clac
+   ```
+
+**Note:** Linux binaries are self-contained and don't require .NET to be installed. The executable may need execute permissions: `chmod +x Clac`
+
 ## Creating a Release
 
-To create a new release with macOS and Windows binaries:
+To create a new release with macOS, Windows, and Linux binaries:
 
 1. **Ensure your code is ready:**
    - Make sure all changes are committed and pushed to `main`
@@ -84,12 +111,13 @@ To create a new release with macOS and Windows binaries:
    - The workflow will automatically:
      - Build binaries for macOS (osx-x64 and osx-arm64)
      - Build binaries for Windows (win-x64 and win-x86)
+     - Build binaries for Linux (linux-x64 and linux-arm64)
      - Create a GitHub Release
-     - Attach all ZIP files to the release
+     - Attach all platform binaries to the release
 
 4. **Verify the release:**
    - Go to the [Releases](https://github.com/maasha/clac/releases) page
-   - Confirm the release appears with all platform ZIP files attached
+   - Confirm the release appears with all platform binaries attached
 
 **Note:** You can also trigger the workflow manually via GitHub Actions → "Release" → "Run workflow", but this won't automatically create a GitHub Release (it will only build and upload artifacts).
 
