@@ -37,6 +37,11 @@ fi
 mkdir -p "$MACOS_DIR"
 mkdir -p "$RESOURCES_DIR"
 
+# Copy icon if it exists
+if [ -f "src/Clac.UI/Assets/Resources/Clac.icns" ]; then
+    cp "src/Clac.UI/Assets/Resources/Clac.icns" "$RESOURCES_DIR/"
+fi
+
 # Move all published files into MacOS directory
 cp -R "$PUBLISH_DIR"/* "$MACOS_DIR/"
 
@@ -69,6 +74,8 @@ cat > "${CONTENTS_DIR}/Info.plist" <<EOF
     <string>10.15</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>CFBundleIconFile</key>
+    <string>Clac.icns</string>
 </dict>
 </plist>
 EOF
@@ -77,3 +84,6 @@ echo "Created ${APP_BUNDLE}"
 echo "Bundle structure:"
 echo "  ${APP_BUNDLE}/Contents/MacOS/${EXECUTABLE_NAME}"
 echo "  ${APP_BUNDLE}/Contents/Info.plist"
+if [ -f "$RESOURCES_DIR/Clac.icns" ]; then
+    echo "  ${APP_BUNDLE}/Contents/Resources/Clac.icns"
+fi
