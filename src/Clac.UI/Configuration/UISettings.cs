@@ -4,7 +4,7 @@ public class UISettings
 {
     public int WindowHeight { get; set; } = 450;
 
-    public int WindowWidth { get; set; } = 400;
+    public int WindowWidth { get; set; } = 450;
 
     public int DisplayLines { get; set; } = 6;
 
