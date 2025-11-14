@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using DotNext;
 using Clac.Core;
@@ -50,7 +51,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private string[] GetStackDisplay()
     {
-        return [.. _processor.Stack.ToArray().Select(x => x.ToString())];
+        return [.. _processor.Stack.ToArray().Select(x => x.ToString(CultureInfo.InvariantCulture))];
     }
 
     public string CurrentInput
