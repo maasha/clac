@@ -28,7 +28,11 @@ macOS binaries are available in the [Releases](https://github.com/maasha/clac/re
 
 3. **Run the application:**
    - macOS Gatekeeper will block the app initially (it's ad-hoc signed, not notarized)
-   - **Option 1 (Recommended):** Right-click `Clac.app` → Select "Open" → Click "Open" in the dialog
+   - **Option 1 (Recommended):** - Follow these steps in order:
+     1. Right-click `Clac.app` → Select "Open"
+     2. Go to System Settings → Privacy & Security
+     3. Look for a message about "Clac.app was blocked" and click "Open Anyway"
+     4. Right-click `Clac.app` → Select "Open" again (the 
    - **Option 2:** Remove quarantine attribute:
      ```bash
      xattr -d com.apple.quarantine /path/to/Clac.app
