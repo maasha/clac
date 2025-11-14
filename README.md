@@ -15,7 +15,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Downloads
 
-macOS binaries are available in the [Releases](https://github.com/maasha/clac/releases) section.
+macOS and Windows binaries are available in the [Releases](https://github.com/maasha/clac/releases) section.
 
 ### macOS Installation
 
@@ -44,9 +44,29 @@ macOS binaries are available in the [Releases](https://github.com/maasha/clac/re
 
 **Note:** The app is ad-hoc signed (not notarized) because we don't have an Apple Developer certificate. This is common for open-source projects. After the first launch using the right-click method, macOS will remember your choice and allow normal double-clicking.
 
+### Windows Installation
+
+1. **Download the appropriate version:**
+   - **64-bit Windows:** Download `clac-windows-win-x64.zip`
+   - **32-bit Windows:** Download `clac-windows-win-x86.zip`
+
+2. **Extract the ZIP file:**
+   - Right-click the downloaded ZIP file → "Extract All"
+   - Choose a destination folder (e.g., `C:\Program Files\Clac`)
+
+3. **Run the application:**
+   - Navigate to the extracted folder
+   - Double-click `Clac.exe` to launch the application
+
+4. **Create a shortcut (optional):**
+   - Right-click `Clac.exe` → "Create shortcut"
+   - Move the shortcut to your Desktop or Start Menu for easy access
+
+**Note:** Windows binaries are self-contained and don't require .NET to be installed. Windows Defender may show a warning on first launch since the app isn't code-signed. Click "More info" → "Run anyway" if this occurs.
+
 ## Creating a Release
 
-To create a new release with macOS binaries:
+To create a new release with macOS and Windows binaries:
 
 1. **Ensure your code is ready:**
    - Make sure all changes are committed and pushed to `main`
@@ -60,17 +80,18 @@ To create a new release with macOS binaries:
    The tag must start with `v` (e.g., `v1.0.0`, `v1.2.3`) to trigger the release workflow.
 
 3. **Wait for the workflow to complete:**
-   - Check the GitHub Actions tab for the "Release macOS" workflow
+   - Check the GitHub Actions tab for the "Release" workflow
    - The workflow will automatically:
-     - Build binaries for both architectures (osx-x64 and osx-arm64)
+     - Build binaries for macOS (osx-x64 and osx-arm64)
+     - Build binaries for Windows (win-x64 and win-x86)
      - Create a GitHub Release
-     - Attach the ZIP files to the release
+     - Attach all ZIP files to the release
 
 4. **Verify the release:**
    - Go to the [Releases](https://github.com/maasha/clac/releases) page
-   - Confirm the release appears with both macOS ZIP files attached
+   - Confirm the release appears with all platform ZIP files attached
 
-**Note:** You can also trigger the workflow manually via GitHub Actions → "Release macOS" → "Run workflow", but this won't automatically create a GitHub Release (it will only build and upload artifacts).
+**Note:** You can also trigger the workflow manually via GitHub Actions → "Release" → "Run workflow", but this won't automatically create a GitHub Release (it will only build and upload artifacts).
 
 ## Boiler plate
 

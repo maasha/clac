@@ -1,4 +1,4 @@
-name: Release macOS
+name: Release
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
   pre-build:
     uses: ./.github/workflows/pre-build.yml
 
-  release:
+  release-macos:
     runs-on: macos-latest
     needs: pre-build
     strategy:
@@ -64,8 +64,44 @@ jobs:
           path: Clac.app
           retention-days: 90
 
+  release-windows:
+    runs-on: windows-latest
+    needs: pre-build
+    strategy:
+      matrix:
+        runtime: [win-x64, win-x86]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build Windows binary
+        run: |
+          dotnet publish src/Clac.UI/Clac.UI.csproj `
+            -c Release `
+            -r ${{ matrix.runtime }} `
+            --self-contained true `
+            -o publish/${{ matrix.runtime }}
+
+      - name: Create artifact
+        run: |
+          Compress-Archive -Path publish/${{ matrix.runtime }}/* -DestinationPath clac-windows-${{ matrix.runtime }}.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clac-windows-${{ matrix.runtime }}
+          path: clac-windows-${{ matrix.runtime }}.zip
+          retention-days: 90
+
   create-release:
-    needs: [pre-build, release]
+    needs: [pre-build, release-macos, release-windows]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -88,6 +124,8 @@ jobs:
           files: |
             artifacts/clac-macos-osx-x64/clac-macos-osx-x64.zip
             artifacts/clac-macos-osx-arm64/clac-macos-osx-arm64.zip
+            artifacts/clac-windows-win-x64/clac-windows-win-x64.zip
+            artifacts/clac-windows-win-x86/clac-windows-win-x86.zip
           draft: false
           prerelease: false
 

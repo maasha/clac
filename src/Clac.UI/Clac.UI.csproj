@@ -7,6 +7,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <UseAppHost>true</UseAppHost>
+    <ApplicationIcon>Assets\Resources\Clac.ico</ApplicationIcon>
+    <AssemblyName>Clac</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

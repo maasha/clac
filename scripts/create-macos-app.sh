@@ -7,7 +7,7 @@ set -e
 RUNTIME=$1
 APP_NAME="Clac"
 BUNDLE_ID="com.clac.app"
-EXECUTABLE_NAME="Clac.UI"
+EXECUTABLE_NAME="Clac"
 
 if [ -z "$RUNTIME" ]; then
     echo "Usage: $0 <runtime> (e.g., osx-x64)"
