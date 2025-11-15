@@ -205,7 +205,15 @@ public class RpnProcessorTests
     }
 
     [Fact]
-    public void RestoreStack_ShouldRestoreStackFromSnapshot()
+    public void RestoreStack_ShouldReplaceStackFromGivenSnapshot()
     {
+        _processor.Process(RpnParser.Parse("1 2 3").Value);
+        var snapshot = new RpnStack();
+        snapshot.Push(10);
+        snapshot.Push(20);
+
+        _processor.RestoreStack(snapshot);
+
+        Assert.Equal([10, 20], _processor.Stack.ToArray());
     }
 }

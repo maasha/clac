@@ -246,5 +246,8 @@ public class RpnProcessor
 
     public void RestoreStack(RpnStack stack)
     {
+        _stack.Clear();
+        foreach (var value in stack.ToArray())
+            _stack.Push(value);
     }
 }
