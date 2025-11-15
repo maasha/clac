@@ -101,4 +101,34 @@ public class RpnStackHistoryTests
         Assert.True(result.IsSuccessful);
         Assert.Equal([1, 2, 3], result.Value.ToArray());
     }
+
+    [Fact]
+    public void SaveStackSnapShot_WillNotExceedMaxHistorySize()
+    {
+        for (int i = 0; i < 101; i++)
+        {
+            _stack.Push(i);
+            _history.SaveStackSnapShot(_stack);
+        }
+        Assert.Equal(100, _history.Count);
+    }
+
+    [Fact]
+    public void SaveStackSnapShot_WithMaxHistorySize_ShouldRemoveOldestSnapshot()
+    {
+        const int maxHistorySize = 100;
+        const int snapshotsToSave = maxHistorySize + 1;
+
+        for (int i = 0; i < snapshotsToSave; i++)
+        {
+            _stack.Push(i);
+            _history.SaveStackSnapShot(_stack);
+        }
+
+        Assert.Equal(maxHistorySize, _history.Count);
+
+        var result = _history.PopStackSnapShot();
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(maxHistorySize, result.Value.ToArray().Last());
+    }
 }

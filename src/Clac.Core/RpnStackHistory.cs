@@ -3,6 +3,7 @@ namespace Clac.Core;
 
 public class RpnStackHistory
 {
+    private readonly int _maxHistorySize = 100;
     private readonly List<RpnStack> _historyStack = [];
     public int Count => _historyStack.Count;
     public Result<bool> SaveStackSnapShot(RpnStack stack)
@@ -11,6 +12,8 @@ public class RpnStackHistory
             return new Result<bool>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
         var clonedStack = CloneStack(stack);
         _historyStack.Add(clonedStack);
+        if (_historyStack.Count > _maxHistorySize)
+            _historyStack.RemoveAt(0);
         return new Result<bool>(true);
     }
 
