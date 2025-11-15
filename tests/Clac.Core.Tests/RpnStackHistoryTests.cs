@@ -11,18 +11,18 @@ public class RpnStackHistoryTests
     }
 
     [Fact]
-    public void Push_WithEmptyStack_ShouldNotSaveSnapshot()
+    public void Push_WithEmptyStack_ShouldSaveSnapshot()
     {
         _history.Push(_stack);
-        Assert.Equal(0, _history.Count);
+        Assert.Equal(1, _history.Count);
     }
 
     [Fact]
-    public void Push_WithEmptyStack_ShouldReturnError()
+    public void Push_WithEmptyStack_ShouldReturnSuccess()
     {
         var result = _history.Push(_stack);
-        Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.HistoryStackIsEmpty, result.Error.Message);
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(1, _history.Count);
     }
 
     [Fact]

@@ -100,8 +100,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             return;
 
         var stackBeforeProcessing = _processor.Stack;
-        if (stackBeforeProcessing.Count > 0)
-            _stackHistory.Push(stackBeforeProcessing);
+        _stackHistory.Push(stackBeforeProcessing);
 
         var result = ProcessTokens(tokens.Value);
         if (result == null)

@@ -8,8 +8,6 @@ public class RpnStackHistory
     public int Count => _historyStack.Count;
     public Result<bool> Push(RpnStack stack)
     {
-        if (stack.Count == 0)
-            return new Result<bool>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
         AddClonedStackToHistory(stack);
         EnforceMaxHistorySize();
         return new Result<bool>(true);
