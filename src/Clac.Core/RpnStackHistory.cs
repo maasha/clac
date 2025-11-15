@@ -3,25 +3,27 @@ namespace Clac.Core;
 
 public class RpnStackHistory
 {
-    public int Size { get; private set; }
-    public RpnStackHistory()
-    {
-        Size = 0;
-    }
-
+    private readonly List<RpnStack> _historyStack = [];
+    public int Count => _historyStack.Count;
     public Result<bool> SaveStackSnapShot(RpnStack stack)
     {
         if (stack.Count == 0)
             return new Result<bool>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
-        Size++;
+        var clonedStack = new RpnStack();
+        foreach (var value in stack.ToArray())
+        {
+            clonedStack.Push(value);
+        }
+        _historyStack.Add(clonedStack);
         return new Result<bool>(true);
     }
 
-    public Result<bool> PopStackSnapShot()
+    public Result<RpnStack> PopStackSnapShot()
     {
-        if (Size == 0)
-            return new Result<bool>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
-        Size--;
-        return new Result<bool>(true);
+        if (_historyStack.Count == 0)
+            return new Result<RpnStack>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
+        var value = _historyStack[^1];
+        _historyStack.RemoveAt(_historyStack.Count - 1);
+        return new Result<RpnStack>(value);
     }
 }
