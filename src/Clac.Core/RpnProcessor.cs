@@ -243,4 +243,8 @@ public class RpnProcessor
 
         return copy;
     }
+
+    public void RestoreStack(RpnStack stack)
+    {
+    }
 }

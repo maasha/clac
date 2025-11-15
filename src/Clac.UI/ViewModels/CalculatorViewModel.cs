@@ -24,6 +24,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
+    private readonly RpnStackHistory _stackHistory = new();
     private readonly Dictionary<string, List<string>> _errors = new();
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
@@ -103,6 +104,20 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             return;
 
         ClearSuccessState();
+    }
+
+    public void Undo()
+    {
+        if (!_stackHistory.CanUndo())
+            return;
+
+        var snapshotResult = _stackHistory.Pop();
+        if (!snapshotResult.IsSuccessful)
+            return;
+
+        _processor.RestoreStack(snapshotResult.Value);
+        UpdateDisplayItems();
+        OnPropertyChanged(nameof(StackDisplay));
     }
 
     private void InitializeDisplayItems()

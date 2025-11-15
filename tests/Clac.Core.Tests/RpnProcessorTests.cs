@@ -203,4 +203,9 @@ public class RpnProcessorTests
         Assert.Equal(1, _processor.Stack.Count);
         Assert.Equal(0.25, _processor.Stack.Peek().Value);
     }
+
+    [Fact]
+    public void RestoreStack_ShouldRestoreStackFromSnapshot()
+    {
+    }
 }
