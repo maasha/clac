@@ -1199,6 +1199,39 @@ public class KeyboardKeyViewTests
     }
 
     [Fact]
+    public void UndoKeyClick_ShouldRestorePreviousStackState_WhenUndoKeyIsClicked()
+    {
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+        _vm.CurrentInput = "2";
+        _vm.Enter();
+
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.Equal("1", _vm.StackDisplay[0]);
+        Assert.Equal("2", _vm.StackDisplay[1]);
+
+        var parent = new UserControl { DataContext = _vm };
+        var view = _view;
+        var key = new KeyboardKey
+        {
+            Label = "UNDO",
+            Value = "undo()",
+            Type = KeyType.Command
+        };
+        view.DataContext = key;
+        parent.Content = view;
+        view.InitializeComponent();
+
+        var button = view.FindControl<Button>("KeyButton");
+        Assert.NotNull(button);
+
+        button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("1", _vm.StackDisplay[0]);
+    }
+
+    [Fact]
     public void ButtonClick_ShouldNotCrash_WhenParentChainExceedsMaxDepth()
     {
         var viewModel = new CalculatorViewModel();

@@ -29,7 +29,7 @@ public partial class KeyboardView : UserControl
         Key5View.DataContext = new KeyboardKey { Label = "5", Value = "5", Type = KeyType.Number };
         Key6View.DataContext = new KeyboardKey { Label = "6", Value = "6", Type = KeyType.Number };
         MinusKeyView.DataContext = new KeyboardKey { Label = "-", Value = "-", Type = KeyType.Operator };
-        UndoKeyView.DataContext = new KeyboardKey { Label = "UNDO", Value = "", Type = KeyType.Command };
+        UndoKeyView.DataContext = new KeyboardKey { Label = "UNDO", Value = "undo()", Type = KeyType.Command };
 
         Key1View.DataContext = new KeyboardKey { Label = "1", Value = "1", Type = KeyType.Number };
         Key2View.DataContext = new KeyboardKey { Label = "2", Value = "2", Type = KeyType.Number };

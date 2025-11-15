@@ -12,6 +12,7 @@ namespace Clac.UI.Views;
 public partial class KeyboardKeyView : UserControl
 {
     private const string DeleteCommand = "del()";
+    private const string UndoCommand = "undo()";
 
     public static readonly StyledProperty<CalculatorViewModel?> ViewModelProperty =
         AvaloniaProperty.Register<KeyboardKeyView, CalculatorViewModel?>(nameof(ViewModel));
@@ -54,6 +55,10 @@ public partial class KeyboardKeyView : UserControl
         if (key.Value == DeleteCommand)
         {
             viewModel.DeleteFromInput();
+        }
+        else if (key.Value == UndoCommand)
+        {
+            viewModel.Undo();
         }
         else
         {
