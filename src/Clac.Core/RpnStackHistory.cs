@@ -24,6 +24,11 @@ public class RpnStackHistory
         return new Result<RpnStack>(value);
     }
 
+    public bool CanUndo()
+    {
+        return _historyStack.Count > 0;
+    }
+
     private void EnforceMaxHistorySize()
     {
         if (_historyStack.Count > _maxHistorySize)

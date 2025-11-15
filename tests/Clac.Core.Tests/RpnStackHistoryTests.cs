@@ -131,4 +131,18 @@ public class RpnStackHistoryTests
         Assert.True(result.IsSuccessful);
         Assert.Equal(maxHistorySize, result.Value.ToArray().Last());
     }
+
+    [Fact]
+    public void CanUndo_WithNoHistory_ShouldReturnFalse()
+    {
+        Assert.False(_history.CanUndo());
+    }
+
+    [Fact]
+    public void CanUndo_WithHistory_ShouldReturnTrue()
+    {
+        _stack.Push(123);
+        _history.SaveStackSnapShot(_stack);
+        Assert.True(_history.CanUndo());
+    }
 }
