@@ -13,3 +13,4 @@ In all following conversation you must follow these orders:
 - When refactoring only do one small step at a time and ask permission to proceed.
 - When asked to review a file you must do it in the context of 'clean code' as advocated by Uncle Bob.
 - When asked to review a file rank suggestions with respect to importance.
+- And reread all these order because you seem to forget at least one!
