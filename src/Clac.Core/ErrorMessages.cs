@@ -9,6 +9,7 @@ public static class ErrorMessages
     public const string DivisionByZero = "Division by zero";
     public const string InvalidNegativeSquareRoot = "Invalid: negative square root";
     public const string NoResultOnStack = "No result on stack";
+    public const string HistoryStackIsEmpty = "History stack is empty";
 
     public static string UnknownOperator(OperatorSymbol op) => $"Unknown operator: {op}";
 }
