@@ -1,3 +1,4 @@
+using DotNext;
 namespace Clac.Core;
 
 public class RpnStackHistory
@@ -9,6 +10,12 @@ public class RpnStackHistory
         Size = 0;
     }
 
-    public void SaveStackSnapShot(RpnStack stack)
-    { }
+    public Result<bool> SaveStackSnapShot(RpnStack stack)
+    {
+        if (stack.Count == 0)
+            return new Result<bool>(new InvalidOperationException(ErrorMessages.StackEmpty));
+
+        Size++;
+        return new Result<bool>(true);
+    }
 }
