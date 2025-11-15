@@ -6,7 +6,7 @@ public class RpnStackHistory
     private readonly int _maxHistorySize = 100;
     private readonly List<RpnStack> _historyStack = [];
     public int Count => _historyStack.Count;
-    public Result<bool> SaveStackSnapShot(RpnStack stack)
+    public Result<bool> Push(RpnStack stack)
     {
         if (stack.Count == 0)
             return new Result<bool>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
@@ -15,7 +15,7 @@ public class RpnStackHistory
         return new Result<bool>(true);
     }
 
-    public Result<RpnStack> PopStackSnapShot()
+    public Result<RpnStack> Pop()
     {
         if (_historyStack.Count == 0)
             return new Result<RpnStack>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));

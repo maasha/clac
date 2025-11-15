@@ -11,110 +11,110 @@ public class RpnStackHistoryTests
     }
 
     [Fact]
-    public void SaveStackSnapShot_WithEmptyStack_ShouldNotSaveSnapshot()
+    public void Push_WithEmptyStack_ShouldNotSaveSnapshot()
     {
-        _history.SaveStackSnapShot(_stack);
+        _history.Push(_stack);
         Assert.Equal(0, _history.Count);
     }
 
     [Fact]
-    public void SaveStackSnapShot_WithEmptyStack_ShouldReturnError()
+    public void Push_WithEmptyStack_ShouldReturnError()
     {
-        var result = _history.SaveStackSnapShot(_stack);
+        var result = _history.Push(_stack);
         Assert.False(result.IsSuccessful);
         Assert.Contains(ErrorMessages.HistoryStackIsEmpty, result.Error.Message);
     }
 
     [Fact]
-    public void SaveStackSnapShot_WithNonEmptyStack_ShouldSaveSnapshot()
+    public void Push_WithNonEmptyStack_ShouldSaveSnapshot()
     {
         _stack.Push(123);
-        _history.SaveStackSnapShot(_stack);
+        _history.Push(_stack);
         Assert.Equal(1, _history.Count);
     }
 
     [Fact]
-    public void PopStackSnapShot_WithEmptyHistory_ShouldReturnError()
+    public void Pop_WithEmptyHistory_ShouldReturnError()
     {
-        var result = _history.PopStackSnapShot();
+        var result = _history.Pop();
         Assert.False(result.IsSuccessful);
         Assert.Contains(ErrorMessages.HistoryStackIsEmpty, result.Error.Message);
     }
 
     [Fact]
-    public void PopStackSnapShot_WithNonEmptyHistory_ShouldPopSnapshot()
+    public void Pop_WithNonEmptyHistory_ShouldPopSnapshot()
     {
         _stack.Push(123);
-        _history.SaveStackSnapShot(_stack);
-        var result = _history.PopStackSnapShot();
+        _history.Push(_stack);
+        var result = _history.Pop();
         Assert.True(result.IsSuccessful);
         Assert.Equal(0, _history.Count);
     }
 
     [Fact]
-    public void PopStackSnapShot_WithNonEmptyHistory_ShouldReturnSnapshot()
+    public void Pop_WithNonEmptyHistory_ShouldReturnSnapshot()
     {
         _stack.Push(123);
-        _history.SaveStackSnapShot(_stack);
-        var result = _history.PopStackSnapShot();
+        _history.Push(_stack);
+        var result = _history.Pop();
         Assert.True(result.IsSuccessful);
         Assert.Equal(_stack.ToArray(), result.Value.ToArray());
     }
 
 
     [Fact]
-    public void PopStackSnapShot_WithTwoSnapshots_ShouldReturnSecondSnapshot()
+    public void Pop_WithTwoSnapshots_ShouldReturnSecondSnapshot()
     {
         _stack.Push(123);
-        _history.SaveStackSnapShot(_stack);
+        _history.Push(_stack);
         _stack.Push(456);
-        _history.SaveStackSnapShot(_stack);
-        var result = _history.PopStackSnapShot();
+        _history.Push(_stack);
+        var result = _history.Pop();
         Assert.True(result.IsSuccessful);
         Assert.Equal(_stack.ToArray(), result.Value.ToArray());
     }
 
     [Fact]
-    public void PopStackSnapShotTwice_WithTwoSnapshots_ShouldReturnFirstSnapshot()
+    public void PopTwice_WithTwoSnapshots_ShouldReturnFirstSnapshot()
     {
         _stack.Push(123);
-        _history.SaveStackSnapShot(_stack);
+        _history.Push(_stack);
         _stack.Push(456);
-        _history.SaveStackSnapShot(_stack);
-        _history.PopStackSnapShot();
-        var result = _history.PopStackSnapShot();
+        _history.Push(_stack);
+        _history.Pop();
+        var result = _history.Pop();
         Assert.True(result.IsSuccessful);
         Assert.Equal([123], result.Value.ToArray());
     }
 
     [Fact]
-    public void SaveStackSnapShot_ShouldCloneStackBeforeSaving()
+    public void Push_ShouldCloneStackBeforeSaving()
     {
         _stack.Push(1);
         _stack.Push(2);
         _stack.Push(3);
-        _history.SaveStackSnapShot(_stack);
+        _history.Push(_stack);
 
         _stack.Push(4);
 
-        var result = _history.PopStackSnapShot();
+        var result = _history.Pop();
         Assert.True(result.IsSuccessful);
         Assert.Equal([1, 2, 3], result.Value.ToArray());
     }
 
     [Fact]
-    public void SaveStackSnapShot_WillNotExceedMaxHistorySize()
+    public void Push_WillNotExceedMaxHistorySize()
     {
         for (int i = 0; i < 101; i++)
         {
             _stack.Push(i);
-            _history.SaveStackSnapShot(_stack);
+            _history.Push(_stack);
         }
         Assert.Equal(100, _history.Count);
     }
 
     [Fact]
-    public void SaveStackSnapShot_WithMaxHistorySize_ShouldRemoveOldestSnapshot()
+    public void Push_WithMaxHistorySize_ShouldRemoveOldestSnapshot()
     {
         const int maxHistorySize = 100;
         const int snapshotsToSave = maxHistorySize + 1;
@@ -122,12 +122,12 @@ public class RpnStackHistoryTests
         for (int i = 0; i < snapshotsToSave; i++)
         {
             _stack.Push(i);
-            _history.SaveStackSnapShot(_stack);
+            _history.Push(_stack);
         }
 
         Assert.Equal(maxHistorySize, _history.Count);
 
-        var result = _history.PopStackSnapShot();
+        var result = _history.Pop();
         Assert.True(result.IsSuccessful);
         Assert.Equal(maxHistorySize, result.Value.ToArray().Last());
     }
@@ -142,7 +142,7 @@ public class RpnStackHistoryTests
     public void CanUndo_WithHistory_ShouldReturnTrue()
     {
         _stack.Push(123);
-        _history.SaveStackSnapShot(_stack);
+        _history.Push(_stack);
         Assert.True(_history.CanUndo());
     }
 }

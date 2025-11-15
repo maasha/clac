@@ -9,13 +9,13 @@ Implement UNDO functionality in two steps:
 
 ### Stack History Module
 - **Data structure**: `Stack<StackSnapshot>` or similar
-- **Methods**: `SaveStackState()`, `UndoStack()`, `CanUndo()`, `Clear()`
+- **Methods**: `Push()`, `Pop()`, `CanUndo()`
 - **Isolated**: No knowledge of input history
 - **Responsibility**: Track and restore stack states
 
 ### Input History Module
 - **Data structure**: `Stack<string>`
-- **Methods**: `SaveInput()`, `UndoInput()`, `CanUndo()`, `Clear()`
+- **Methods**: `SaveInput()`, `UndoInput()`, `CanUndo()`
 - **Isolated**: No knowledge of stack history
 - **Responsibility**: Track and restore input strings
 
@@ -32,13 +32,13 @@ Implement UNDO functionality in two steps:
 2. Save stack snapshot after successful operations in `Enter()`
 3. Implement `Undo()` method in ViewModel
 4. Wire UNDO button to `Undo()` method
-5. Handle edge cases (no history, clear command, etc.)
+5. Handle edge cases (no history, etc.)
 
 ### When to Save History
 - After successful `Enter()` that modifies stack
 - After operations: `+`, `-`, `*`, `/`, `sqrt()`, `pow()`, `reciprocal()`, `sum()`, `swap()`, `pop()`
 - **Not saved**: 
-  - `clear()` command (clears history)
+  - `clear()` command
   - Failed operations (errors)
   - Operations that don't modify stack
 
@@ -93,7 +93,6 @@ Implement UNDO functionality in two steps:
 - This is an RPN calculator - remember stack operations, not just input strings
 - Button commands (sum(), sqrt(), etc.) should be saved as their command string
 - Consider history depth limits to prevent unbounded growth
-- Clear history when `clear()` command is executed
 
 ## Example
 
