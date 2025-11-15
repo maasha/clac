@@ -10,19 +10,9 @@ public class RpnStackHistory
     {
         if (stack.Count == 0)
             return new Result<bool>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
-        var clonedStack = CloneStack(stack);
-        _historyStack.Add(clonedStack);
-        if (_historyStack.Count > _maxHistorySize)
-            _historyStack.RemoveAt(0);
+        AddClonedStackToHistory(stack);
+        EnforceMaxHistorySize();
         return new Result<bool>(true);
-    }
-
-    private static RpnStack CloneStack(RpnStack stack)
-    {
-        var clonedStack = new RpnStack();
-        foreach (var value in stack.ToArray())
-            clonedStack.Push(value);
-        return clonedStack;
     }
 
     public Result<RpnStack> PopStackSnapShot()
@@ -32,5 +22,25 @@ public class RpnStackHistory
         var value = _historyStack[^1];
         _historyStack.RemoveAt(_historyStack.Count - 1);
         return new Result<RpnStack>(value);
+    }
+
+    private void EnforceMaxHistorySize()
+    {
+        if (_historyStack.Count > _maxHistorySize)
+            _historyStack.RemoveAt(0);
+    }
+
+    private void AddClonedStackToHistory(RpnStack stack)
+    {
+        var clonedStack = CloneStack(stack);
+        _historyStack.Add(clonedStack);
+    }
+
+    private static RpnStack CloneStack(RpnStack stack)
+    {
+        var clonedStack = new RpnStack();
+        foreach (var value in stack.ToArray())
+            clonedStack.Push(value);
+        return clonedStack;
     }
 }
