@@ -9,13 +9,17 @@ public class RpnStackHistory
     {
         if (stack.Count == 0)
             return new Result<bool>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
-        var clonedStack = new RpnStack();
-        foreach (var value in stack.ToArray())
-        {
-            clonedStack.Push(value);
-        }
+        var clonedStack = CloneStack(stack);
         _historyStack.Add(clonedStack);
         return new Result<bool>(true);
+    }
+
+    private static RpnStack CloneStack(RpnStack stack)
+    {
+        var clonedStack = new RpnStack();
+        foreach (var value in stack.ToArray())
+            clonedStack.Push(value);
+        return clonedStack;
     }
 
     public Result<RpnStack> PopStackSnapShot()
