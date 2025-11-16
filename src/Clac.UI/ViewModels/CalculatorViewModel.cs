@@ -25,6 +25,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
     private readonly RpnStackHistory _stackHistory = new();
+    private readonly RpnInputHistory _inputHistory = new();
     private readonly Dictionary<string, List<string>> _errors = new();
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
@@ -101,6 +102,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
         var stackBeforeProcessing = _processor.Stack;
         _stackHistory.Push(stackBeforeProcessing);
+        _inputHistory.Push(_currentInput);
 
         var result = ProcessTokens(tokens.Value);
         if (result == null)
@@ -117,6 +119,12 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         var snapshotResult = _stackHistory.Pop();
         if (!snapshotResult.IsSuccessful)
             return;
+
+        var inputResult = _inputHistory.Pop();
+        if (inputResult.IsSuccessful)
+        {
+            SetCurrentInputAndClearErrors(inputResult.Value);
+        }
 
         _processor.RestoreStack(snapshotResult.Value);
         UpdateDisplayItems();

@@ -67,7 +67,7 @@ public class CalculatorViewModelTests
     }
 
     [Fact]
-    public void Undo_WithHistory_ShouldRestorePreviousStackState()
+    public void Undo_WithHistory_ShouldRestorePreviousStackInDisplay()
     {
         _vm.CurrentInput = "1";
         _vm.Enter();
@@ -78,5 +78,27 @@ public class CalculatorViewModelTests
 
         Assert.Single(_vm.StackDisplay);
         Assert.Equal("1", _vm.StackDisplay[0]);
+    }
+
+    [Fact]
+    public void Undo_WithNoHistory_ShouldDoNothingInDisplay()
+    {
+        _vm.Undo();
+
+        Assert.Empty(_vm.StackDisplay);
+    }
+
+    [Fact]
+    public void Undo_WithHistory_ShouldRestorePreviousInputInCurrentInput()
+    {
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+
+
+        Assert.Equal("", _vm.CurrentInput);
+
+        _vm.Undo();
+
+        Assert.Equal("1", _vm.CurrentInput);
     }
 }
