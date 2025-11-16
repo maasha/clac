@@ -92,8 +92,8 @@ public class History<T>
 - Clean code principles applied (extracted methods, clear naming)
 
 **Current Usage:**
-- `RpnStackHistory` wraps `History<RpnStack>` with clone function
-- `RpnInputHistory` will wrap `History<string>` with validation function
+- `RpnStackHistory` wraps `History<RpnStack>` with clone function ✅
+- `RpnInputHistory` wraps `History<string>` with validation function ✅
 
 ### Option 2: Synchronized History Pair
 
@@ -207,13 +207,23 @@ This approach provides:
 - Clone function passed via constructor
 - Public API unchanged (no breaking changes)
 
-### ⏳ Step 3: Refactor `RpnInputHistory` to use `History<string>`
-**Status:** PENDING
+### ✅ Step 3: Refactor `RpnInputHistory` to use `History<string>`
+**Status:** COMPLETE
 
-- Need to refactor `RpnInputHistory` similar to `RpnStackHistory`
-- Configure with validation function (reject empty/whitespace strings)
-- Wrap `Pop()` to translate error message to `HistoryInputIsEmpty`
-- Remove redundant tests
+- `RpnInputHistory` now uses composition with `History<string>`
+- Configured with validation function: `input => !string.IsNullOrWhiteSpace(input)`
+- Wraps `Pop()` to translate error message to `HistoryInputIsEmpty`
+- Delegates `Count`, `Push`, and `CanUndo` to internal `History<string>`
+- Added `CanUndo` property (was missing before)
+- Reduced from 34 lines to 31 lines
+- Removed 5 redundant tests (kept only 2 wrapper-specific tests)
+- All tests passing (200 total: 85 core + 115 UI)
+
+**Implementation Details:**
+- Error message translation handled in `Pop()` wrapper
+- Validation function passed via constructor
+- Public API unchanged (no breaking changes)
+- Added namespace declaration for consistency
 
 ### ⏳ Step 4: Create `SynchronizedHistory` class
 **Status:** PENDING
@@ -253,11 +263,12 @@ This approach provides:
 **Completed:**
 - ✅ Generic `History<T>` class created and tested
 - ✅ `RpnStackHistory` refactored to use `History<RpnStack>`
-- ✅ Test suite cleaned up (removed redundant tests)
+- ✅ `RpnInputHistory` refactored to use `History<string>`
+- ✅ Test suite cleaned up (removed redundant tests from both wrapper classes)
 - ✅ Code quality improvements (Clean Code principles applied)
+- ✅ Both wrapper classes now use composition pattern consistently
 
 **Remaining:**
-- ⏳ Refactor `RpnInputHistory` to use `History<string>`
 - ⏳ Create `SynchronizedHistory` class
 - ⏳ Update `CalculatorViewModel` to use `SynchronizedHistory`
 - ⏳ Final cleanup and removal of wrapper classes (if appropriate)
