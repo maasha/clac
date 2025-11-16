@@ -4,21 +4,26 @@ using Xunit;
 using Clac.UI.Views;
 using Clac.UI.Models;
 using Clac.UI.Enums;
+using Avalonia;
 using Avalonia.Controls;
 
 public class KeyboardViewTests
 {
-    private readonly KeyboardView _view;
-
-    public KeyboardViewTests()
+    private KeyboardView CreateView()
     {
-        _view = new KeyboardView();
+        if (Application.Current == null)
+        {
+            AppBuilder.Configure<Clac.UI.App>()
+                .UsePlatformDetect()
+                .SetupWithoutStarting();
+        }
+        return new KeyboardView();
     }
 
     [Fact]
     public void KeyboardView_ShouldHaveKey1_WhenInitialized()
     {
-
+        var _view = CreateView();
         var key1View = _view.FindControl<KeyboardKeyView>("Key1View");
         Assert.NotNull(key1View);
 
@@ -32,7 +37,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveDeleteKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var deleteKeyView = _view.FindControl<KeyboardKeyView>("DeleteKeyView");
         Assert.NotNull(deleteKeyView);
 
@@ -46,7 +51,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHavePlusKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var plusKeyView = _view.FindControl<KeyboardKeyView>("PlusKeyView");
         Assert.NotNull(plusKeyView);
 
@@ -60,7 +65,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveMinusKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var minusKeyView = _view.FindControl<KeyboardKeyView>("MinusKeyView");
         Assert.NotNull(minusKeyView);
 
@@ -74,7 +79,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveEnterKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var enterKeyView = _view.FindControl<KeyboardKeyView>("EnterKeyView");
         Assert.NotNull(enterKeyView);
 
@@ -88,7 +93,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveZeroKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var zeroKeyView = _view.FindControl<KeyboardKeyView>("Key0View");
         Assert.NotNull(zeroKeyView);
 
@@ -102,7 +107,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveTwoKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var twoKeyView = _view.FindControl<KeyboardKeyView>("Key2View");
         Assert.NotNull(twoKeyView);
 
@@ -116,7 +121,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveThreeKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var threeKeyView = _view.FindControl<KeyboardKeyView>("Key3View");
         Assert.NotNull(threeKeyView);
 
@@ -130,7 +135,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveFourKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var fourKeyView = _view.FindControl<KeyboardKeyView>("Key4View");
         Assert.NotNull(fourKeyView);
 
@@ -144,7 +149,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveFiveKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var fiveKeyView = _view.FindControl<KeyboardKeyView>("Key5View");
         Assert.NotNull(fiveKeyView);
 
@@ -158,7 +163,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveSixKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var sixKeyView = _view.FindControl<KeyboardKeyView>("Key6View");
         Assert.NotNull(sixKeyView);
 
@@ -172,7 +177,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveSevenKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var sevenKeyView = _view.FindControl<KeyboardKeyView>("Key7View");
         Assert.NotNull(sevenKeyView);
 
@@ -186,7 +191,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveEightKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var eightKeyView = _view.FindControl<KeyboardKeyView>("Key8View");
         Assert.NotNull(eightKeyView);
 
@@ -200,7 +205,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveNineKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var nineKeyView = _view.FindControl<KeyboardKeyView>("Key9View");
         Assert.NotNull(nineKeyView);
 
@@ -214,7 +219,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveMultiplyKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var multiplyKeyView = _view.FindControl<KeyboardKeyView>("MultiplyKeyView");
         Assert.NotNull(multiplyKeyView);
 
@@ -228,7 +233,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveDivideKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var divideKeyView = _view.FindControl<KeyboardKeyView>("DivideKeyView");
         Assert.NotNull(divideKeyView);
 
@@ -242,7 +247,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveDecimalKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var decimalKeyView = _view.FindControl<KeyboardKeyView>("DecimalKeyView");
         Assert.NotNull(decimalKeyView);
 
@@ -256,7 +261,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHavePopKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var popKeyView = _view.FindControl<KeyboardKeyView>("PopKeyView");
         Assert.NotNull(popKeyView);
 
@@ -270,7 +275,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveSwapKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var swapKeyView = _view.FindControl<KeyboardKeyView>("SwapKeyView");
         Assert.NotNull(swapKeyView);
 
@@ -284,7 +289,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveClearKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var clearKeyView = _view.FindControl<KeyboardKeyView>("ClearKeyView");
         Assert.NotNull(clearKeyView);
 
@@ -298,7 +303,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveSumKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var sumKeyView = _view.FindControl<KeyboardKeyView>("SumKeyView");
         Assert.NotNull(sumKeyView);
 
@@ -312,7 +317,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveSqrtKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var sqrtKeyView = _view.FindControl<KeyboardKeyView>("SqrtKeyView");
         Assert.NotNull(sqrtKeyView);
 
@@ -326,7 +331,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHavePowKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var powKeyView = _view.FindControl<KeyboardKeyView>("PowKeyView");
         Assert.NotNull(powKeyView);
 
@@ -340,7 +345,7 @@ public class KeyboardViewTests
     [Fact]
     public void KeyboardView_ShouldHaveReciprocalKey_WhenInitialized()
     {
-
+        var _view = CreateView();
         var reciprocalKeyView = _view.FindControl<KeyboardKeyView>("ReciprocalKeyView");
         Assert.NotNull(reciprocalKeyView);
 
