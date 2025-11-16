@@ -169,7 +169,7 @@ public class HistoryTests
         public void WithNoHistory_ShouldReturnFalse()
         {
             History<int> history = new();
-            Assert.False(history.CanUndo());
+            Assert.False(history.CanUndo);
         }
 
         [Fact]
@@ -177,7 +177,7 @@ public class HistoryTests
         {
             History<int> history = new();
             history.Push(42);
-            Assert.True(history.CanUndo());
+            Assert.True(history.CanUndo);
         }
     }
 }

@@ -61,9 +61,6 @@ public class History<T>
         return new Result<T>(value);
     }
 
-    public bool CanUndo()
-    {
-        return _history.Count > 0;
-    }
+    public bool CanUndo => _history.Count > 0;
 }
 
