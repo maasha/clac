@@ -1,34 +1,31 @@
-using static Clac.Core.ErrorMessages;
 using DotNext;
+using static Clac.Core.ErrorMessages;
+
+namespace Clac.Core;
 
 public class RpnInputHistory
 {
-    private readonly List<string> _history = [];
-    public int Count => _history.Count;
+    private readonly History<string> _history;
 
-    private readonly int _maxHistorySize = 100;
+    public RpnInputHistory()
+    {
+        _history = new History<string>(validateFunc: input => !string.IsNullOrWhiteSpace(input));
+    }
+
+    public int Count => _history.Count;
 
     public Result<bool> Push(string input)
     {
-        if (string.IsNullOrWhiteSpace(input))
-            return new Result<bool>(false);
-
-        _history.Add(input);
-        EnforceMaxHistorySize();
-        return new Result<bool>(true);
+        return _history.Push(input);
     }
 
     public Result<string> Pop()
     {
-        if (_history.Count == 0)
+        var result = _history.Pop();
+        if (!result.IsSuccessful)
             return new Result<string>(new InvalidOperationException(HistoryInputIsEmpty));
-        var value = _history[^1];
-        _history.RemoveAt(_history.Count - 1);
-        return new Result<string>(value);
+        return result;
     }
-    private void EnforceMaxHistorySize()
-    {
-        if (_history.Count > _maxHistorySize)
-            _history.RemoveAt(0);
-    }
+
+    public bool CanUndo => _history.CanUndo;
 }
