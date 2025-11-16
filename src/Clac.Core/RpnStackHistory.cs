@@ -4,40 +4,31 @@ namespace Clac.Core;
 
 public class RpnStackHistory
 {
-    private readonly int _maxHistorySize = 100;
-    private readonly List<RpnStack> _historyStack = [];
-    public int Count => _historyStack.Count;
+    private readonly History<RpnStack> _history;
+
+    public RpnStackHistory()
+    {
+        _history = new History<RpnStack>(cloneFunc: CloneStack);
+    }
+
+    public int Count => _history.Count;
+
     public Result<bool> Push(RpnStack stack)
     {
-        AddClonedStackToHistory(stack);
-        EnforceMaxHistorySize();
-        return new Result<bool>(true);
+        return _history.Push(stack);
     }
 
     public Result<RpnStack> Pop()
     {
-        if (_historyStack.Count == 0)
+        var result = _history.Pop();
+        if (!result.IsSuccessful)
             return new Result<RpnStack>(new InvalidOperationException(HistoryStackIsEmpty));
-        var value = _historyStack[^1];
-        _historyStack.RemoveAt(_historyStack.Count - 1);
-        return new Result<RpnStack>(value);
+        return result;
     }
 
     public bool CanUndo()
     {
-        return _historyStack.Count > 0;
-    }
-
-    private void EnforceMaxHistorySize()
-    {
-        if (_historyStack.Count > _maxHistorySize)
-            _historyStack.RemoveAt(0);
-    }
-
-    private void AddClonedStackToHistory(RpnStack stack)
-    {
-        var clonedStack = CloneStack(stack);
-        _historyStack.Add(clonedStack);
+        return _history.CanUndo;
     }
 
     private static RpnStack CloneStack(RpnStack stack)
