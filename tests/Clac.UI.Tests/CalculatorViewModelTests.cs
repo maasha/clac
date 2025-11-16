@@ -101,4 +101,16 @@ public class CalculatorViewModelTests
 
         Assert.Equal("1", _vm.CurrentInput);
     }
+
+    [Fact]
+    public void CanUndo_WithError_ShouldReturnFalse()
+    {
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+        _vm.CurrentInput = "abc";
+        _vm.Enter();
+
+        Assert.True(_vm.HasError);
+        Assert.False(_vm.CanUndo);
+    }
 }
