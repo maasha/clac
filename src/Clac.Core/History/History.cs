@@ -1,7 +1,7 @@
 using DotNext;
 using static Clac.Core.ErrorMessages;
 
-namespace Clac.Core;
+namespace Clac.Core.History;
 
 public class History<T>
 {

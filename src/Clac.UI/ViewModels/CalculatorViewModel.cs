@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using DotNext;
 using Clac.Core;
+using Clac.Core.History;
 using Clac.UI.Configuration;
 using Clac.UI.Helpers;
 using Clac.UI.Models;

@@ -1,6 +1,7 @@
 using DotNext;
+using Clac.Core.History;
 
-namespace Clac.Core;
+namespace Clac.Core.History;
 
 public class StackAndInputHistory
 {
@@ -55,3 +56,4 @@ public class StackAndInputHistory
         return clonedStack;
     }
 }
+

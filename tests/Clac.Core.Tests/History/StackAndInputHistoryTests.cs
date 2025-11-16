@@ -1,7 +1,8 @@
 using Clac.Core;
+using Clac.Core.History;
 using Xunit;
 
-namespace Clac.Core.Tests;
+namespace Clac.Core.Tests.History;
 
 public class StackAndInputHistoryTests
 {
