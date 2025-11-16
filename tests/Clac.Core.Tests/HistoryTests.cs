@@ -51,6 +51,20 @@ public class HistoryTests
         }
 
         [Fact]
+        public void WithCustomMaxHistorySize_ShouldRespectLimit()
+        {
+            const int customMaxSize = 5;
+            History<int> history = new(maxHistorySize: customMaxSize);
+
+            for (int i = 0; i < 10; i++)
+                history.Push(i);
+
+            Assert.Equal(customMaxSize, history.Count);
+            var result = history.Pop();
+            Assert.Equal(9, result.Value); // Last item should be 9
+        }
+
+        [Fact]
         public void WithCloneFunc_ShouldCloneItemBeforeSaving()
         {
             var original = new List<int> { 1, 2, 3 };

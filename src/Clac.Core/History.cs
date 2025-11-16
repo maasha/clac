@@ -5,15 +5,16 @@ namespace Clac.Core;
 
 public class History<T>
 {
-    private readonly int _maxHistorySize = 100;
+    private readonly int _maxHistorySize;
     private readonly List<T> _history = [];
     private readonly Func<T, T>? _cloneFunc;
     private readonly Func<T, bool>? _validateFunc;
 
-    public History(Func<T, T>? cloneFunc = null, Func<T, bool>? validateFunc = null)
+    public History(Func<T, T>? cloneFunc = null, Func<T, bool>? validateFunc = null, int maxHistorySize = 100)
     {
         _cloneFunc = cloneFunc;
         _validateFunc = validateFunc;
+        _maxHistorySize = maxHistorySize;
     }
 
     public int Count => _history.Count;
