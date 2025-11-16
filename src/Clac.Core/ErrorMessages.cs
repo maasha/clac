@@ -12,6 +12,8 @@ public static class ErrorMessages
     public const string HistoryStackIsEmpty = "History stack is empty";
     public const string HistoryInputIsEmpty = "History input is empty";
 
+    public const string HistoryIsEmpty = "History is empty";
+
     public static string UnknownOperator(OperatorSymbol op) => $"Unknown operator: {op}";
 }
 
