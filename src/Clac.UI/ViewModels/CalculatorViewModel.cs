@@ -24,8 +24,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
-    private readonly RpnStackHistory _stackHistory = new();
-    private readonly RpnInputHistory _inputHistory = new();
+    private readonly SynchronizedHistory _history = new();
     private readonly Dictionary<string, List<string>> _errors = new();
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
@@ -68,7 +67,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     public bool HasError => !string.IsNullOrEmpty(_errorMessage);
     public string ErrorMessage => _errorMessage ?? "";
-    public bool CanUndo => !HasError && _stackHistory.CanUndo;
+    public bool CanUndo => !HasError && _history.CanUndo;
 
     private const double ErrorLineHeight = 50.0;
     public double WindowHeight => SettingsManager.UI.WindowHeight + (HasError ? ErrorLineHeight : 0);
@@ -102,8 +101,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             return;
 
         var stackBeforeProcessing = _processor.Stack;
-        _stackHistory.Push(stackBeforeProcessing);
-        _inputHistory.Push(_currentInput);
+        _history.Push(stackBeforeProcessing, _currentInput);
 
         var result = ProcessTokens(tokens.Value);
         if (result == null)
@@ -117,17 +115,12 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (!CanUndo)
             return;
 
-        var snapshotResult = _stackHistory.Pop();
-        if (!snapshotResult.IsSuccessful)
+        var result = _history.Pop();
+        if (!result.IsSuccessful)
             return;
 
-        var inputResult = _inputHistory.Pop();
-        if (inputResult.IsSuccessful)
-        {
-            SetCurrentInputAndClearErrors(inputResult.Value);
-        }
-
-        _processor.RestoreStack(snapshotResult.Value);
+        SetCurrentInputAndClearErrors(result.Value.input);
+        _processor.RestoreStack(result.Value.stack);
         UpdateDisplayItems();
         OnPropertyChanged(nameof(StackDisplay));
     }
