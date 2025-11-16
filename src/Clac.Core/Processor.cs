@@ -4,13 +4,13 @@ using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core;
 
-public class RpnProcessor
+public class Processor
 {
     private const int MinimumStackSizeForBinaryOperation = 2;
-    private readonly RpnStack _stack = new();
+    private readonly Stack _stack = new();
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
 
-    public RpnProcessor()
+    public Processor()
     {
         _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
         {
@@ -24,7 +24,7 @@ public class RpnProcessor
         };
     }
 
-    public RpnStack Stack => CloneStack();
+    public Stack Stack => CloneStack();
 
     public Result<double> Process(List<Token> tokens)
     {
@@ -224,7 +224,7 @@ public class RpnProcessor
         var number1 = _stack.Pop();
         var number2 = _stack.Pop();
 
-        var result = RpnEvaluator.Evaluate(number2.Value, number1.Value, operatorToken.Symbol);
+        var result = Evaluator.Evaluate(number2.Value, number1.Value, operatorToken.Symbol);
 
         if (!result.IsSuccessful)
             return result;
@@ -233,9 +233,9 @@ public class RpnProcessor
         return result;
     }
 
-    private RpnStack CloneStack()
+    private Stack CloneStack()
     {
-        var copy = new RpnStack();
+        var copy = new Stack();
 
         foreach (var value in _stack.ToArray())
         {
@@ -245,7 +245,7 @@ public class RpnProcessor
         return copy;
     }
 
-    public void RestoreStack(RpnStack stack)
+    public void RestoreStack(Stack stack)
     {
         _stack.Clear();
         foreach (var value in stack.ToArray())

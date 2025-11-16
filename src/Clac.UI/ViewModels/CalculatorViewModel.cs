@@ -24,7 +24,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private string _currentInput = "";
     private string? _errorMessage = null;
-    private readonly RpnProcessor _processor = new();
+    private readonly Processor _processor = new();
     private readonly StackAndInputHistory _history = new();
     private readonly Dictionary<string, List<string>> _errors = new();
     public ObservableCollection<StackLineItem> DisplayItems { get; }
@@ -294,7 +294,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private Result<List<Token>> ParseInput()
     {
-        var tokens = RpnParser.Parse(_currentInput);
+        var tokens = Parser.Parse(_currentInput);
         if (!tokens.IsSuccessful)
             SetErrorMessageAndNotify(tokens.Error.Message);
         return tokens;

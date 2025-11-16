@@ -4,12 +4,12 @@ using Xunit;
 using Clac.Core;
 using Clac.Core.Enums;
 
-public class RpnParserTests
+public class ParserTests
 {
     [Fact]
     public void Parse_EmptyString_ShouldReturnEmptyList()
     {
-        var result = RpnParser.Parse("   ");
+        var result = Parser.Parse("   ");
         Assert.True(result.IsSuccessful);
         Assert.Empty(result.Value);
     }
@@ -17,7 +17,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_InvalidString_ShouldReturnError()
     {
-        var result = RpnParser.Parse("1 2 3 + - * / bad content");
+        var result = Parser.Parse("1 2 3 + - * / bad content");
         Assert.False(result.IsSuccessful);
         Assert.Contains("Invalid input", result.Error.Message);
         Assert.Contains("bad content", result.Error.Message);
@@ -26,7 +26,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_ValidString_ShouldReturnListOfTokens()
     {
-        var result = RpnParser.Parse("1 2 3 + - * / -1 0.2 .3 -0.4");
+        var result = Parser.Parse("1 2 3 + - * / -1 0.2 .3 -0.4");
 
         Assert.True(result.IsSuccessful);
         Assert.Equal(11, result.Value.Count);
@@ -55,7 +55,7 @@ public class RpnParserTests
     [InlineData("2.5e3")]
     public void Parse_ScientificNotation_ShouldParseCorrectly(string input)
     {
-        var result = RpnParser.Parse(input);
+        var result = Parser.Parse(input);
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
     }
@@ -63,7 +63,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_ClearCommand_ShouldReturnCommandToken()
     {
-        var result = RpnParser.Parse("clear()");
+        var result = Parser.Parse("clear()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -72,7 +72,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_PopCommand_ShouldReturnCommandToken()
     {
-        var result = RpnParser.Parse("pop()");
+        var result = Parser.Parse("pop()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -81,7 +81,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_SwapCommand_ShouldReturnCommandToken()
     {
-        var result = RpnParser.Parse("swap()");
+        var result = Parser.Parse("swap()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -90,7 +90,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_SumCommand_ShouldReturnCommandToken()
     {
-        var result = RpnParser.Parse("sum()");
+        var result = Parser.Parse("sum()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -99,7 +99,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_SquareRootCommand_ShouldReturnCommandToken()
     {
-        var result = RpnParser.Parse("sqrt()");
+        var result = Parser.Parse("sqrt()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -108,7 +108,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_PowCommand_ShouldReturnCommandToken()
     {
-        var result = RpnParser.Parse("pow()");
+        var result = Parser.Parse("pow()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -117,7 +117,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_ReciprocalCommand_ShouldReturnCommandToken()
     {
-        var result = RpnParser.Parse("reciprocal()");
+        var result = Parser.Parse("reciprocal()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -126,7 +126,7 @@ public class RpnParserTests
     [Fact]
     public void Parse_UppercaseCommand_ShouldReturnCommandToken()
     {
-        var result = RpnParser.Parse("RECIPROCAL()");
+        var result = Parser.Parse("RECIPROCAL()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);

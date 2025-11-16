@@ -3,7 +3,7 @@ using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core;
 
-public class RpnStack
+public class Stack
 {
     private readonly List<double> _stack = [];
 

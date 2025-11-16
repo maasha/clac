@@ -10,7 +10,7 @@ public class StackAndInputHistoryTests
     public void Push_WithValidStackAndInput_ShouldSucceed()
     {
         StackAndInputHistory history = new();
-        var stack = new RpnStack();
+        var stack = new Stack();
         stack.Push(123);
 
         var result = history.Push(stack, "1 2 3");
@@ -22,7 +22,7 @@ public class StackAndInputHistoryTests
     public void Push_WhenInputPushFails_ShouldRollbackStackPush()
     {
         StackAndInputHistory history = new();
-        var stack = new RpnStack();
+        var stack = new Stack();
         stack.Push(123);
 
         var result = history.Push(stack, "");
@@ -34,7 +34,7 @@ public class StackAndInputHistoryTests
     public void Pop_WithHistory_ShouldReturnBothStackAndInput()
     {
         StackAndInputHistory history = new();
-        var stack = new RpnStack();
+        var stack = new Stack();
         stack.Push(123);
         history.Push(stack, "1 2 3");
 
@@ -57,7 +57,7 @@ public class StackAndInputHistoryTests
     public void CanUndo_WithHistory_ShouldReturnTrue()
     {
         StackAndInputHistory history = new();
-        var stack = new RpnStack();
+        var stack = new Stack();
         stack.Push(123);
         history.Push(stack, "1 2 3");
 

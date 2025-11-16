@@ -4,13 +4,13 @@ using Xunit;
 using Clac.Core;
 using static Clac.Core.ErrorMessages;
 
-public class RpnStackTests
+public class StackTests
 {
-    private readonly RpnStack _stack;
+    private readonly Stack _stack;
 
-    public RpnStackTests()
+    public StackTests()
     {
-        _stack = new RpnStack();
+        _stack = new Stack();
     }
 
     [Fact]

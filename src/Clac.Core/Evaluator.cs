@@ -4,7 +4,7 @@ using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core;
 
-public class RpnEvaluator
+public class Evaluator
 {
     public static Result<double> Evaluate(double number1, double number2, OperatorSymbol op)
     {

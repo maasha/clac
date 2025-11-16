@@ -5,16 +5,16 @@ namespace Clac.Core.History;
 
 public class StackAndInputHistory
 {
-    private readonly History<RpnStack> _stackHistory;
+    private readonly History<Stack> _stackHistory;
     private readonly History<string> _inputHistory;
 
     public StackAndInputHistory()
     {
-        _stackHistory = new History<RpnStack>(cloneFunc: CloneStack);
+        _stackHistory = new History<Stack>(cloneFunc: CloneStack);
         _inputHistory = new History<string>(validateFunc: input => !string.IsNullOrWhiteSpace(input));
     }
 
-    public Result<bool> Push(RpnStack stack, string input)
+    public Result<bool> Push(Stack stack, string input)
     {
         var stackResult = _stackHistory.Push(stack);
         if (!stackResult.IsSuccessful)
@@ -30,27 +30,27 @@ public class StackAndInputHistory
         return new Result<bool>(true);
     }
 
-    public Result<(RpnStack stack, string input)> Pop()
+    public Result<(Stack stack, string input)> Pop()
     {
         var stackResult = _stackHistory.Pop();
         if (!stackResult.IsSuccessful)
-            return new Result<(RpnStack, string)>(stackResult.Error);
+            return new Result<(Stack, string)>(stackResult.Error);
 
         var inputResult = _inputHistory.Pop();
         if (!inputResult.IsSuccessful)
         {
             _stackHistory.Push(stackResult.Value);
-            return new Result<(RpnStack, string)>(inputResult.Error);
+            return new Result<(Stack, string)>(inputResult.Error);
         }
 
-        return new Result<(RpnStack, string)>((stackResult.Value, inputResult.Value));
+        return new Result<(Stack, string)>((stackResult.Value, inputResult.Value));
     }
 
     public bool CanUndo => _stackHistory.CanUndo;
 
-    private static RpnStack CloneStack(RpnStack stack)
+    private static Stack CloneStack(Stack stack)
     {
-        var clonedStack = new RpnStack();
+        var clonedStack = new Stack();
         foreach (var value in stack.ToArray())
             clonedStack.Push(value);
         return clonedStack;

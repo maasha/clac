@@ -3,7 +3,7 @@ using DotNext;
 
 namespace Clac.Core;
 
-public class RpnParser
+public class Parser
 {
     public static Result<List<Token>> Parse(string input)
     {
