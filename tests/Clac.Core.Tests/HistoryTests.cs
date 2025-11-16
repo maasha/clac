@@ -25,6 +25,67 @@ public class HistoryTests
     }
 
     [Fact]
+    public void Push_WillNotExceedMaxHistorySize()
+    {
+        History<int> history = new();
+        for (int i = 0; i < 101; i++)
+            history.Push(i);
+        Assert.Equal(100, history.Count);
+    }
+
+    [Fact]
+    public void Push_WithMaxHistorySize_ShouldRemoveOldestItem()
+    {
+        History<int> history = new();
+        const int maxHistorySize = 100;
+        const int itemsToPush = maxHistorySize + 1;
+
+        for (int i = 0; i < itemsToPush; i++)
+            history.Push(i);
+
+        Assert.Equal(maxHistorySize, history.Count);
+        var result = history.Pop();
+        Assert.Equal(maxHistorySize, result.Value);
+    }
+
+    [Fact]
+    public void Push_WithCloneFunc_ShouldCloneItemBeforeSaving()
+    {
+        var original = new List<int> { 1, 2, 3 };
+        History<List<int>> history = new(cloneFunc: list => new List<int>(list));
+
+        history.Push(original);
+        original.Add(4);
+
+        var result = history.Pop();
+        Assert.True(result.IsSuccessful);
+        Assert.Equal([1, 2, 3], result.Value);
+    }
+
+    [Fact]
+    public void Push_WithValidationFunc_ShouldRejectInvalidItem()
+    {
+        History<string> history = new(validateFunc: s => !string.IsNullOrWhiteSpace(s));
+
+        var result = history.Push("");
+
+        Assert.False(result.IsSuccessful);
+        Assert.Contains(ValidationFailed, result.Error.Message);
+        Assert.Equal(0, history.Count);
+    }
+
+    [Fact]
+    public void Push_WithValidationFunc_ShouldAcceptValidItem()
+    {
+        History<string> history = new(validateFunc: s => !string.IsNullOrWhiteSpace(s));
+
+        var result = history.Push("valid");
+
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(1, history.Count);
+    }
+
+    [Fact]
     public void Pop_WithEmptyHistory_ShouldReturnError()
     {
         History<int> history = new();
@@ -95,44 +156,6 @@ public class HistoryTests
         History<int> history = new();
         history.Push(42);
         Assert.True(history.CanUndo());
-    }
-
-    [Fact]
-    public void Push_WillNotExceedMaxHistorySize()
-    {
-        History<int> history = new();
-        for (int i = 0; i < 101; i++)
-            history.Push(i);
-        Assert.Equal(100, history.Count);
-    }
-
-    [Fact]
-    public void Push_WithMaxHistorySize_ShouldRemoveOldestItem()
-    {
-        History<int> history = new();
-        const int maxHistorySize = 100;
-        const int itemsToPush = maxHistorySize + 1;
-
-        for (int i = 0; i < itemsToPush; i++)
-            history.Push(i);
-
-        Assert.Equal(maxHistorySize, history.Count);
-        var result = history.Pop();
-        Assert.Equal(maxHistorySize, result.Value);
-    }
-
-    [Fact]
-    public void Push_WithCloneFunc_ShouldCloneItemBeforeSaving()
-    {
-        var original = new List<int> { 1, 2, 3 };
-        History<List<int>> history = new(cloneFunc: list => new List<int>(list));
-
-        history.Push(original);
-        original.Add(4);
-
-        var result = history.Pop();
-        Assert.True(result.IsSuccessful);
-        Assert.Equal([1, 2, 3], result.Value);
     }
 }
 

@@ -8,16 +8,21 @@ public class History<T>
     private readonly int _maxHistorySize = 100;
     private readonly List<T> _history = [];
     private readonly Func<T, T>? _cloneFunc;
+    private readonly Func<T, bool>? _validateFunc;
 
-    public History(Func<T, T>? cloneFunc = null)
+    public History(Func<T, T>? cloneFunc = null, Func<T, bool>? validateFunc = null)
     {
         _cloneFunc = cloneFunc;
+        _validateFunc = validateFunc;
     }
 
     public int Count => _history.Count;
 
     public Result<bool> Push(T item)
     {
+        if (_validateFunc != null && !_validateFunc(item))
+            return new Result<bool>(new InvalidOperationException(ValidationFailed));
+
         var itemToAdd = _cloneFunc != null ? _cloneFunc(item) : item;
         _history.Add(itemToAdd);
         EnforceMaxHistorySize();
