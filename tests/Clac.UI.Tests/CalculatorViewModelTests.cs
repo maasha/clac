@@ -67,39 +67,11 @@ public class CalculatorViewModelTests
     }
 
     [Fact]
-    public void Undo_WithHistory_ShouldRestorePreviousStackInDisplay()
-    {
-        _vm.CurrentInput = "1";
-        _vm.Enter();
-        _vm.CurrentInput = "2";
-        _vm.Enter();
-
-        _vm.Undo();
-
-        Assert.Single(_vm.StackDisplay);
-        Assert.Equal("1", _vm.StackDisplay[0]);
-    }
-
-    [Fact]
     public void Undo_WithNoHistory_ShouldDoNothingInDisplay()
     {
         _vm.Undo();
 
         Assert.Empty(_vm.StackDisplay);
-    }
-
-    [Fact]
-    public void Undo_WithHistory_ShouldRestorePreviousInputInCurrentInput()
-    {
-        _vm.CurrentInput = "1";
-        _vm.Enter();
-
-
-        Assert.Equal("", _vm.CurrentInput);
-
-        _vm.Undo();
-
-        Assert.Equal("1", _vm.CurrentInput);
     }
 
     [Fact]
@@ -112,5 +84,82 @@ public class CalculatorViewModelTests
 
         Assert.True(_vm.HasError);
         Assert.False(_vm.CanUndo);
+    }
+
+    [Fact]
+    public void CanUndo_WithHistory_ShouldReturnTrue()
+    {
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+
+        Assert.False(_vm.HasError);
+        Assert.True(_vm.CanUndo);
+    }
+
+    [Fact]
+    public void Undo_WithHistory_ShouldRestoreBothStackAndInputTogether()
+    {
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+        _vm.CurrentInput = "2";
+        _vm.Enter();
+
+        _vm.Undo();
+
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("1", _vm.StackDisplay[0]);
+        Assert.Equal("2", _vm.CurrentInput);
+    }
+
+    [Fact]
+    public void Undo_MultipleTimes_ShouldMaintainSynchronization()
+    {
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+        _vm.CurrentInput = "2";
+        _vm.Enter();
+        _vm.CurrentInput = "3";
+        _vm.Enter();
+
+        _vm.Undo();
+        Assert.Equal(2, _vm.StackDisplay.Length);
+        Assert.Equal("2", _vm.StackDisplay[1]);
+        Assert.Equal("3", _vm.CurrentInput);
+
+        _vm.Undo();
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("1", _vm.StackDisplay[0]);
+        Assert.Equal("2", _vm.CurrentInput);
+
+        _vm.Undo();
+        Assert.Empty(_vm.StackDisplay);
+        Assert.Equal("1", _vm.CurrentInput);
+    }
+
+    [Fact]
+    public void Enter_WithInvalidInput_ShouldNotSaveToHistory()
+    {
+        _vm.CurrentInput = "1";
+        _vm.Enter();
+
+        Assert.True(_vm.CanUndo);
+
+        _vm.CurrentInput = "abc";
+        _vm.Enter();
+
+        Assert.True(_vm.HasError);
+        Assert.False(_vm.CanUndo);
+
+        _vm.CurrentInput = "2";
+        _vm.Enter();
+
+        Assert.False(_vm.HasError);
+        Assert.True(_vm.CanUndo);
+
+        _vm.Undo();
+
+        Assert.Single(_vm.StackDisplay);
+        Assert.Equal("1", _vm.StackDisplay[0]);
+        Assert.Equal("2", _vm.CurrentInput);
     }
 }
