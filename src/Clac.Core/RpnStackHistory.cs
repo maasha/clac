@@ -26,10 +26,7 @@ public class RpnStackHistory
         return result;
     }
 
-    public bool CanUndo()
-    {
-        return _history.CanUndo;
-    }
+    public bool CanUndo => _history.CanUndo;
 
     private static RpnStack CloneStack(RpnStack stack)
     {

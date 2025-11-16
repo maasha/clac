@@ -68,7 +68,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     public bool HasError => !string.IsNullOrEmpty(_errorMessage);
     public string ErrorMessage => _errorMessage ?? "";
-    public bool CanUndo => !HasError && _stackHistory.CanUndo();
+    public bool CanUndo => !HasError && _stackHistory.CanUndo;
 
     private const double ErrorLineHeight = 50.0;
     public double WindowHeight => SettingsManager.UI.WindowHeight + (HasError ? ErrorLineHeight : 0);
