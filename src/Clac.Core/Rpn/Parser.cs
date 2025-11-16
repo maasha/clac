@@ -1,7 +1,8 @@
 using System.Globalization;
 using DotNext;
+using Clac.Core.Operations;
 
-namespace Clac.Core;
+namespace Clac.Core.Rpn;
 
 public class Parser
 {

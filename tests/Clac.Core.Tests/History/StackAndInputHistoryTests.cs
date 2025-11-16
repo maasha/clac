@@ -1,6 +1,5 @@
-using Clac.Core;
 using Clac.Core.History;
-using Xunit;
+using Clac.Core.Rpn;
 
 namespace Clac.Core.Tests.History;
 

@@ -1,7 +1,7 @@
-namespace Clac.Core.Tests;
+namespace Clac.Core.Tests.Operations;
 
+using Clac.Core.Operations;
 using Xunit;
-using Clac.Core;
 using Clac.Core.Enums;
 
 public class OperatorTests

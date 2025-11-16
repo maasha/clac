@@ -1,7 +1,7 @@
 using DotNext;
 using Clac.Core.Enums;
 
-namespace Clac.Core;
+namespace Clac.Core.Operations;
 
 public static class Operator
 {

@@ -1,5 +1,5 @@
 using DotNext;
-using Clac.Core.History;
+using Clac.Core.Rpn;
 
 namespace Clac.Core.History;
 

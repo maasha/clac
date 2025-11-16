@@ -2,7 +2,7 @@
 using Clac.Core.Enums;
 using static Clac.Core.ErrorMessages;
 
-namespace Clac.Core;
+namespace Clac.Core.Rpn;
 
 public class Evaluator
 {

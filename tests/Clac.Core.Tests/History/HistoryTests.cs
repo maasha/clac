@@ -3,7 +3,6 @@ namespace Clac.Core.Tests.History;
 using Xunit;
 using Clac.Core.History;
 using static Clac.Core.ErrorMessages;
-using DotNext;
 
 public class HistoryTests
 {

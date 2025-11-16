@@ -1,7 +1,8 @@
-namespace Clac.Core.Tests;
+namespace Clac.Core.Tests.Rpn;
+
+using Clac.Core.Rpn;
 
 using Xunit;
-using Clac.Core;
 using Clac.Core.Enums;
 
 public class ParserTests

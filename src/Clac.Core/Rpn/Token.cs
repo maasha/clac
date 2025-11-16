@@ -1,4 +1,4 @@
-namespace Clac.Core;
+namespace Clac.Core.Rpn;
 
 using Clac.Core.Enums;
 
