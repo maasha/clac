@@ -1,4 +1,5 @@
 using Clac.Core;
+using static Clac.Core.ErrorMessages;
 
 public class RpnStackHistoryTests
 {
@@ -38,7 +39,7 @@ public class RpnStackHistoryTests
     {
         var result = _history.Pop();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.HistoryStackIsEmpty, result.Error.Message);
+        Assert.Contains(HistoryStackIsEmpty, result.Error.Message);
     }
 
     [Fact]

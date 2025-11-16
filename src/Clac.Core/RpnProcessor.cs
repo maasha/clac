@@ -1,5 +1,6 @@
 using DotNext;
 using Clac.Core.Enums;
+using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core;
 
@@ -101,7 +102,7 @@ public class RpnProcessor
         var finalResult = _stack.Peek();
         return finalResult.IsSuccessful
             ? finalResult
-            : new Result<double>(new InvalidOperationException(ErrorMessages.NoResultOnStack));
+            : new Result<double>(new InvalidOperationException(NoResultOnStack));
     }
 
     private Result<(bool commandExecuted, double commandResult)?> ProcessCommandToken(Token.CommandToken commandToken)
@@ -185,12 +186,12 @@ public class RpnProcessor
 
     private bool IsStackEmptyError(Exception error)
     {
-        return error is InvalidOperationException && error.Message == ErrorMessages.StackEmpty;
+        return error is InvalidOperationException && error.Message == StackEmpty;
     }
 
     private bool IsStackInsufficientNumbersError(Exception error)
     {
-        return error is InvalidOperationException && error.Message == ErrorMessages.StackHasLessThanTwoNumbers;
+        return error is InvalidOperationException && error.Message == StackHasLessThanTwoNumbers;
     }
 
     private Result<double>? HandleStackOperation(
@@ -218,7 +219,7 @@ public class RpnProcessor
     private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
     {
         if (_stack.Count < MinimumStackSizeForBinaryOperation)
-            return new Result<double>(new InvalidOperationException(ErrorMessages.StackHasLessThanTwoNumbers));
+            return new Result<double>(new InvalidOperationException(StackHasLessThanTwoNumbers));
 
         var number1 = _stack.Pop();
         var number2 = _stack.Pop();

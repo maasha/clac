@@ -2,6 +2,7 @@ namespace Clac.Core.Tests;
 
 using Xunit;
 using Clac.Core;
+using static Clac.Core.ErrorMessages;
 
 public class RpnStackTests
 {
@@ -17,7 +18,7 @@ public class RpnStackTests
     {
         var result = _stack.Peek();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
+        Assert.Contains(StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -43,7 +44,7 @@ public class RpnStackTests
         _stack.Clear();
         var result = _stack.Peek();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
+        Assert.Contains(StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -51,7 +52,7 @@ public class RpnStackTests
     {
         var result = _stack.Pop();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
+        Assert.Contains(StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -85,7 +86,7 @@ public class RpnStackTests
         _stack.Push(1);
         var result = _stack.Swap();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, result.Error.Message);
+        Assert.Contains(StackHasLessThanTwoNumbers, result.Error.Message);
     }
 
     [Fact]
@@ -93,7 +94,7 @@ public class RpnStackTests
     {
         var result = _stack.Sum();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
+        Assert.Contains(StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -111,7 +112,7 @@ public class RpnStackTests
     {
         var result = _stack.Sqrt();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
+        Assert.Contains(StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -129,7 +130,7 @@ public class RpnStackTests
         _stack.Push(-1);
         var result = _stack.Sqrt();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.InvalidNegativeSquareRoot, result.Error.Message);
+        Assert.Contains(InvalidNegativeSquareRoot, result.Error.Message);
     }
 
     [Fact]
@@ -138,7 +139,7 @@ public class RpnStackTests
         _stack.Push(2);
         var result = _stack.Pow();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.StackHasLessThanTwoNumbers, result.Error.Message);
+        Assert.Contains(StackHasLessThanTwoNumbers, result.Error.Message);
     }
 
     [Fact]
@@ -165,7 +166,7 @@ public class RpnStackTests
     {
         var result = _stack.Reciprocal();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.StackEmpty, result.Error.Message);
+        Assert.Contains(StackEmpty, result.Error.Message);
     }
 
     [Fact]
@@ -174,6 +175,6 @@ public class RpnStackTests
         _stack.Push(0);
         var result = _stack.Reciprocal();
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.DivisionByZero, result.Error.Message);
+        Assert.Contains(DivisionByZero, result.Error.Message);
     }
 }

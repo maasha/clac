@@ -1,4 +1,5 @@
 using DotNext;
+using static Clac.Core.ErrorMessages;
 namespace Clac.Core;
 
 public class RpnStackHistory
@@ -16,7 +17,7 @@ public class RpnStackHistory
     public Result<RpnStack> Pop()
     {
         if (_historyStack.Count == 0)
-            return new Result<RpnStack>(new InvalidOperationException(ErrorMessages.HistoryStackIsEmpty));
+            return new Result<RpnStack>(new InvalidOperationException(HistoryStackIsEmpty));
         var value = _historyStack[^1];
         _historyStack.RemoveAt(_historyStack.Count - 1);
         return new Result<RpnStack>(value);

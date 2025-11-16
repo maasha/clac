@@ -1,5 +1,6 @@
 ﻿using DotNext;
 using Clac.Core.Enums;
+using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core;
 
@@ -13,8 +14,8 @@ public class RpnEvaluator
             OperatorSymbol.Subtract => number1 - number2,
             OperatorSymbol.Multiply => number1 * number2,
             OperatorSymbol.Divide when number2 != 0 => number1 / number2,
-            OperatorSymbol.Divide => new Result<double>(new DivideByZeroException(ErrorMessages.DivisionByZero)),
-            _ => new Result<double>(new InvalidOperationException(ErrorMessages.UnknownOperator(op))),
+            OperatorSymbol.Divide => new Result<double>(new DivideByZeroException(DivisionByZero)),
+            _ => new Result<double>(new InvalidOperationException(UnknownOperator(op))),
         };
     }
 }

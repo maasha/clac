@@ -2,6 +2,7 @@ namespace Clac.Core.Tests;
 
 using Xunit;
 using Clac.Core;
+using static Clac.Core.ErrorMessages;
 using Clac.Core.Enums;
 
 public class RpnEvaluatorTests
@@ -12,7 +13,7 @@ public class RpnEvaluatorTests
         var badOperator = (OperatorSymbol)999;
         var result = RpnEvaluator.Evaluate(1, 2, badOperator);
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.UnknownOperator(badOperator), result.Error.Message);
+        Assert.Contains(UnknownOperator(badOperator), result.Error.Message);
     }
 
     [Fact]
@@ -52,6 +53,6 @@ public class RpnEvaluatorTests
     {
         var result = RpnEvaluator.Evaluate(1, 0, OperatorSymbol.Divide);
         Assert.False(result.IsSuccessful);
-        Assert.Contains(ErrorMessages.DivisionByZero, result.Error.Message);
+        Assert.Contains(DivisionByZero, result.Error.Message);
     }
 }
