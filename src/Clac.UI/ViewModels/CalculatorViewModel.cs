@@ -24,7 +24,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly RpnProcessor _processor = new();
-    private readonly SynchronizedHistory _history = new();
+    private readonly StackAndInputHistory _history = new();
     private readonly Dictionary<string, List<string>> _errors = new();
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 

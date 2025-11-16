@@ -3,12 +3,12 @@ using Xunit;
 
 namespace Clac.Core.Tests;
 
-public class SynchronizedHistoryTests
+public class StackAndInputHistoryTests
 {
     [Fact]
     public void Push_WithValidStackAndInput_ShouldSucceed()
     {
-        SynchronizedHistory history = new();
+        StackAndInputHistory history = new();
         var stack = new RpnStack();
         stack.Push(123);
 
@@ -20,7 +20,7 @@ public class SynchronizedHistoryTests
     [Fact]
     public void Push_WhenInputPushFails_ShouldRollbackStackPush()
     {
-        SynchronizedHistory history = new();
+        StackAndInputHistory history = new();
         var stack = new RpnStack();
         stack.Push(123);
 
@@ -32,7 +32,7 @@ public class SynchronizedHistoryTests
     [Fact]
     public void Pop_WithHistory_ShouldReturnBothStackAndInput()
     {
-        SynchronizedHistory history = new();
+        StackAndInputHistory history = new();
         var stack = new RpnStack();
         stack.Push(123);
         history.Push(stack, "1 2 3");
@@ -47,7 +47,7 @@ public class SynchronizedHistoryTests
     [Fact]
     public void CanUndo_WithNoHistory_ShouldReturnFalse()
     {
-        SynchronizedHistory history = new();
+        StackAndInputHistory history = new();
 
         Assert.False(history.CanUndo);
     }
@@ -55,7 +55,7 @@ public class SynchronizedHistoryTests
     [Fact]
     public void CanUndo_WithHistory_ShouldReturnTrue()
     {
-        SynchronizedHistory history = new();
+        StackAndInputHistory history = new();
         var stack = new RpnStack();
         stack.Push(123);
         history.Push(stack, "1 2 3");

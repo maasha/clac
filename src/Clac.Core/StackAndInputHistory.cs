@@ -2,12 +2,12 @@ using DotNext;
 
 namespace Clac.Core;
 
-public class SynchronizedHistory
+public class StackAndInputHistory
 {
     private readonly History<RpnStack> _stackHistory;
     private readonly History<string> _inputHistory;
 
-    public SynchronizedHistory()
+    public StackAndInputHistory()
     {
         _stackHistory = new History<RpnStack>(cloneFunc: CloneStack);
         _inputHistory = new History<string>(validateFunc: input => !string.IsNullOrWhiteSpace(input));
