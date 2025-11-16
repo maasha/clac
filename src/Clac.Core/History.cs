@@ -20,13 +20,28 @@ public class History<T>
 
     public Result<bool> Push(T item)
     {
-        if (_validateFunc != null && !_validateFunc(item))
-            return new Result<bool>(new InvalidOperationException(ValidationFailed));
+        if (!IsValid(item))
+            return CreateValidationError();
 
-        var itemToAdd = _cloneFunc != null ? _cloneFunc(item) : item;
+        var itemToAdd = CloneIfNeeded(item);
         _history.Add(itemToAdd);
         EnforceMaxHistorySize();
         return new Result<bool>(true);
+    }
+
+    private bool IsValid(T item)
+    {
+        return _validateFunc == null || _validateFunc(item);
+    }
+
+    private Result<bool> CreateValidationError()
+    {
+        return new Result<bool>(new InvalidOperationException(ValidationFailed));
+    }
+
+    private T CloneIfNeeded(T item)
+    {
+        return _cloneFunc != null ? _cloneFunc(item) : item;
     }
 
     private void EnforceMaxHistorySize()
