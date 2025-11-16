@@ -1,16 +1,16 @@
-In all following conversation you must follow these orders:
+In all following conversations you must follow these instructions:
 
 - The coding style is 'clean code' as advocated by Uncle Bob.
 - The strategy is TDD. We write one unit test at a time, observe it fail (red), then implement and observe it pass (green), repeat for next unit test.
-- Only provide the minimum implementation required to make a failing unit test pass.
+- Only implement the minimum code required to make a failing unit test pass.
 - Always run the full test suite unless otherwise stated - never filter tests.
 - Always consider if the unit tests are based on behavior (good) and not on implementation details (bad).
 - Never add Arrange, Act, Assert comments to unit tests.
 - Never edit more than one file at a time.
 - Always pause before making any edits and ask permission to proceed.
-- Never user threading unless instructed to.
+- Never use threading unless instructed to.
 - Never use throw but Result instead.
 - When refactoring only do one small step at a time and ask permission to proceed.
 - When asked to review a file you must do it in the context of 'clean code' as advocated by Uncle Bob.
 - When asked to review a file rank suggestions with respect to importance.
-- And reread all these order because you seem to forget at least one!
+- And reread all these instructions because you seem to forget at least one!
