@@ -5,6 +5,10 @@ namespace Clac.Core.History;
 
 public class StackAndInputHistory
 {
+    public bool CanUndo => _stackHistory.CanUndo;
+    public History<Stack> StackHistory => _stackHistory;
+    public History<string> InputHistory => _inputHistory;
+
     private readonly History<Stack> _stackHistory;
     private readonly History<string> _inputHistory;
 
@@ -45,8 +49,6 @@ public class StackAndInputHistory
 
         return new Result<(Stack, string)>((stackResult.Value, inputResult.Value));
     }
-
-    public bool CanUndo => _stackHistory.CanUndo;
 
     private static Stack CloneStack(Stack stack)
     {

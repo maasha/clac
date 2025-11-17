@@ -62,5 +62,35 @@ public class StackAndInputHistoryTests
 
         Assert.True(history.CanUndo);
     }
+
+    [Fact]
+    public void StackHistory_ShouldReturnCurrentStackHistory()
+    {
+        StackAndInputHistory history = new();
+        var stack = new Stack();
+        stack.Push(123);
+        history.Push(stack, "1 2 3");
+
+        var stackHistory = history.StackHistory;
+        var poppedStack = stackHistory.Pop();
+
+        Assert.True(poppedStack.IsSuccessful);
+        Assert.Equal(123, poppedStack.Value.ToArray()[0]);
+    }
+
+    [Fact]
+    public void InputHistory_ShouldReturnCurrentInputHistory()
+    {
+        StackAndInputHistory history = new();
+        var stack = new Stack();
+        stack.Push(123);
+        history.Push(stack, "1 2 3");
+
+        var inputHistory = history.InputHistory;
+        var poppedInput = inputHistory.Pop();
+
+        Assert.True(poppedInput.IsSuccessful);
+        Assert.Equal("1 2 3", poppedInput.Value);
+    }
 }
 
