@@ -15,6 +15,9 @@ public static class ErrorMessages
     public const string HistoryIsEmpty = "History is empty";
     public const string ValidationFailed = "Validation failed";
 
+    public const string SavingFailed = "Saving failed";
+    public const string LoadingFailed = "Loading failed";
+
     public static string UnknownOperator(OperatorSymbol op) => $"Unknown operator: {op}";
 }
 

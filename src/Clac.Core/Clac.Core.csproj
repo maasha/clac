@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNext" Version="5.26.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="22.0.16" />
   </ItemGroup>
 
 </Project>
