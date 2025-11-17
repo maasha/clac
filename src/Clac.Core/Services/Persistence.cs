@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.IO;
 using System.IO.Abstractions;
-using System.Linq;
+using System.Text.Json;
 using DotNext;
 using Clac.Core.History;
 using static Clac.Core.ErrorMessages;
@@ -42,6 +39,10 @@ public class Persistence
 
         try
         {
+            var directory = _fileSystem.Path.GetDirectoryName(path);
+            if (!string.IsNullOrEmpty(directory))
+                _fileSystem.Directory.CreateDirectory(directory);
+
             _fileSystem.File.WriteAllText(path, "");
             _error = "";
             return new Result<bool>(true);
@@ -55,8 +56,26 @@ public class Persistence
 
     public Result<StackAndInputHistory?> Load(string? filePath = null)
     {
-        StackAndInputHistory? loadedHistory = null;
-        return new Result<StackAndInputHistory?>(loadedHistory);
+        var path = filePath ?? GetDefaultFilePath();
+
+        if (!_fileSystem.File.Exists(path))
+        {
+            StackAndInputHistory? loadedHistory = null;
+            return new Result<StackAndInputHistory?>(loadedHistory);
+        }
+
+        try
+        {
+            var content = _fileSystem.File.ReadAllText(path);
+            JsonSerializer.Deserialize<StackAndInputHistory>(content);
+            StackAndInputHistory? loadedHistory = null;
+            return new Result<StackAndInputHistory?>(loadedHistory);
+        }
+        catch (Exception ex)
+        {
+            _error = $"{LoadingFailed}: {ex.Message}";
+            return new Result<StackAndInputHistory?>(new InvalidOperationException(_error));
+        }
     }
 
     private string GetDefaultFilePath()

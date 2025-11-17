@@ -12,7 +12,8 @@ public class PersistenceTests
     protected readonly StackAndInputHistory _history;
     protected readonly MockFileSystem _mockFileSystem;
     protected readonly Persistence _persistence;
-    protected static readonly string InvalidPath = "/nonexistent/directory/test.json";
+    protected static readonly string InvalidPath = "\0/invalid/path/test.json";
+    protected static readonly string ValidPath = "/existent/directory/test.json";
 
     public PersistenceTests()
     {
@@ -56,18 +57,16 @@ public class PersistenceTests
         [Fact]
         public void Save_WhenFileOperationSucceeds_ShouldReturnSuccess()
         {
-            var result = _persistence.Save("test.json");
-
+            var result = _persistence.Save(ValidPath);
             Assert.True(result.IsSuccessful);
             Assert.False(_persistence.HasError);
-            Assert.True(_mockFileSystem.File.Exists("test.json"));
+            Assert.True(_mockFileSystem.File.Exists(ValidPath));
         }
 
         [Fact]
         public void Save_WithNullFilePath_ShouldUseDefaultPath()
         {
             var result = _persistence.Save();
-
             Assert.True(result.IsSuccessful);
             Assert.False(_persistence.HasError);
         }
@@ -133,6 +132,41 @@ public class PersistenceTests
             Assert.True(result.IsSuccessful);
             Assert.False(_persistence.HasError);
             Assert.Null(result.Value);
+        }
+
+        [Fact]
+        public void Save_WhenFileOperationFails_ShouldReturnError()
+        {
+            _mockFileSystem.AddFile(ValidPath, "invalid json content");
+            var result = _persistence.Load(ValidPath);
+            Assert.False(result.IsSuccessful);
+        }
+
+        [Fact]
+        public void Load_WhenFileOperationFails_ShouldReturnErrorMessage()
+        {
+            _mockFileSystem.AddFile(ValidPath, "invalid json content");
+            var result = _persistence.Load(ValidPath);
+            Assert.False(result.IsSuccessful);
+            Assert.True(_persistence.HasError);
+            Assert.Contains(LoadingFailed, _persistence.GetError());
+        }
+
+        // [Fact]
+        // public void Load_WhenFileOperationSucceeds_ShouldReturnSuccess()
+        // {
+        //     _persistence.Save(ValidPath);
+        //     var result = _persistence.Load(ValidPath);
+        //     Assert.True(result.IsSuccessful);
+        //     Assert.True(_mockFileSystem.File.Exists(ValidPath));
+        // }
+
+        [Fact]
+        public void Load_WithNullFilePath_ShouldUseDefaultPath()
+        {
+            var result = _persistence.Load();
+            Assert.True(result.IsSuccessful);
+            Assert.False(_persistence.HasError);
         }
     }
 }
