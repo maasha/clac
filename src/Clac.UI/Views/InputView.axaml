@@ -38,16 +38,16 @@
         </Style>
         <Style Selector="TextBox.input-box /template/ TextBlock#PART_Watermark">
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Opacity" Value="1.0"/>
         </Style>
         <Style Selector="TextBox.input-box:pointerover /template/ TextBlock#PART_Watermark">
             <Setter Property="Foreground" Value="#666666"/>
-            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontWeight" Value="Bold"/>
         </Style>
         <Style Selector="TextBox.input-box:focus /template/ TextBlock#PART_Watermark">
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontWeight" Value="Bold"/>
         </Style>
         <!-- Custom DataValidationErrors template -->
         <Style Selector="DataValidationErrors">
