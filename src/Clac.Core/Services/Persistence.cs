@@ -28,6 +28,11 @@ public class Persistence
         return _error;
     }
 
+    public void ClearError()
+    {
+        _error = "";
+    }
+
     public Result<bool> Save(string? filePath = null)
     {
         if (_history == null)

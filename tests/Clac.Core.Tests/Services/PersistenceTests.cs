@@ -98,4 +98,23 @@ public class PersistenceTests
         _persistence.Save(InvalidPath);
         Assert.Contains(SavingFailed, _persistence.GetError());
     }
+
+    [Fact]
+    public void ClearError_WhenNoErrors_ShouldDoNothing()
+    {
+        var result = _persistence.Save();
+        Assert.Empty(_persistence.GetError());
+    }
+
+    [Fact]
+    public void ClearError_WhenErrorExists_ShouldClearError()
+    {
+        _persistence.Save(InvalidPath);
+        Assert.True(_persistence.HasError);
+
+        _persistence.ClearError();
+
+        Assert.False(_persistence.HasError);
+        Assert.Empty(_persistence.GetError());
+    }
 }
