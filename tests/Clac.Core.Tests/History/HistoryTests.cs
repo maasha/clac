@@ -179,5 +179,26 @@ public class HistoryTests
             Assert.True(history.CanUndo);
         }
     }
+
+    public class ToArrayTests
+    {
+        [Fact]
+        public void WithEmptyHistory_ShouldReturnEmptyArray()
+        {
+            History<int> history = new();
+            var array = history.ToArray();
+            Assert.Empty(array);
+        }
+
+        [Fact]
+        public void WithNonEmptyHistory_ShouldReturnItems()
+        {
+            History<int> history = new();
+            history.Push(42);
+            history.Push(43);
+            var array = history.ToArray();
+            Assert.Equal([42, 43], array);
+        }
+    }
 }
 

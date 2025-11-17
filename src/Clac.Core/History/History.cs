@@ -62,5 +62,7 @@ public class History<T>
     }
 
     public bool CanUndo => _history.Count > 0;
+
+    public T[] ToArray() => [.. _history];
 }
 
