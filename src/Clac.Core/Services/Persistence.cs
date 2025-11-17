@@ -53,6 +53,12 @@ public class Persistence
         }
     }
 
+    public Result<StackAndInputHistory?> Load(string? filePath = null)
+    {
+        StackAndInputHistory? loadedHistory = null;
+        return new Result<StackAndInputHistory?>(loadedHistory);
+    }
+
     private string GetDefaultFilePath()
     {
         var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

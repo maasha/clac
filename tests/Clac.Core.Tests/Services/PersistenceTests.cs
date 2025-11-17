@@ -123,4 +123,16 @@ public class PersistenceTests
             Assert.Empty(_persistence.GetError());
         }
     }
+
+    public class LoadTests : PersistenceTests
+    {
+        [Fact]
+        public void Load_WhenFileDoesNotExists_ShouldDoNothing()
+        {
+            var result = _persistence.Load();
+            Assert.True(result.IsSuccessful);
+            Assert.False(_persistence.HasError);
+            Assert.Null(result.Value);
+        }
+    }
 }
