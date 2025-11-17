@@ -39,15 +39,14 @@ public class Persistence
             return new Result<bool>(true);
 
         var path = filePath ?? GetDefaultFilePath();
+        return WriteHistoryToFile(path, _history);
+    }
 
+    private Result<bool> WriteHistoryToFile(string path, StackAndInputHistory history)
+    {
         try
         {
-            var directory = _fileSystem.Path.GetDirectoryName(path);
-            if (!string.IsNullOrEmpty(directory))
-                _fileSystem.Directory.CreateDirectory(directory);
-
-            var serializedHistory = SerializeHistory(_history);
-            _fileSystem.File.WriteAllText(path, serializedHistory);
+            WriteSerializedHistoryToFile(path, history);
             _error = "";
             return new Result<bool>(true);
         }
@@ -63,51 +62,76 @@ public class Persistence
         var path = filePath ?? GetDefaultFilePath();
 
         if (!_fileSystem.File.Exists(path))
-        {
-            StackAndInputHistory? loadedHistory = null;
-            return new Result<StackAndInputHistory?>(loadedHistory);
-        }
+            return ReturnNullHistory();
 
         try
         {
             var content = _fileSystem.File.ReadAllText(path);
-            var deserialized = JsonSerializer.Deserialize<List<JsonElement>>(content, JsonOptions);
-
-            if (deserialized == null || deserialized.Count != 2)
-            {
-                _error = $"{LoadingFailed}: Invalid file format";
-                return new Result<StackAndInputHistory?>(new InvalidOperationException(_error));
-            }
-
-            var inputArray = JsonSerializer.Deserialize<string[]>(deserialized[0].GetRawText(), JsonOptions);
-            var stackDataArray = JsonSerializer.Deserialize<double[][]>(deserialized[1].GetRawText(), JsonOptions);
-
-            if (inputArray == null || stackDataArray == null || inputArray.Length != stackDataArray.Length)
-            {
-                _error = $"{LoadingFailed}: Mismatched array lengths";
-                return new Result<StackAndInputHistory?>(new InvalidOperationException(_error));
-            }
-
-            var loadedHistory = new StackAndInputHistory();
-
-            // Push items back in order (oldest first, as ToArray() returns oldest first)
-            for (int i = 0; i < inputArray.Length; i++)
-            {
-                var stack = new Rpn.Stack();
-                foreach (var value in stackDataArray[i])
-                {
-                    stack.Push(value);
-                }
-                loadedHistory.Push(stack, inputArray[i]);
-            }
-
-            return new Result<StackAndInputHistory?>(loadedHistory);
+            return DeserializeAndReconstructHistory(content);
         }
         catch (Exception ex)
         {
             _error = $"{LoadingFailed}: {ex.Message}";
             return new Result<StackAndInputHistory?>(new InvalidOperationException(_error));
         }
+    }
+
+    private Result<StackAndInputHistory?> ReturnNullHistory()
+    {
+        StackAndInputHistory? loadedHistory = null;
+        return new Result<StackAndInputHistory?>(loadedHistory);
+    }
+
+    private void EnsureDirectoryExists(string filePath)
+    {
+        var directory = _fileSystem.Path.GetDirectoryName(filePath);
+        if (!string.IsNullOrEmpty(directory))
+            _fileSystem.Directory.CreateDirectory(directory);
+    }
+
+    private void WriteSerializedHistoryToFile(string path, StackAndInputHistory history)
+    {
+        EnsureDirectoryExists(path);
+        _fileSystem.File.WriteAllText(path, SerializeHistory(history));
+    }
+
+    private StackAndInputHistory ReconstructHistory(string[] inputArray, double[][] stackDataArray)
+    {
+        var loadedHistory = new StackAndInputHistory();
+        for (int i = 0; i < inputArray.Length; i++)
+            loadedHistory.Push(CreateStackFromArray(stackDataArray[i]), inputArray[i]);
+        return loadedHistory;
+    }
+
+    private Stack CreateStackFromArray(double[] values)
+    {
+        var stack = new Rpn.Stack();
+        foreach (var value in values)
+            stack.Push(value);
+        return stack;
+    }
+
+    private Result<StackAndInputHistory?> DeserializeAndReconstructHistory(string content)
+    {
+        var deserialized = JsonSerializer.Deserialize<List<JsonElement>>(content, JsonOptions);
+
+        if (deserialized == null || deserialized.Count != 2)
+        {
+            _error = $"{LoadingFailed}: Invalid file format";
+            return new Result<StackAndInputHistory?>(new InvalidOperationException(_error));
+        }
+
+        var inputArray = JsonSerializer.Deserialize<string[]>(deserialized[0].GetRawText(), JsonOptions);
+        var stackDataArray = JsonSerializer.Deserialize<double[][]>(deserialized[1].GetRawText(), JsonOptions);
+
+        if (inputArray == null || stackDataArray == null || inputArray.Length != stackDataArray.Length)
+        {
+            _error = $"{LoadingFailed}: Mismatched array lengths";
+            return new Result<StackAndInputHistory?>(new InvalidOperationException(_error));
+        }
+
+        var loadedHistory = ReconstructHistory(inputArray, stackDataArray);
+        return new Result<StackAndInputHistory?>(loadedHistory);
     }
 
     private string GetDefaultFilePath()
@@ -121,13 +145,16 @@ public class Persistence
     private string SerializeHistory(StackAndInputHistory history)
     {
         var stackHistoryData = history.StackHistory.ToArray().Select(s => s.ToArray()).ToArray();
-        var serializedHistory = new List<object>
-        {
-            history.InputHistory.ToArray(),
-            stackHistoryData,
-        };
-
+        var serializedHistory = CreateSerializedHistoryList(history.InputHistory.ToArray(), stackHistoryData);
         return JsonSerializer.Serialize(serializedHistory, JsonOptions);
     }
 
+    private List<object> CreateSerializedHistoryList(string[] inputHistory, double[][] stackHistoryData)
+    {
+        return new List<object>
+        {
+            inputHistory,
+            stackHistoryData,
+        };
+    }
 }
