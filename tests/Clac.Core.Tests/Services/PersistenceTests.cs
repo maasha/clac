@@ -1,10 +1,10 @@
 namespace Clac.Core.Tests.Services;
 
-using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 using Clac.Core.Services;
 using Clac.Core.History;
+using Clac.Core.Rpn;
 using static Clac.Core.ErrorMessages;
 
 public class PersistenceTests
@@ -125,6 +125,37 @@ public class PersistenceTests
 
     public class LoadTests : PersistenceTests
     {
+        private const double TestStackValue1 = 123;
+        private const double TestStackValue2 = 456;
+        private const string TestInput = "1 2 3";
+
+        private Stack CreateTestStack()
+        {
+            var stack = new Stack();
+            stack.Push(TestStackValue1);
+            stack.Push(TestStackValue2);
+            return stack;
+        }
+
+        private StackAndInputHistory CreateTestHistory()
+        {
+            var history = new StackAndInputHistory();
+            history.Push(CreateTestStack(), TestInput);
+            return history;
+        }
+
+        private void SaveTestHistory(string path)
+        {
+            var historyToSave = CreateTestHistory();
+            var persistenceToSave = new Persistence(historyToSave, _mockFileSystem);
+            persistenceToSave.Save(path);
+        }
+
+        private bool LoadedHistoryEqualsSavedHistory(StackAndInputHistory? loadedHistory, StackAndInputHistory savedHistory)
+        {
+            return HistoryComparer.AreEqual(loadedHistory, savedHistory);
+        }
+
         [Fact]
         public void Load_WhenFileDoesNotExists_ShouldDoNothing()
         {
@@ -135,7 +166,7 @@ public class PersistenceTests
         }
 
         [Fact]
-        public void Save_WhenFileOperationFails_ShouldReturnError()
+        public void Load_WhenFileOperationFails_ShouldReturnError()
         {
             _mockFileSystem.AddFile(ValidPath, "invalid json content");
             var result = _persistence.Load(ValidPath);
@@ -152,14 +183,15 @@ public class PersistenceTests
             Assert.Contains(LoadingFailed, _persistence.GetError());
         }
 
-        // [Fact]
-        // public void Load_WhenFileOperationSucceeds_ShouldReturnSuccess()
-        // {
-        //     _persistence.Save(ValidPath);
-        //     var result = _persistence.Load(ValidPath);
-        //     Assert.True(result.IsSuccessful);
-        //     Assert.True(_mockFileSystem.File.Exists(ValidPath));
-        // }
+        [Fact]
+        public void Load_WhenFileOperationSucceeds_ShouldReturnHistory()
+        {
+            var savedHistory = CreateTestHistory();
+            SaveTestHistory(ValidPath);
+            var result = _persistence.Load(ValidPath);
+            Assert.True(result.IsSuccessful);
+            Assert.True(LoadedHistoryEqualsSavedHistory(result.Value, savedHistory));
+        }
 
         [Fact]
         public void Load_WithNullFilePath_ShouldUseDefaultPath()
