@@ -19,7 +19,7 @@ public class PersistenceTests
     {
         _history = new StackAndInputHistory();
         _mockFileSystem = new MockFileSystem();
-        _persistence = new Persistence(_history, _mockFileSystem);
+        _persistence = new Persistence(_mockFileSystem);
     }
 
     public class SaveTests : PersistenceTests
@@ -27,29 +27,28 @@ public class PersistenceTests
         [Fact]
         public void Save_WithNullHistory_ShouldDoNothing()
         {
-            var persistence = new Persistence(null, _mockFileSystem);
-            var result = persistence.Save();
+            var result = _persistence.Save(null!);
             Assert.True(result.IsSuccessful);
         }
 
         [Fact]
         public void Save_WithEmptyHistory_ShouldDoNothing()
         {
-            var result = _persistence.Save("test.json");
+            var result = _persistence.Save(_history);
             Assert.True(result.IsSuccessful);
         }
 
         [Fact]
         public void Save_WhenFileOperationFails_ShouldReturnError()
         {
-            var result = _persistence.Save(InvalidPath);
+            var result = _persistence.Save(_history, InvalidPath);
             Assert.False(result.IsSuccessful);
         }
 
         [Fact]
         public void Save_WhenFileOperationFails_ShouldReturnErrorMessage()
         {
-            var result = _persistence.Save(InvalidPath);
+            var result = _persistence.Save(_history, InvalidPath);
             Assert.False(result.IsSuccessful);
             Assert.Contains(SavingFailed, result.Error.Message);
         }
@@ -57,7 +56,7 @@ public class PersistenceTests
         [Fact]
         public void Save_WhenFileOperationSucceeds_ShouldReturnSuccess()
         {
-            var result = _persistence.Save(ValidPath);
+            var result = _persistence.Save(_history, ValidPath);
             Assert.True(result.IsSuccessful);
             Assert.False(_persistence.HasError);
             Assert.True(_mockFileSystem.File.Exists(ValidPath));
@@ -66,7 +65,7 @@ public class PersistenceTests
         [Fact]
         public void Save_WithNullFilePath_ShouldUseDefaultPath()
         {
-            var result = _persistence.Save();
+            var result = _persistence.Save(_history);
             Assert.True(result.IsSuccessful);
             Assert.False(_persistence.HasError);
         }
@@ -84,7 +83,7 @@ public class PersistenceTests
         [Fact]
         public void HasError_WhenError_ShouldReturnTrue()
         {
-            _persistence.Save(InvalidPath);
+            _persistence.Save(_history, InvalidPath);
             var hasError = _persistence.HasError;
             Assert.True(hasError);
         }
@@ -99,21 +98,21 @@ public class PersistenceTests
         [Fact]
         public void GetError_WhenSaveFailedError_ShouldReturnSaveError()
         {
-            _persistence.Save(InvalidPath);
+            _persistence.Save(_history, InvalidPath);
             Assert.Contains(SavingFailed, _persistence.GetError());
         }
 
         [Fact]
         public void ClearError_WhenNoErrors_ShouldDoNothing()
         {
-            var result = _persistence.Save();
+            var result = _persistence.Save(_history);
             Assert.Empty(_persistence.GetError());
         }
 
         [Fact]
         public void ClearError_WhenErrorExists_ShouldClearError()
         {
-            _persistence.Save(InvalidPath);
+            _persistence.Save(_history, InvalidPath);
             Assert.True(_persistence.HasError);
 
             _persistence.ClearError();
@@ -147,13 +146,8 @@ public class PersistenceTests
         private void SaveTestHistory(string path)
         {
             var historyToSave = CreateTestHistory();
-            var persistenceToSave = new Persistence(historyToSave, _mockFileSystem);
-            persistenceToSave.Save(path);
-        }
-
-        private bool LoadedHistoryEqualsSavedHistory(StackAndInputHistory? loadedHistory, StackAndInputHistory savedHistory)
-        {
-            return HistoryComparer.AreEqual(loadedHistory, savedHistory);
+            var persistenceToSave = new Persistence(_mockFileSystem);
+            persistenceToSave.Save(historyToSave, path);
         }
 
         [Fact]
@@ -199,6 +193,11 @@ public class PersistenceTests
             var result = _persistence.Load();
             Assert.True(result.IsSuccessful);
             Assert.False(_persistence.HasError);
+        }
+
+        private static bool LoadedHistoryEqualsSavedHistory(StackAndInputHistory? loadedHistory, StackAndInputHistory savedHistory)
+        {
+            return HistoryComparer.AreEqual(loadedHistory, savedHistory);
         }
     }
 }
