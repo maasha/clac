@@ -14,7 +14,8 @@ using Clac.Core.Operations;
 using Clac.UI.Configuration;
 using Clac.UI.Helpers;
 using Clac.UI.Models;
-
+using Clac.Core.Services;
+using System.IO.Abstractions;
 
 public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 {
@@ -26,6 +27,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly Processor _processor = new();
+    private readonly IPersistence _persistence = new Persistence(new FileSystem());
     private readonly StackAndInputHistory _history = new();
     private readonly Dictionary<string, List<string>> _errors = new();
     public ObservableCollection<StackLineItem> DisplayItems { get; }
@@ -104,6 +106,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
         var stackBeforeProcessing = _processor.Stack;
         _history.Push(stackBeforeProcessing, _currentInput);
+        _persistence.Save(_history, "/tmp/test.json");
 
         var result = ProcessTokens(tokens.Value);
         if (result == null)
@@ -120,7 +123,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         var result = _history.Pop();
         if (!result.IsSuccessful)
             return;
-
+        _persistence.Save(_history, "/tmp/test.json");
         SetCurrentInputAndClearErrors(result.Value.input);
         _processor.RestoreStack(result.Value.stack);
         UpdateDisplayItems();
