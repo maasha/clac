@@ -7,19 +7,12 @@ using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core.Services;
 
-public class Persistence
+public class Persistence(IFileSystem fileSystem) : IPersistence
 {
     private static readonly JsonSerializerOptions JsonOptions = new() { IncludeFields = true };
 
-    private readonly StackAndInputHistory? _history;
-    private readonly IFileSystem _fileSystem;
+    private readonly IFileSystem _fileSystem = fileSystem ?? new FileSystem();
     private string _error = "";
-
-    public Persistence(StackAndInputHistory? history, IFileSystem? fileSystem = null)
-    {
-        _history = history;
-        _fileSystem = fileSystem ?? new FileSystem();
-    }
 
     public bool HasError => !string.IsNullOrEmpty(_error);
 
@@ -33,13 +26,13 @@ public class Persistence
         _error = "";
     }
 
-    public Result<bool> Save(string? filePath = null)
+    public Result<bool> Save(StackAndInputHistory history, string? filePath = null)
     {
-        if (_history == null)
+        if (history == null)
             return new Result<bool>(true);
 
         var path = filePath ?? GetDefaultFilePath();
-        return WriteHistoryToFile(path, _history);
+        return WriteHistoryToFile(path, history);
     }
 
     private Result<bool> WriteHistoryToFile(string path, StackAndInputHistory history)
