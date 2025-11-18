@@ -1,0 +1,179 @@
+@startuml Clac Architecture
+
+!define RECTANGLE class
+
+package "Clac.UI" {
+    class App {
+        +Initialize()
+        +OnFrameworkInitializationCompleted()
+    }
+    
+    class MainWindow {
+        +MainWindow(viewModel)
+    }
+    
+    package "ViewModels" {
+        class CalculatorViewModel {
+            -Processor _processor
+            -StackAndInputHistory _history
+            -string _currentInput
+            +CurrentInput
+            +DisplayItems
+            +Enter()
+            +Undo()
+            +CanUndo
+        }
+    }
+    
+    package "Views" {
+        class CalculatorView
+        class DisplayView
+        class InputView
+        class KeyboardView
+        class KeyboardKeyView
+    }
+    
+    package "Models" {
+        class StackLineItem
+        class KeyboardKey
+    }
+    
+    package "Configuration" {
+        class SettingsManager
+        class UISettings
+    }
+    
+    package "Helpers" {
+        class DisplayFormatter
+    }
+}
+
+package "Clac.Core" {
+    package "Rpn" {
+        class Processor {
+            -Stack _stack
+            +Process(tokens)
+            +Stack
+        }
+        
+        class Stack {
+            -List<double> _stack
+            +Push(value)
+            +Pop()
+            +ToArray()
+        }
+        
+        class Parser {
+            +Parse(input)
+        }
+        
+        class Evaluator {
+            +Evaluate(token, stack)
+        }
+        
+        class Token {
+            <<abstract>>
+        }
+        
+        class NumberToken {
+            +double Value
+        }
+        
+        class OperatorToken {
+            +Operator Operator
+        }
+        
+        class CommandToken {
+            +Command Command
+        }
+    }
+    
+    package "History" {
+        class History<T> {
+            -List<T> _history
+            +Push(item)
+            +Pop()
+            +CanUndo
+            +ToArray()
+        }
+        
+        class StackAndInputHistory {
+            -History<Stack> _stackHistory
+            -History<string> _inputHistory
+            +Push(stack, input)
+            +Pop()
+            +CanUndo
+        }
+        
+        class HistoryComparer {
+            {static}
+            +AreEqual(first, second)
+        }
+    }
+    
+    package "Operations" {
+        class Operator {
+            +OperatorSymbol Symbol
+            +Evaluate(stack)
+        }
+        
+        class Command {
+            +CommandSymbol Symbol
+            +Execute(processor)
+        }
+    }
+    
+    package "Services" {
+        class Persistence {
+            -StackAndInputHistory? _history
+            -IFileSystem _fileSystem
+            +Save(filePath)
+            +Load(filePath)
+            +HasError
+            +GetError()
+            +ClearError()
+        }
+    }
+    
+    class ErrorMessages {
+        {static}
+    }
+}
+
+' Relationships
+CalculatorViewModel --> Processor : uses
+CalculatorViewModel --> StackAndInputHistory : uses
+CalculatorViewModel --> DisplayFormatter : uses
+CalculatorViewModel --> StackLineItem : creates
+
+App --> MainWindow : creates
+MainWindow --> CalculatorViewModel : uses
+MainWindow --> CalculatorView : contains
+CalculatorView --> DisplayView : contains
+CalculatorView --> InputView : contains
+CalculatorView --> KeyboardView : contains
+KeyboardView --> KeyboardKeyView : contains
+
+Processor --> Stack : uses
+Processor --> Evaluator : uses
+Processor --> Operator : uses
+Processor --> Command : uses
+Parser --> Token : creates
+Parser --> NumberToken : creates
+Parser --> OperatorToken : creates
+Parser --> CommandToken : creates
+Evaluator --> Operator : uses
+Evaluator --> Stack : uses
+
+StackAndInputHistory --> History : uses
+StackAndInputHistory --> Stack : uses
+HistoryComparer --> StackAndInputHistory : compares
+
+Persistence --> StackAndInputHistory : saves/loads
+Persistence --> IFileSystem : uses
+
+Operator --> Stack : uses
+Command --> Processor : uses
+
+@enduml
+
