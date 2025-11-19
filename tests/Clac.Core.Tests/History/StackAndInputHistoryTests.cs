@@ -92,5 +92,23 @@ public class StackAndInputHistoryTests
         Assert.True(poppedInput.IsSuccessful);
         Assert.Equal("1 2 3", poppedInput.Value);
     }
+
+    [Fact]
+    public void IsEmpty_WhenHistoryNotEmpty_ShouldReturnFalse()
+    {
+        StackAndInputHistory history = new();
+        var stack = new Stack();
+        stack.Push(123);
+        history.Push(stack, "1 2 3");
+
+        Assert.False(history.IsEmpty);
+    }
+
+    [Fact]
+    public void IsEmpty_WhenHistoryEmpty_SholdReturnTrue()
+    {
+        StackAndInputHistory history = new();
+        Assert.True(history.IsEmpty);
+    }
 }
 

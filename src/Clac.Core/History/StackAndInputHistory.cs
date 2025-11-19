@@ -6,6 +6,7 @@ namespace Clac.Core.History;
 public class StackAndInputHistory
 {
     public bool CanUndo => _stackHistory.CanUndo;
+    public bool IsEmpty => _stackHistory.Count == 0;
     public History<Stack> StackHistory => _stackHistory;
     public History<string> InputHistory => _inputHistory;
 
