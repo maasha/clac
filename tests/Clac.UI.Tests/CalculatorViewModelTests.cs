@@ -5,6 +5,7 @@ using Clac.Core.Services;
 using Clac.UI.Tests.Spies;
 
 namespace Clac.UI.Tests;
+
 public class CalculatorViewModelTests
 {
     private readonly CalculatorViewModel _vm;
@@ -14,66 +15,181 @@ public class CalculatorViewModelTests
         _vm = new CalculatorViewModel(persistence);
     }
 
-    [Fact]
-    public void Constructor_ShouldInitializeWithEmptyStackDisplay()
+    public class ConstructorTests : CalculatorViewModelTests
     {
-        Assert.Empty(_vm.StackDisplay);
+        [Fact]
+        public void Constructor_ShouldInitializeWithEmptyStackDisplay()
+        {
+            Assert.Empty(_vm.StackDisplay);
+        }
+
+        [Fact]
+        public void Constructor_ShouldInitializeWithEmptyCurrentInput()
+        {
+            Assert.Equal("", _vm.CurrentInput);
+        }
     }
 
-    [Fact]
-    public void Constructor_ShouldInitializeWithEmptyCurrentInput()
+    public class EnterTests : CalculatorViewModelTests
     {
-        Assert.Equal("", _vm.CurrentInput);
+        [Fact]
+        public void Enter_WithNumber_ShouldPushToStackAndClearInput()
+        {
+            _vm.CurrentInput = "42";
+
+            _vm.Enter();
+
+            Assert.Single(_vm.StackDisplay);
+            Assert.Equal("42", _vm.StackDisplay[0]);
+            Assert.Equal("", _vm.CurrentInput);
+        }
+
+        [Fact]
+        public void Enter_WithInvalidInput_ShouldSetErrorState()
+        {
+            _vm.CurrentInput = "abc";
+
+            _vm.Enter();
+
+            Assert.True(_vm.HasError);
+            Assert.Contains("Invalid", _vm.ErrorMessage);
+            Assert.Empty(_vm.StackDisplay);
+        }
+
+        [Fact]
+        public void Enter_WithEmptyInput_ShouldDoNothing()
+        {
+            _vm.Enter();
+
+            Assert.False(_vm.HasError);
+            Assert.Empty(_vm.StackDisplay);
+        }
+
+        [Fact]
+        public void Enter_WithInvalidInput_ShouldNotSaveToHistory()
+        {
+            _vm.CurrentInput = "1";
+            _vm.Enter();
+
+            Assert.True(_vm.CanUndo);
+
+            _vm.CurrentInput = "abc";
+            _vm.Enter();
+
+            Assert.True(_vm.HasError);
+            Assert.False(_vm.CanUndo);
+
+            _vm.CurrentInput = "2";
+            _vm.Enter();
+
+            Assert.False(_vm.HasError);
+            Assert.True(_vm.CanUndo);
+
+            _vm.Undo();
+
+            Assert.Single(_vm.StackDisplay);
+            Assert.Equal("1", _vm.StackDisplay[0]);
+            Assert.Equal("2", _vm.CurrentInput);
+        }
+
+        [Fact]
+        public void Enter_WithValidInput_ShouldPersistHistoryToFile()
+        {
+            var persistenceSpy = new PersistenceSpy(null!);
+            var vm = new CalculatorViewModel(persistenceSpy)
+            {
+                CurrentInput = "42"
+            };
+            vm.Enter();
+
+            Assert.Equal(1, persistenceSpy.SaveCallCount);
+        }
+    }
+
+    public class UndoTests : CalculatorViewModelTests
+    {
+        [Fact]
+        public void Undo_WithNoHistory_ShouldDoNothingInDisplay()
+        {
+            _vm.Undo();
+
+            Assert.Empty(_vm.StackDisplay);
+        }
+
+        [Fact]
+        public void Undo_WithHistory_ShouldRestoreBothStackAndInputTogether()
+        {
+            _vm.CurrentInput = "1";
+            _vm.Enter();
+            _vm.CurrentInput = "2";
+            _vm.Enter();
+
+            _vm.Undo();
+
+            Assert.Single(_vm.StackDisplay);
+            Assert.Equal("1", _vm.StackDisplay[0]);
+            Assert.Equal("2", _vm.CurrentInput);
+        }
+
+        [Fact]
+        public void Undo_MultipleTimes_ShouldMaintainSynchronization()
+        {
+            _vm.CurrentInput = "1";
+            _vm.Enter();
+            _vm.CurrentInput = "2";
+            _vm.Enter();
+            _vm.CurrentInput = "3";
+            _vm.Enter();
+
+            _vm.Undo();
+            Assert.Equal(2, _vm.StackDisplay.Length);
+            Assert.Equal("2", _vm.StackDisplay[1]);
+            Assert.Equal("3", _vm.CurrentInput);
+
+            _vm.Undo();
+            Assert.Single(_vm.StackDisplay);
+            Assert.Equal("1", _vm.StackDisplay[0]);
+            Assert.Equal("2", _vm.CurrentInput);
+
+            _vm.Undo();
+            Assert.Empty(_vm.StackDisplay);
+            Assert.Equal("1", _vm.CurrentInput);
+        }
+
+        [Fact]
+        public void Undo_WithNoHistory_ShouldNotPersistHistoryToFile()
+        {
+            var persistenceSpy = new PersistenceSpy(null!);
+            var vm = new CalculatorViewModel(persistenceSpy)
+            {
+                CurrentInput = ""
+            };
+            vm.Undo();
+
+            Assert.Equal(0, persistenceSpy.SaveCallCount);
+        }
+
+        [Fact]
+        public void Undo_WithHistory_ShouldPersistHistoryToFile()
+        {
+            var persistenceSpy = new PersistenceSpy(null!);
+            var vm = new CalculatorViewModel(persistenceSpy)
+            {
+                CurrentInput = "42"
+            };
+            vm.Enter();
+            vm.Undo();
+
+            Assert.Equal(2, persistenceSpy.SaveCallCount);
+        }
     }
 
     [Fact]
     public void CurrentInput_CanBeSetDirectly()
     {
-
         _vm.CurrentInput = "42";
 
         Assert.Equal("42", _vm.CurrentInput);
-    }
-
-    [Fact]
-    public void Enter_WithNumber_ShouldPushToStackAndClearInput()
-    {
-        _vm.CurrentInput = "42";
-
-        _vm.Enter();
-
-        Assert.Single(_vm.StackDisplay);
-        Assert.Equal("42", _vm.StackDisplay[0]);
-        Assert.Equal("", _vm.CurrentInput);
-    }
-
-    [Fact]
-    public void Enter_WithInvalidInput_ShouldSetErrorState()
-    {
-        _vm.CurrentInput = "abc";
-
-        _vm.Enter();
-
-        Assert.True(_vm.HasError);
-        Assert.Contains("Invalid", _vm.ErrorMessage);
-        Assert.Empty(_vm.StackDisplay);
-    }
-
-    [Fact]
-    public void Enter_WithEmptyInput_ShouldDoNothing()
-    {
-        _vm.Enter();
-
-        Assert.False(_vm.HasError);
-        Assert.Empty(_vm.StackDisplay);
-    }
-
-    [Fact]
-    public void Undo_WithNoHistory_ShouldDoNothingInDisplay()
-    {
-        _vm.Undo();
-
-        Assert.Empty(_vm.StackDisplay);
     }
 
     [Fact]
@@ -98,110 +214,4 @@ public class CalculatorViewModelTests
         Assert.True(_vm.CanUndo);
     }
 
-    [Fact]
-    public void Undo_WithHistory_ShouldRestoreBothStackAndInputTogether()
-    {
-        _vm.CurrentInput = "1";
-        _vm.Enter();
-        _vm.CurrentInput = "2";
-        _vm.Enter();
-
-        _vm.Undo();
-
-        Assert.Single(_vm.StackDisplay);
-        Assert.Equal("1", _vm.StackDisplay[0]);
-        Assert.Equal("2", _vm.CurrentInput);
-    }
-
-    [Fact]
-    public void Undo_MultipleTimes_ShouldMaintainSynchronization()
-    {
-        _vm.CurrentInput = "1";
-        _vm.Enter();
-        _vm.CurrentInput = "2";
-        _vm.Enter();
-        _vm.CurrentInput = "3";
-        _vm.Enter();
-
-        _vm.Undo();
-        Assert.Equal(2, _vm.StackDisplay.Length);
-        Assert.Equal("2", _vm.StackDisplay[1]);
-        Assert.Equal("3", _vm.CurrentInput);
-
-        _vm.Undo();
-        Assert.Single(_vm.StackDisplay);
-        Assert.Equal("1", _vm.StackDisplay[0]);
-        Assert.Equal("2", _vm.CurrentInput);
-
-        _vm.Undo();
-        Assert.Empty(_vm.StackDisplay);
-        Assert.Equal("1", _vm.CurrentInput);
-    }
-
-    [Fact]
-    public void Enter_WithInvalidInput_ShouldNotSaveToHistory()
-    {
-        _vm.CurrentInput = "1";
-        _vm.Enter();
-
-        Assert.True(_vm.CanUndo);
-
-        _vm.CurrentInput = "abc";
-        _vm.Enter();
-
-        Assert.True(_vm.HasError);
-        Assert.False(_vm.CanUndo);
-
-        _vm.CurrentInput = "2";
-        _vm.Enter();
-
-        Assert.False(_vm.HasError);
-        Assert.True(_vm.CanUndo);
-
-        _vm.Undo();
-
-        Assert.Single(_vm.StackDisplay);
-        Assert.Equal("1", _vm.StackDisplay[0]);
-        Assert.Equal("2", _vm.CurrentInput);
-    }
-
-    [Fact]
-    public void Enter_WithValidInput_ShouldPersistHistoryToFile()
-    {
-        var persistenceSpy = new PersistenceSpy(null!);
-        var vm = new CalculatorViewModel(persistenceSpy)
-        {
-            CurrentInput = "42"
-        };
-        vm.Enter();
-
-        Assert.Equal(1, persistenceSpy.SaveCallCount);
-    }
-
-    [Fact]
-    public void Undo_WithNoHistory_ShouldNotPersistHistoryToFile()
-    {
-        var persistenceSpy = new PersistenceSpy(null!);
-        var vm = new CalculatorViewModel(persistenceSpy)
-        {
-            CurrentInput = ""
-        };
-        vm.Undo();
-
-        Assert.Equal(0, persistenceSpy.SaveCallCount);
-    }
-
-    [Fact]
-    public void Undo_WithHistory_ShouldPersistHistoryToFile()
-    {
-        var persistenceSpy = new PersistenceSpy(null!);
-        var vm = new CalculatorViewModel(persistenceSpy)
-        {
-            CurrentInput = "42"
-        };
-        vm.Enter();
-        vm.Undo();
-
-        Assert.Equal(2, persistenceSpy.SaveCallCount);
-    }
 }
