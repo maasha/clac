@@ -2,16 +2,20 @@ using System;
 using Xunit;
 using Clac.UI.ViewModels;
 using Clac.UI.Configuration;
+using Clac.UI.Tests.Spies;
+using System.IO.Abstractions;
+using Clac.Core.Services;
 
 namespace Clac.UI.Tests.ViewModels;
 
 public class CalculatorViewModelDisplayTests
 {
     private readonly CalculatorViewModel _vm;
+    private static IPersistence DummyPersistence() => new PersistenceSpy(new FileSystem());
 
     public CalculatorViewModelDisplayTests()
     {
-        _vm = new CalculatorViewModel();
+        _vm = new CalculatorViewModel(DummyPersistence());
     }
 
     [Fact]

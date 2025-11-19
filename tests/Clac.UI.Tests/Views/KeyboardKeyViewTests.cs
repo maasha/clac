@@ -8,15 +8,19 @@ using Clac.UI.ViewModels;
 using static Clac.Core.ErrorMessages;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Clac.Core.Services;
+using Clac.UI.Tests.Spies;
+using System.IO.Abstractions;
 
 public class KeyboardKeyViewTests
 {
     private readonly CalculatorViewModel _vm;
     private readonly KeyboardKeyView _view;
+    private static IPersistence DummyPersistence() => new PersistenceSpy(new FileSystem());
 
     public KeyboardKeyViewTests()
     {
-        _vm = new CalculatorViewModel();
+        _vm = new CalculatorViewModel(DummyPersistence());
         _view = new KeyboardKeyView();
     }
 
@@ -1234,7 +1238,7 @@ public class KeyboardKeyViewTests
     [Fact]
     public void ButtonClick_ShouldNotCrash_WhenParentChainExceedsMaxDepth()
     {
-        var viewModel = new CalculatorViewModel();
+        var viewModel = new CalculatorViewModel(DummyPersistence());
         viewModel.CurrentInput = "123";
 
         var topParent = new UserControl { DataContext = viewModel };

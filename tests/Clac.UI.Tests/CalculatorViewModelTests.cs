@@ -1,15 +1,17 @@
-namespace Clac.UI.Tests;
 
-using Xunit;
 using Clac.UI.ViewModels;
+using System.IO.Abstractions;
+using Clac.Core.Services;
+using Clac.UI.Tests.Spies;
 
+namespace Clac.UI.Tests;
 public class CalculatorViewModelTests
 {
     private readonly CalculatorViewModel _vm;
-
     public CalculatorViewModelTests()
     {
-        _vm = new CalculatorViewModel();
+        IPersistence persistence = new PersistenceSpy(new FileSystem());
+        _vm = new CalculatorViewModel(persistence);
     }
 
     [Fact]
@@ -161,5 +163,45 @@ public class CalculatorViewModelTests
         Assert.Single(_vm.StackDisplay);
         Assert.Equal("1", _vm.StackDisplay[0]);
         Assert.Equal("2", _vm.CurrentInput);
+    }
+
+    [Fact]
+    public void Enter_WithValidInput_ShouldPersistHistoryToFile()
+    {
+        var persistenceSpy = new PersistenceSpy(null!);
+        var vm = new CalculatorViewModel(persistenceSpy)
+        {
+            CurrentInput = "42"
+        };
+        vm.Enter();
+
+        Assert.Equal(1, persistenceSpy.SaveCallCount);
+    }
+
+    [Fact]
+    public void Undo_WithNoHistory_ShouldNotPersistHistoryToFile()
+    {
+        var persistenceSpy = new PersistenceSpy(null!);
+        var vm = new CalculatorViewModel(persistenceSpy)
+        {
+            CurrentInput = ""
+        };
+        vm.Undo();
+
+        Assert.Equal(0, persistenceSpy.SaveCallCount);
+    }
+
+    [Fact]
+    public void Undo_WithHistory_ShouldPersistHistoryToFile()
+    {
+        var persistenceSpy = new PersistenceSpy(null!);
+        var vm = new CalculatorViewModel(persistenceSpy)
+        {
+            CurrentInput = "42"
+        };
+        vm.Enter();
+        vm.Undo();
+
+        Assert.Equal(2, persistenceSpy.SaveCallCount);
     }
 }

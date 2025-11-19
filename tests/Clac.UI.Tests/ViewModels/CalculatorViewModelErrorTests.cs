@@ -4,16 +4,20 @@ using Clac.Core;
 using static Clac.Core.ErrorMessages;
 using System.ComponentModel;
 using System.Linq;
+using Clac.Core.Services;
+using Clac.UI.Tests.Spies;
+using System.IO.Abstractions;
 
 namespace Clac.UI.Tests.ViewModels;
 
 public class CalculatorViewModelErrorTests
 {
     private readonly CalculatorViewModel _vm;
+    private static IPersistence DummyPersistence() => new PersistenceSpy(new FileSystem());
 
     public CalculatorViewModelErrorTests()
     {
-        _vm = new CalculatorViewModel();
+        _vm = new CalculatorViewModel(DummyPersistence());
     }
 
     [Fact]

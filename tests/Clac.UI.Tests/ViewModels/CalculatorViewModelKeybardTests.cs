@@ -1,15 +1,18 @@
 namespace Clac.UI.Tests.ViewModels;
 
-using Xunit;
 using Clac.UI.ViewModels;
+using Clac.UI.Tests.Spies;
+using System.IO.Abstractions;
+using Clac.Core.Services;
 
 public class CalculatorViewModelKeyboardTests
 {
     private readonly CalculatorViewModel _vm;
+    private static IPersistence DummyPersistence() => new PersistenceSpy(new FileSystem());
 
     public CalculatorViewModelKeyboardTests()
     {
-        _vm = new CalculatorViewModel();
+        _vm = new CalculatorViewModel(DummyPersistence());
     }
 
     [Fact]

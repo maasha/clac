@@ -27,9 +27,9 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly Processor _processor = new();
-    private readonly IPersistence _persistence = new Persistence(new FileSystem());
+    private readonly IPersistence _persistence = null!;
     private readonly StackAndInputHistory _history = new();
-    private readonly Dictionary<string, List<string>> _errors = new();
+    private readonly Dictionary<string, List<string>> _errors = [];
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
     private bool _showScrollBar = false;
@@ -46,10 +46,11 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         }
     }
 
-    public CalculatorViewModel()
+    public CalculatorViewModel(IPersistence persistence)
     {
-        DisplayItems = new ObservableCollection<StackLineItem>();
+        DisplayItems = [];
         InitializeDisplayItems();
+        _persistence = persistence;
     }
 
     public string[] StackDisplay => GetStackDisplay();
@@ -76,7 +77,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private const double ErrorLineHeight = 50.0;
     public double WindowHeight => SettingsManager.UI.WindowHeight + (HasError ? ErrorLineHeight : 0);
 
-    public double DisplayHeight => (SettingsManager.UI.DisplayLines * SettingsManager.UI.LineHeight) + SettingsManager.UI.BorderThickness;
+    public static double DisplayHeight => (SettingsManager.UI.DisplayLines * SettingsManager.UI.LineHeight) + SettingsManager.UI.BorderThickness;
 
     public void AppendToInput(string value)
     {
@@ -215,7 +216,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private void AddError(string propertyName, string error)
     {
         if (!_errors.ContainsKey(propertyName))
-            _errors[propertyName] = new List<string>();
+            _errors[propertyName] = [];
 
         if (!_errors[propertyName].Contains(error))
         {
@@ -226,11 +227,8 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private void ClearErrors(string propertyName)
     {
-        if (_errors.ContainsKey(propertyName))
-        {
-            _errors.Remove(propertyName);
+        if (_errors.Remove(propertyName))
             OnErrorsChanged(propertyName);
-        }
     }
 
     private void SetErrorMessageAndNotify(string message)
