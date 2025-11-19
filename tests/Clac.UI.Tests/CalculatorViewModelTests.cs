@@ -1,32 +1,48 @@
 
 using Clac.UI.ViewModels;
-using System.IO.Abstractions;
 using Clac.Core.Services;
 using Clac.UI.Tests.Spies;
+using System.IO.Abstractions.TestingHelpers;
+using Clac.Core.History;
+using Clac.Core.Rpn;
 
 namespace Clac.UI.Tests;
 
 public class CalculatorViewModelTests
 {
-    private readonly CalculatorViewModel _vm;
+    private readonly MockFileSystem mockFileSystem = new();
+    private CalculatorViewModel _vm;
     public CalculatorViewModelTests()
     {
-        IPersistence persistence = new PersistenceSpy(new FileSystem());
+        IPersistence persistence = new PersistenceSpy(mockFileSystem);
         _vm = new CalculatorViewModel(persistence);
     }
 
     public class ConstructorTests : CalculatorViewModelTests
     {
         [Fact]
-        public void Constructor_ShouldInitializeWithEmptyStackDisplay()
+        public void Constructor_ShouldInitializeWithEmptyCurrentInput()
+        {
+            Assert.Equal("", _vm.CurrentInput);
+        }
+
+        [Fact]
+        public void Constructor_WhenNoHistoryExists_ShouldInitializeWithEmptyStackDisplay()
         {
             Assert.Empty(_vm.StackDisplay);
         }
 
         [Fact]
-        public void Constructor_ShouldInitializeWithEmptyCurrentInput()
+        public void Constructor_WhenHistoryExists_ShouldInitializeWithHistoryLoadedOnStackDisplay()
         {
-            Assert.Equal("", _vm.CurrentInput);
+            var spy = new PersistenceSpy(mockFileSystem)
+            {
+                LoadResultToReturn = DummyHistory()
+            };
+
+            _vm = new CalculatorViewModel(spy);
+
+            Assert.NotEmpty(_vm.StackDisplay);
         }
     }
 
@@ -95,7 +111,7 @@ public class CalculatorViewModelTests
         [Fact]
         public void Enter_WithValidInput_ShouldPersistHistoryToFile()
         {
-            var persistenceSpy = new PersistenceSpy(null!);
+            var persistenceSpy = new PersistenceSpy(mockFileSystem);
             var vm = new CalculatorViewModel(persistenceSpy)
             {
                 CurrentInput = "42"
@@ -159,7 +175,7 @@ public class CalculatorViewModelTests
         [Fact]
         public void Undo_WithNoHistory_ShouldNotPersistHistoryToFile()
         {
-            var persistenceSpy = new PersistenceSpy(null!);
+            var persistenceSpy = new PersistenceSpy(mockFileSystem);
             var vm = new CalculatorViewModel(persistenceSpy)
             {
                 CurrentInput = ""
@@ -172,7 +188,7 @@ public class CalculatorViewModelTests
         [Fact]
         public void Undo_WithHistory_ShouldPersistHistoryToFile()
         {
-            var persistenceSpy = new PersistenceSpy(null!);
+            var persistenceSpy = new PersistenceSpy(mockFileSystem);
             var vm = new CalculatorViewModel(persistenceSpy)
             {
                 CurrentInput = "42"
@@ -214,4 +230,12 @@ public class CalculatorViewModelTests
         Assert.True(_vm.CanUndo);
     }
 
+    private StackAndInputHistory DummyHistory()
+    {
+        var history = new StackAndInputHistory();
+        var stack = new Stack();
+        stack.Push(123);
+        history.Push(stack, "1 2 3");
+        return history;
+    }
 }

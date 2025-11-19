@@ -15,7 +15,6 @@ using Clac.UI.Configuration;
 using Clac.UI.Helpers;
 using Clac.UI.Models;
 using Clac.Core.Services;
-using System.IO.Abstractions;
 
 public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 {
@@ -27,8 +26,8 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private string _currentInput = "";
     private string? _errorMessage = null;
     private readonly Processor _processor = new();
-    private readonly IPersistence _persistence = null!;
-    private readonly StackAndInputHistory _history = new();
+    private IPersistence _persistence = null!;
+    private StackAndInputHistory _history = new();
     private readonly Dictionary<string, List<string>> _errors = [];
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
@@ -48,9 +47,42 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     public CalculatorViewModel(IPersistence persistence)
     {
-        DisplayItems = [];
-        InitializeDisplayItems();
         _persistence = persistence;
+        DisplayItems = [];
+        LoadHistory();
+
+        if (_history.IsEmpty)
+        {
+            InitializeEmptyDisplayItems();
+        }
+    }
+
+    private void LoadHistory()
+    {
+        var result = _persistence.Load("/tmp/test.json");
+        if (!result.IsSuccessful)
+            _errorMessage = result.Error.Message;
+        if (result.Value == null)
+            return;
+        _history = result.Value;
+        // Console.WriteLine("History loaded:");
+        // Console.WriteLine($"Stack: {_history.InputHistory.ToArray()}");
+        // Console.WriteLine($"Input: {_history.StackHistory.ToArray()}");
+        LoadLastHistory();
+    }
+
+    private void LoadLastHistory()
+    {
+        var result = _history.Last();
+
+        if (!result.IsSuccessful)
+        {
+            _errorMessage = "Failed to load history";
+            return;
+        }
+        _processor.RestoreStack(result.Value.stack);
+        UpdateDisplayItems();
+        OnPropertyChanged(nameof(StackDisplay));
     }
 
     public string[] StackDisplay => GetStackDisplay();
@@ -131,7 +163,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(StackDisplay));
     }
 
-    private void InitializeDisplayItems()
+    private void InitializeEmptyDisplayItems()
     {
         int displayLines = SettingsManager.UI.DisplayLines;
         DisplayItems.Clear();

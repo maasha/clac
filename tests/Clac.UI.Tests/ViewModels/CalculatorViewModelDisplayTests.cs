@@ -5,17 +5,18 @@ using Clac.UI.Configuration;
 using Clac.UI.Tests.Spies;
 using System.IO.Abstractions;
 using Clac.Core.Services;
+using System.IO.Abstractions.TestingHelpers;
 
 namespace Clac.UI.Tests.ViewModels;
 
 public class CalculatorViewModelDisplayTests
 {
     private readonly CalculatorViewModel _vm;
-    private static IPersistence DummyPersistence() => new PersistenceSpy(new FileSystem());
+    private readonly PersistenceSpy persistenceSpy = new(new MockFileSystem());
 
     public CalculatorViewModelDisplayTests()
     {
-        _vm = new CalculatorViewModel(DummyPersistence());
+        _vm = new CalculatorViewModel(persistenceSpy);
     }
 
     [Fact]
