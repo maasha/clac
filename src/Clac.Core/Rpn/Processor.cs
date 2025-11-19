@@ -124,7 +124,7 @@ public class Processor
     }
 
     /// This was introduced to silence the errors that would just cause
-    /// confusion in the calculator such as clicking pop() on and empty stack.
+    /// confusion in the calculator such as clicking pop() on an empty stack.
     private static Result<double> SuccessWithZero()
     {
         return new Result<double>(0);
