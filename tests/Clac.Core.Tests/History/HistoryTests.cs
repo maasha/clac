@@ -200,5 +200,37 @@ public class HistoryTests
             Assert.Equal([42, 43], array);
         }
     }
+
+    public class LastTests
+    {
+        [Fact]
+        public void WithEmptyHistory_ShouldReturnError()
+        {
+            History<int> history = new();
+            var result = history.Last();
+
+            Assert.False(result.IsSuccessful);
+        }
+
+        [Fact]
+        public void WithEmptyHistory_ShouldReturnErrorMessage()
+        {
+            History<int> history = new();
+            var result = history.Last();
+
+            Assert.False(result.IsSuccessful);
+            Assert.Contains(HistoryIsEmpty, result.Error.Message);
+        }
+
+        [Fact]
+        public void WithHistory_ShouldReturnLastItem()
+        {
+            History<int> history = new();
+            history.Push(32);
+            history.Push(42);
+            var result = history.Last();
+            Assert.Equal(42, result.Value);
+        }
+    }
 }
 

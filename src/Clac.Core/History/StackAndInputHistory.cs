@@ -51,6 +51,20 @@ public class StackAndInputHistory
         return new Result<(Stack, string)>((stackResult.Value, inputResult.Value));
     }
 
+    public Result<(Stack stack, string input)> Last()
+    {
+        var stackResult = _stackHistory.Last();
+        if (!stackResult.IsSuccessful)
+            return new Result<(Stack, string)>(stackResult.Error);
+
+        var inputResult = _inputHistory.Last();
+        if (!inputResult.IsSuccessful)
+            return new Result<(Stack, string)>(inputResult.Error);
+
+        return new Result<(Stack, string)>((stackResult.Value, inputResult.Value));
+
+    }
+
     private static Stack CloneStack(Stack stack)
     {
         var clonedStack = new Stack();

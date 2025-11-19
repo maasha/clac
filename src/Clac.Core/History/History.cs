@@ -53,11 +53,20 @@ public class History<T>
 
     public Result<T> Pop()
     {
+        var result = Last();
+        if (!result.IsSuccessful)
+            return result;
+        var value = Last();
+        _history.RemoveAt(_history.Count - 1);
+        return value;
+    }
+
+    public Result<T> Last()
+    {
         if (_history.Count == 0)
             return new Result<T>(new InvalidOperationException(HistoryIsEmpty));
 
         var value = _history[^1];
-        _history.RemoveAt(_history.Count - 1);
         return new Result<T>(value);
     }
 

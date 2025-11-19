@@ -1,5 +1,6 @@
 using Clac.Core.History;
 using Clac.Core.Rpn;
+using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core.Tests.History;
 
@@ -30,7 +31,7 @@ public class StackAndInputHistoryTests
     }
 
     [Fact]
-    public void Pop_WithHistory_ShouldReturnBothStackAndInput()
+    public void Pop_WithHistory_ShouldReturnLastStackAndInput()
     {
         StackAndInputHistory history = new();
         var stack = new Stack();
@@ -105,10 +106,34 @@ public class StackAndInputHistoryTests
     }
 
     [Fact]
-    public void IsEmpty_WhenHistoryEmpty_SholdReturnTrue()
+    public void IsEmpty_WhenHistoryEmpty_ShouldReturnTrue()
     {
         StackAndInputHistory history = new();
         Assert.True(history.IsEmpty);
+    }
+
+    [Fact]
+    public void Last_WhenHistoryEmpty_ShouldReturnError()
+    {
+        StackAndInputHistory history = new();
+        var result = history.Last();
+        Assert.False(result.IsSuccessful);
+        Assert.Contains(HistoryIsEmpty, result.Error.Message);
+    }
+
+    [Fact]
+    public void Last_WithHistory_ShouldReturnLastStackAndInput()
+    {
+        StackAndInputHistory history = new();
+        var stack = new Stack();
+        stack.Push(123);
+        history.Push(stack, "1 2 3");
+
+        var result = history.Last();
+
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(123, result.Value.stack.ToArray()[0]);
+        Assert.Equal("1 2 3", result.Value.input);
     }
 }
 
