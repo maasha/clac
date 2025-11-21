@@ -59,7 +59,7 @@ public partial class KeyboardKeyView : UserControl
         else if (key.Value == UndoCommand)
         {
             viewModel.Undo();
-        }
+        } // TODO else if (key.Value == ClearCommand) {}
         else
         {
             var prefix = GetOperatorPrefix(viewModel);
