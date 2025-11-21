@@ -4,5 +4,6 @@
         "CLAC",
         "pointerover",
         "xunit"
-    ]
+    ],
+    "editor.formatOnSave": true,
 }
