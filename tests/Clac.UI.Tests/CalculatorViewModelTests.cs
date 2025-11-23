@@ -230,6 +230,84 @@ public class CalculatorViewModelTests
         Assert.True(_vm.CanUndo);
     }
 
+    public class ClearTests : CalculatorViewModelTests
+    {
+        [Fact]
+        public void Clear_WithError_ShouldClearInputAndErrorState()
+        {
+            _vm.CurrentInput = "abc";
+            _vm.Enter();
+            _vm.Clear();
+
+            Assert.False(_vm.HasError);
+            Assert.Equal("", _vm.CurrentInput);
+        }
+
+        [Fact]
+        public void Clear_WithError_ShouldClearStackAndErrorState()
+        {
+            _vm.CurrentInput = "1";
+            _vm.Enter();
+            _vm.CurrentInput = "abc";
+            _vm.Enter();
+            _vm.Clear();
+
+            Assert.False(_vm.HasError);
+            Assert.Equal(0, _vm.Stack.Count);
+        }
+
+        [Fact]
+        public void Clear_WithInput_ShouldClearInput()
+        {
+            _vm.CurrentInput = "1";
+            _vm.Clear();
+
+            Assert.False(_vm.HasError);
+            Assert.Equal("", _vm.CurrentInput);
+            Assert.Equal(0, _vm.Stack.Count);
+        }
+
+        [Fact]
+        public void Clear_WithStack_ShouldClearStack()
+        {
+            _vm.CurrentInput = "1";
+            _vm.Enter();
+            _vm.Clear();
+
+            Assert.False(_vm.HasError);
+            Assert.Equal("", _vm.CurrentInput);
+            Assert.Equal(0, _vm.Stack.Count);
+
+        }
+
+        [Fact]
+        public void Clear_WithInputAndStack_ShouldClearInputAndStack()
+        {
+            _vm.CurrentInput = "1";
+            _vm.Enter();
+            _vm.CurrentInput = "2";
+            _vm.Clear();
+
+            Assert.False(_vm.HasError);
+            Assert.Equal("", _vm.CurrentInput);
+            Assert.Equal(0, _vm.Stack.Count);
+
+        }
+
+        [Fact]
+        public void Clear_ShouldPersistHistoryToFile()
+        {
+            var persistenceSpy = new PersistenceSpy(mockFileSystem);
+            var vm = new CalculatorViewModel(persistenceSpy)
+            {
+                CurrentInput = "42"
+            };
+            vm.Clear();
+
+            Assert.Equal(1, persistenceSpy.SaveCallCount);
+        }
+    }
+
     private StackAndInputHistory DummyHistory()
     {
         var history = new StackAndInputHistory();

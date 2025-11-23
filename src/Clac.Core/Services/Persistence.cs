@@ -60,7 +60,6 @@ public class Persistence(IFileSystem fileSystem) : IPersistence
         try
         {
             var content = _fileSystem.File.ReadAllText(path);
-            Console.WriteLine($"Content: {content}");
             return DeserializeAndReconstructHistory(content);
         }
         catch (Exception ex)

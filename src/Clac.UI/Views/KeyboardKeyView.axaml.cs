@@ -11,6 +11,7 @@ namespace Clac.UI.Views;
 
 public partial class KeyboardKeyView : UserControl
 {
+    private const string ClearCommand = "clear()";
     private const string DeleteCommand = "del()";
     private const string UndoCommand = "undo()";
 
@@ -52,14 +53,18 @@ public partial class KeyboardKeyView : UserControl
 
     private static void HandleCommandKey(KeyboardKey key, CalculatorViewModel viewModel)
     {
-        if (key.Value == DeleteCommand)
+        if (key.Value == ClearCommand)
+        {
+            viewModel.Clear();
+        }
+        else if (key.Value == DeleteCommand)
         {
             viewModel.DeleteFromInput();
         }
         else if (key.Value == UndoCommand)
         {
             viewModel.Undo();
-        } // TODO else if (key.Value == ClearCommand) {}
+        }
         else
         {
             var prefix = GetOperatorPrefix(viewModel);

@@ -31,6 +31,8 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private readonly Dictionary<string, List<string>> _errors = [];
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
+    public Clac.Core.Rpn.Stack Stack => _processor.Stack;
+
     private bool _showScrollBar = false;
     public bool ShowScrollBar
     {
@@ -65,9 +67,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (result.Value == null)
             return;
         _history = result.Value;
-        // Console.WriteLine("History loaded:");
-        // Console.WriteLine($"Stack: {_history.InputHistory.ToArray()}");
-        // Console.WriteLine($"Input: {_history.StackHistory.ToArray()}");
         LoadLastHistory();
     }
 
@@ -161,6 +160,12 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         _processor.RestoreStack(result.Value.stack);
         UpdateDisplayItems();
         OnPropertyChanged(nameof(StackDisplay));
+    }
+
+    public void Clear()
+    {
+        SetCurrentInputAndClearErrors("clear()");
+        Enter();
     }
 
     private void InitializeEmptyDisplayItems()
