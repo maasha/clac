@@ -61,7 +61,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private void LoadHistory()
     {
-        var result = _persistence.Load("/tmp/test.json");
+        var result = _persistence.Load();
         if (!result.IsSuccessful)
             _errorMessage = result.Error.Message;
         if (result.Value == null)
@@ -138,7 +138,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
         var stackBeforeProcessing = _processor.Stack;
         _history.Push(stackBeforeProcessing, _currentInput);
-        _persistence.Save(_history, "/tmp/test.json");
+        _persistence.Save(_history);
 
         var result = ProcessTokens(tokens.Value);
         if (result == null)
@@ -155,7 +155,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         var result = _history.Pop();
         if (!result.IsSuccessful)
             return;
-        _persistence.Save(_history, "/tmp/test.json");
+        _persistence.Save(_history);
         SetCurrentInputAndClearErrors(result.Value.input);
         _processor.RestoreStack(result.Value.stack);
         UpdateDisplayItems();
