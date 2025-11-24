@@ -21,4 +21,20 @@ public class OperatorRegistryTests
         Assert.False(result.IsSuccessful);
         Assert.Contains("Operator 'Add' not found", result.Error.Message);
     }
+
+    [Fact]
+    public void IsValidOperator_WithInValidOperator_ShouldReturnFalse()
+    {
+        Assert.False(OperatorRegistry.IsValidOperator("%"));
+    }
+
+    [Theory]
+    [InlineData("+")]
+    [InlineData("-")]
+    [InlineData("*")]
+    [InlineData("/")]
+    public void IsValidOperator_WithValidOperator_ShouldReturnTrue(string symbol)
+    {
+        Assert.True(OperatorRegistry.IsValidOperator(symbol));
+    }
 }

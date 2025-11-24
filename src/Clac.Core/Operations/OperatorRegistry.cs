@@ -18,4 +18,16 @@ public class OperatorRegistry
             return new Result<IOperator>(new InvalidOperationException($"Operator '{symbol}' not found"));
         return new Result<IOperator>(op);
     }
+
+    public static bool IsValidOperator(string symbol)
+    {
+        return symbol switch
+        {
+            "+" => true,
+            "-" => true,
+            "*" => true,
+            "/" => true,
+            _ => false
+        };
+    }
 }
