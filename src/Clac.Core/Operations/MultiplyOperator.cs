@@ -1,11 +1,13 @@
 using Clac.Core.Rpn;
 using DotNext;
 using static Clac.Core.ErrorMessages;
+using Clac.Core.Enums;
 
 namespace Clac.Core.Operations;
 
 public class MultiplyOperator : IOperator
 {
+    public OperatorSymbol Symbol => OperatorSymbol.Multiply;
     public string Name => "Multiply";
     public string Description => "Multiplies two numbers";
     public int MinimumStackSize => 2;

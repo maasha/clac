@@ -4,10 +4,18 @@ using Clac.Core.Rpn;
 
 namespace Clac.Core.Tests.Operations;
 
+using static Clac.Core.Enums.OperatorSymbol;
+
 public class AddOperatorTests
 {
     [Fact]
+    public void Symbol_ShouldBeCorrect()
+    {
+        var addOperator = new AddOperator();
+        Assert.Equal(Add, addOperator.Symbol);
+    }
 
+    [Fact]
     public void Name_ShouldBeCorrect()
     {
         var addOperator = new AddOperator();

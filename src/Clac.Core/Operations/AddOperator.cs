@@ -1,11 +1,13 @@
 using DotNext;
 using Clac.Core.Rpn;
+using Clac.Core.Enums;
 using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core.Operations;
 
 public class AddOperator : IOperator
 {
+    public OperatorSymbol Symbol => OperatorSymbol.Add;
     public string Name => "Add";
     public string Description => "Adds two numbers";
     public int MinimumStackSize => 2;

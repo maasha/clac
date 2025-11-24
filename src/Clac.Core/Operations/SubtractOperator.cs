@@ -1,11 +1,13 @@
 using Clac.Core.Rpn;
 using DotNext;
 using static Clac.Core.ErrorMessages;
+using Clac.Core.Enums;
 
 namespace Clac.Core.Operations;
 
 public class SubtractOperator : IOperator
 {
+    public OperatorSymbol Symbol => OperatorSymbol.Subtract;
     public string Name => "Subtract";
     public string Description => "Subtracts two numbers";
     public int MinimumStackSize => 2;
