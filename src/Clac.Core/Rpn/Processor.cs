@@ -12,9 +12,9 @@ public class Processor
     private readonly OperatorRegistry _operatorRegistry;
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
 
-    public Processor(OperatorRegistry? operatorRegistry = null)
+    public Processor()
     {
-        _operatorRegistry = operatorRegistry ?? CreateDefaultOperatorRegistry();
+        _operatorRegistry = CreateDefaultOperatorRegistry();
         _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
         {
             { CommandSymbol.Clear, HandleClear },
@@ -221,9 +221,8 @@ public class Processor
         }
 
         for (int i = 0; i < popCount; i++)
-        {
             _stack.Pop();
-        }
+
         _stack.Push(result.Value);
         return result;
     }
