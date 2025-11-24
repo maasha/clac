@@ -54,8 +54,6 @@ public class Persistence(IFileSystem fileSystem) : IPersistence
     {
         var path = filePath ?? GetDefaultFilePath();
 
-        Console.WriteLine(path);
-
         if (!_fileSystem.File.Exists(path))
             return ReturnNullHistory();
 
