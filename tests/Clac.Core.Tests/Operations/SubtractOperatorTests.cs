@@ -59,8 +59,8 @@ public class SubtractOperatorTests
     [Fact]
     public void Evaluate_WithInsufficientStackSize_ShouldReturnErrorMessage()
     {
-        var addOperator = new AddOperator();
-        var result = addOperator.Evaluate(new Stack());
+        var subtractOperator = new SubtractOperator();
+        var result = subtractOperator.Evaluate(new Stack());
         Assert.False(result.IsSuccessful);
         Assert.Contains(StackHasLessThanTwoNumbers, result.Error.Message);
     }
@@ -70,8 +70,8 @@ public class SubtractOperatorTests
     {
         var stack = new Stack();
         stack.Push(123);
-        var addOperator = new AddOperator();
-        var result = addOperator.Evaluate(stack);
+        var subtractOperator = new SubtractOperator();
+        var result = subtractOperator.Evaluate(stack);
         Assert.False(result.IsSuccessful);
         Assert.Equal(1, stack.Count);
         Assert.Equal(123, stack.Peek().Value);
@@ -83,10 +83,10 @@ public class SubtractOperatorTests
         var stack = new Stack();
         stack.Push(123);
         stack.Push(456);
-        var addOperator = new AddOperator();
-        var result = addOperator.Evaluate(stack);
+        var subtractOperator = new SubtractOperator();
+        var result = subtractOperator.Evaluate(stack);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(579, result.Value);
+        Assert.Equal(-333, result.Value);
     }
 
     [Fact]
