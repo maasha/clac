@@ -2,6 +2,8 @@ using Clac.Core.Operations;
 using Clac.Core.Rpn;
 using static Clac.Core.ErrorMessages;
 
+namespace Clac.Core.Tests.Operations;
+
 public class MultiplyOperatorTests
 {
     [Fact]
