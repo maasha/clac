@@ -1,6 +1,7 @@
 using DotNext;
 using Clac.Core.Enums;
 using static Clac.Core.ErrorMessages;
+using Clac.Core.Operations;
 
 namespace Clac.Core.Rpn;
 
@@ -8,10 +9,12 @@ public class Processor
 {
     private const int MinimumStackSizeForBinaryOperation = 2;
     private readonly Stack _stack = new();
+    private readonly OperatorRegistry _operatorRegistry;
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
 
-    public Processor()
+    public Processor(OperatorRegistry? operatorRegistry = null)
     {
+        _operatorRegistry = operatorRegistry ?? CreateDefaultOperatorRegistry();
         _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
         {
             { CommandSymbol.Clear, HandleClear },
@@ -32,6 +35,15 @@ public class Processor
         if (!processResult.IsSuccessful)
             return new Result<double>(processResult.Error);
         return GetFinalResult(processResult.Value.commandExecuted, processResult.Value.commandResult);
+    }
+    private static OperatorRegistry CreateDefaultOperatorRegistry()
+    {
+        var registry = new OperatorRegistry();
+        registry.Register(new AddOperator());
+        registry.Register(new SubtractOperator());
+        registry.Register(new MultiplyOperator());
+        registry.Register(new DivideOperator());
+        return registry;
     }
 
     private Result<(bool commandExecuted, double commandResult)> ProcessTokens(List<Token> tokens)
@@ -218,19 +230,17 @@ public class Processor
 
     private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
     {
-        if (_stack.Count < MinimumStackSizeForBinaryOperation)
-            return new Result<double>(new InvalidOperationException(StackHasLessThanTwoNumbers));
+        var opResult = _operatorRegistry.GetOperator(operatorToken.Symbol);
+        if (!opResult.IsSuccessful)
+            return new Result<double>(opResult.Error);
 
-        var number1 = _stack.Pop();
-        var number2 = _stack.Pop();
+        var op = opResult.Value;
 
-        var result = Evaluator.Evaluate(number2.Value, number1.Value, operatorToken.Symbol);
+        var stackSizeResult = op.ValidateStackSize(_stack.Count);
+        if (!stackSizeResult.IsSuccessful)
+            return new Result<double>(stackSizeResult.Error);
 
-        if (!result.IsSuccessful)
-            return result;
-
-        _stack.Push(result.Value);
-        return result;
+        return op.Evaluate(_stack);
     }
 
     private Stack CloneStack()

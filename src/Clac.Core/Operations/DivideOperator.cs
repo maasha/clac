@@ -38,7 +38,7 @@ public class DivideOperator : IOperator
         var number1 = stack.Pop();
         var number2 = stack.Pop();
         if (number1.Value == 0)
-            return new Result<double>(new InvalidOperationException(DivisionByZero));
+            return new Result<double>(new DivideByZeroException(DivisionByZero));
         var result = number2.Value / number1.Value;
         return new Result<double>(result);
     }
