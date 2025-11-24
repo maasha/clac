@@ -99,7 +99,7 @@ public class AddOperatorTests
         var addOperator = new AddOperator();
         var result = addOperator.Evaluate(stack);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(2, stack.Count);
+        Assert.Equal(1, stack.Count);
         Assert.Equal(579, stack.Peek().Value);
     }
 }
