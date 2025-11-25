@@ -8,11 +8,11 @@ public abstract record Token
 
     public sealed record NumberToken(double Value) : Token;
 
-    public sealed record OperatorToken(OperatorSymbol Symbol) : Token;
+    public sealed record OperatorToken(string Symbol) : Token;
 
     public static Token CreateNumber(double value) => new NumberToken(value);
 
-    public static Token CreateOperator(OperatorSymbol symbol) => new OperatorToken(symbol);
+    public static Token CreateOperator(string symbol) => new OperatorToken(symbol);
 
     public sealed record CommandToken(CommandSymbol Command) : Token;
 
