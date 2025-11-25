@@ -54,7 +54,10 @@ public class Stack
         if (_stack.Count == 0)
             return new Result<double>(new InvalidOperationException(StackEmpty));
 
-        return new Result<double>(_stack.Sum());
+        var sum = _stack.Sum();
+        _stack.Clear();
+        Push(sum);
+        return new Result<double>(sum);
     }
 
     public Result<double> Sqrt()

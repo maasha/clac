@@ -6,5 +6,6 @@ public class DefaultFunctionRegistry : FunctionRegistry
     {
         Register(new PopFunction());
         Register(new SwapFunction());
+        Register(new SumFunction());
     }
 }

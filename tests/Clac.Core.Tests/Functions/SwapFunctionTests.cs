@@ -1,6 +1,5 @@
 using Clac.Core.Functions;
 using Clac.Core.Rpn;
-using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core.Tests.Functions;
 

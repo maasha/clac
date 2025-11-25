@@ -6,6 +6,7 @@ public class DefaultFunctionRegistryTests
     [Theory]
     [InlineData("pop")]
     [InlineData("swap")]
+    [InlineData("sum")]
     public void CreateDefaultFunctionRegistry_ShouldHaveDefaultFunctions(string functionName)
     {
         var registry = new DefaultFunctionRegistry();
