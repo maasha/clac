@@ -13,7 +13,7 @@ public class ProcessorTests
 
     public ProcessorTests()
     {
-        _operatorRegistry = new OperatorRegistry();
+        _operatorRegistry = new DefaultOperatorRegistry();
         _processor = new Processor(_operatorRegistry);
     }
 

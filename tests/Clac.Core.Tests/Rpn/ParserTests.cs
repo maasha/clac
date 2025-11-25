@@ -3,7 +3,6 @@ namespace Clac.Core.Tests.Rpn;
 using Clac.Core.Rpn;
 using Clac.Core.Operations;
 using Xunit;
-using Clac.Core.Enums;
 
 public class ParserTests
 {
@@ -11,7 +10,7 @@ public class ParserTests
 
     public ParserTests()
     {
-        _operatorRegistry = new OperatorRegistry();
+        _operatorRegistry = new DefaultOperatorRegistry();
     }
 
     [Fact]

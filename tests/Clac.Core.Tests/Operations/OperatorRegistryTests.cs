@@ -18,7 +18,7 @@ public class OperatorRegistryTests
         var operatorRegistry = new OperatorRegistry();
         var result = operatorRegistry.GetOperator("+");
         Assert.False(result.IsSuccessful);
-        Assert.Contains("Operator 'Add' not found", result.Error.Message);
+        Assert.Contains("Operator '+' not found", result.Error.Message);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class OperatorRegistryTests
     [InlineData("/")]
     public void IsValidOperator_WithValidOperator_ShouldReturnTrue(string symbol)
     {
-        var operatorRegistry = new OperatorRegistry();
+        var operatorRegistry = new DefaultOperatorRegistry();
         var result = operatorRegistry.IsValidOperator(symbol);
         Assert.True(result.IsSuccessful);
     }

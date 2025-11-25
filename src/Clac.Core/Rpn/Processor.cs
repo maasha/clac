@@ -16,7 +16,7 @@ public class Processor
 
     public Processor(OperatorRegistry? operatorRegistry = null)
     {
-        _operatorRegistry = operatorRegistry ?? CreateDefaultOperatorRegistry();
+        _operatorRegistry = operatorRegistry ?? new DefaultOperatorRegistry();
         _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
         {
             { CommandSymbol.Clear, HandleClear },
@@ -38,16 +38,6 @@ public class Processor
             return new Result<double>(processResult.Error);
         return GetFinalResult(processResult.Value.commandExecuted, processResult.Value.commandResult);
     }
-    private static OperatorRegistry CreateDefaultOperatorRegistry()
-    {
-        var registry = new OperatorRegistry();
-        registry.Register(new AddOperator());
-        registry.Register(new SubtractOperator());
-        registry.Register(new MultiplyOperator());
-        registry.Register(new DivideOperator());
-        return registry;
-    }
-
     private Result<(bool commandExecuted, double commandResult)> ProcessTokens(List<Token> tokens)
     {
         bool commandExecuted = false;
