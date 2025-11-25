@@ -286,6 +286,7 @@ public class ProcessorTests
 
         [Theory]
         [InlineData("pop")]
+        [InlineData("swap")]
         public void Process_ShouldHaveDefaultCommandRegistry(string commandName)
         {
             var processor = new Processor();

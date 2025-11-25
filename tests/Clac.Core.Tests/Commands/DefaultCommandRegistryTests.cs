@@ -5,6 +5,7 @@ public class DefaultCommandRegistryTests
 {
     [Theory]
     [InlineData("pop")]
+    [InlineData("swap")]
     public void CreateDefaultCommandRegistry_ShouldHaveDefaultCommands(string commandName)
     {
         var registry = new DefaultCommandRegistry();

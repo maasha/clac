@@ -5,5 +5,6 @@ public class DefaultCommandRegistry : CommandRegistry
     public DefaultCommandRegistry()
     {
         Register(new PopCommand());
+        Register(new SwapCommand());
     }
 }
