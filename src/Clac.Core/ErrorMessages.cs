@@ -18,6 +18,6 @@ public static class ErrorMessages
     public const string SavingFailed = "Saving failed";
     public const string LoadingFailed = "Loading failed";
 
-    public static string UnknownOperator(OperatorSymbol op) => $"Unknown operator: {op}";
+    public static string UnknownOperator(string op) => $"Unknown operator: {op}";
 }
 
