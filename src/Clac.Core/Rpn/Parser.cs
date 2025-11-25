@@ -6,27 +6,27 @@ namespace Clac.Core.Rpn;
 
 public class Parser
 {
-    public static Result<List<Token>> Parse(string input)
+    public static Result<List<Token>> Parse(OperatorRegistry opReg, string input)
     {
         if (string.IsNullOrWhiteSpace(input))
             return new Result<List<Token>>([]);
 
         var inputItems = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        var validationResult = ValidateInput(inputItems);
+        var validationResult = ValidateInput(opReg, inputItems);
 
         if (!validationResult.IsSuccessful)
             return new Result<List<Token>>(validationResult.Error);
 
-        return CreateTokensFromItems(validationResult.Value);
+        return CreateTokensFromItems(opReg, validationResult.Value);
     }
 
-    private static Result<List<Token>> CreateTokensFromItems(string[] items)
+    private static Result<List<Token>> CreateTokensFromItems(OperatorRegistry opReg, string[] items)
     {
         var tokens = new List<Token>();
 
         foreach (var item in items)
         {
-            var tokenResult = CreateTokenFromItem(item);
+            var tokenResult = CreateTokenFromItem(opReg, item);
             if (!tokenResult.IsSuccessful)
                 return new Result<List<Token>>(tokenResult.Error);
             tokens.Add(tokenResult.Value);
@@ -35,15 +35,15 @@ public class Parser
         return new Result<List<Token>>(tokens);
     }
 
-    private static Result<Token> CreateTokenFromItem(string item)
+    private static Result<Token> CreateTokenFromItem(OperatorRegistry opReg, string item)
     {
-        var tokenResult = CreateTokenFromString(item);
+        var tokenResult = CreateTokenFromString(opReg, item);
         if (!tokenResult.IsSuccessful)
             return new Result<Token>(tokenResult.Error);
         return tokenResult;
     }
 
-    private static Result<Token> CreateTokenFromString(string item)
+    private static Result<Token> CreateTokenFromString(OperatorRegistry opReg, string item)
     {
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
             return new Result<Token>(Token.CreateNumber(number));
@@ -51,12 +51,12 @@ public class Parser
         if (IsCommand(item))
             return CreateCommandToken(item);
 
-        return CreateOperatorToken(item);
+        return CreateOperatorToken(opReg, item);
     }
 
-    private static Result<string[]> ValidateInput(string[] input)
+    private static Result<string[]> ValidateInput(OperatorRegistry opReg, string[] input)
     {
-        var errors = CollectInvalidItems(input);
+        var errors = CollectInvalidItems(opReg, input);
 
         if (errors.Count > 0)
         {
@@ -67,23 +67,23 @@ public class Parser
         return new Result<string[]>(input);
     }
 
-    private static List<string> CollectInvalidItems(string[] input)
+    private static List<string> CollectInvalidItems(OperatorRegistry opReg, string[] input)
     {
         var errors = new List<string>();
 
         foreach (var item in input)
         {
-            if (IsInvalidItem(item))
+            if (IsInvalidItem(opReg, item))
                 errors.Add(item);
         }
 
         return errors;
     }
 
-    private static bool IsInvalidItem(string item)
+    private static bool IsInvalidItem(OperatorRegistry opReg, string item)
     {
         bool isNumber = IsNumber(item);
-        bool isOperator = Operator.IsValidOperator(item);
+        bool isOperator = opReg.GetOperator(item).IsSuccessful;
         bool isCommand = IsCommand(item);
 
         return !isNumber && !isOperator && !isCommand;
@@ -112,12 +112,12 @@ public class Parser
         return new Result<Token>(Token.CreateCommand(commandResult.Value));
     }
 
-    private static Result<Token> CreateOperatorToken(string item)
+    private static Result<Token> CreateOperatorToken(OperatorRegistry opReg, string item)
     {
-        var operatorResult = Operator.GetOperatorSymbol(item);
+        var operatorResult = opReg.GetOperator(item);
         if (!operatorResult.IsSuccessful)
             return new Result<Token>(operatorResult.Error);
-        return new Result<Token>(Token.CreateOperator(operatorResult.Value));
+        return new Result<Token>(Token.CreateOperator(operatorResult.Value.Symbol));
     }
 
     private static string ExtractCommandName(string commandWithParentheses)
