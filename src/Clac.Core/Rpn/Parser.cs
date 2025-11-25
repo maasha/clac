@@ -4,29 +4,31 @@ using Clac.Core.Operations;
 
 namespace Clac.Core.Rpn;
 
-public class Parser
+public class Parser(OperatorRegistry operatorRegistry)
 {
-    public static Result<List<Token>> Parse(OperatorRegistry opReg, string input)
+    private readonly OperatorRegistry _operatorRegistry = operatorRegistry;
+
+    public Result<List<Token>> Parse(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
             return new Result<List<Token>>([]);
 
         var inputItems = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        var validationResult = ValidateInput(opReg, inputItems);
+        var validationResult = ValidateInput(inputItems);
 
         if (!validationResult.IsSuccessful)
             return new Result<List<Token>>(validationResult.Error);
 
-        return CreateTokensFromItems(opReg, validationResult.Value);
+        return CreateTokensFromItems(validationResult.Value);
     }
 
-    private static Result<List<Token>> CreateTokensFromItems(OperatorRegistry opReg, string[] items)
+    private Result<List<Token>> CreateTokensFromItems(string[] items)
     {
         var tokens = new List<Token>();
 
         foreach (var item in items)
         {
-            var tokenResult = CreateTokenFromItem(opReg, item);
+            var tokenResult = CreateTokenFromItem(item);
             if (!tokenResult.IsSuccessful)
                 return new Result<List<Token>>(tokenResult.Error);
             tokens.Add(tokenResult.Value);
@@ -35,15 +37,15 @@ public class Parser
         return new Result<List<Token>>(tokens);
     }
 
-    private static Result<Token> CreateTokenFromItem(OperatorRegistry opReg, string item)
+    private Result<Token> CreateTokenFromItem(string item)
     {
-        var tokenResult = CreateTokenFromString(opReg, item);
+        var tokenResult = CreateTokenFromString(item);
         if (!tokenResult.IsSuccessful)
             return new Result<Token>(tokenResult.Error);
         return tokenResult;
     }
 
-    private static Result<Token> CreateTokenFromString(OperatorRegistry opReg, string item)
+    private Result<Token> CreateTokenFromString(string item)
     {
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
             return new Result<Token>(Token.CreateNumber(number));
@@ -51,12 +53,12 @@ public class Parser
         if (IsCommand(item))
             return CreateCommandToken(item);
 
-        return CreateOperatorToken(opReg, item);
+        return CreateOperatorToken(item);
     }
 
-    private static Result<string[]> ValidateInput(OperatorRegistry opReg, string[] input)
+    private Result<string[]> ValidateInput(string[] input)
     {
-        var errors = CollectInvalidItems(opReg, input);
+        var errors = CollectInvalidItems(input);
 
         if (errors.Count > 0)
         {
@@ -67,23 +69,23 @@ public class Parser
         return new Result<string[]>(input);
     }
 
-    private static List<string> CollectInvalidItems(OperatorRegistry opReg, string[] input)
+    private List<string> CollectInvalidItems(string[] input)
     {
         var errors = new List<string>();
 
         foreach (var item in input)
         {
-            if (IsInvalidItem(opReg, item))
+            if (IsInvalidItem(item))
                 errors.Add(item);
         }
 
         return errors;
     }
 
-    private static bool IsInvalidItem(OperatorRegistry opReg, string item)
+    private bool IsInvalidItem(string item)
     {
         bool isNumber = IsNumber(item);
-        bool isOperator = opReg.GetOperator(item).IsSuccessful;
+        bool isOperator = _operatorRegistry.GetOperator(item).IsSuccessful;
         bool isCommand = IsCommand(item);
 
         return !isNumber && !isOperator && !isCommand;
@@ -112,9 +114,9 @@ public class Parser
         return new Result<Token>(Token.CreateCommand(commandResult.Value));
     }
 
-    private static Result<Token> CreateOperatorToken(OperatorRegistry opReg, string item)
+    private Result<Token> CreateOperatorToken(string item)
     {
-        var operatorResult = opReg.GetOperator(item);
+        var operatorResult = _operatorRegistry.GetOperator(item);
         if (!operatorResult.IsSuccessful)
             return new Result<Token>(operatorResult.Error);
         return new Result<Token>(Token.CreateOperator(operatorResult.Value.Symbol));

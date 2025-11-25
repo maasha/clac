@@ -30,7 +30,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     private readonly Dictionary<string, List<string>> _errors = [];
     public ObservableCollection<StackLineItem> DisplayItems { get; }
 
-    public Clac.Core.Rpn.Stack Stack => _processor.Stack;
+    public Core.Rpn.Stack Stack => _processor.Stack;
 
     private bool _showScrollBar = false;
     public bool ShowScrollBar
@@ -332,7 +332,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private Result<List<Token>> ParseInput()
     {
-        var tokens = Parser.Parse(_processor.OperatorRegistry, _currentInput);
+        var tokens = _processor.Parser.Parse(_currentInput);
         if (!tokens.IsSuccessful)
             SetErrorMessageAndNotify(tokens.Error.Message);
         return tokens;

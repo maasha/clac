@@ -6,16 +6,18 @@ namespace Clac.Core.Tests.Rpn;
 public class ParserTests
 {
     private readonly OperatorRegistry _operatorRegistry;
+    private readonly Parser _parser;
 
     public ParserTests()
     {
         _operatorRegistry = new DefaultOperatorRegistry();
+        _parser = new Parser(_operatorRegistry);
     }
 
     [Fact]
     public void Parse_EmptyString_ShouldReturnEmptyList()
     {
-        var result = Parser.Parse(_operatorRegistry, "   ");
+        var result = _parser.Parse("   ");
         Assert.True(result.IsSuccessful);
         Assert.Empty(result.Value);
     }
@@ -23,7 +25,7 @@ public class ParserTests
     [Fact]
     public void Parse_InvalidString_ShouldReturnError()
     {
-        var result = Parser.Parse(_operatorRegistry, "1 2 3 + - * / bad content");
+        var result = _parser.Parse("1 2 3 + - * / bad content");
         Assert.False(result.IsSuccessful);
         Assert.Contains("Invalid input", result.Error.Message);
         Assert.Contains("bad content", result.Error.Message);
@@ -32,7 +34,7 @@ public class ParserTests
     [Fact]
     public void Parse_ValidString_ShouldReturnListOfTokens()
     {
-        var result = Parser.Parse(_operatorRegistry, "1 2 3 + - * / -1 0.2 .3 -0.4");
+        var result = _parser.Parse("1 2 3 + - * / -1 0.2 .3 -0.4");
 
         Assert.True(result.IsSuccessful);
         Assert.Equal(11, result.Value.Count);
@@ -61,7 +63,7 @@ public class ParserTests
     [InlineData("2.5e3")]
     public void Parse_ScientificNotation_ShouldParseCorrectly(string input)
     {
-        var result = Parser.Parse(_operatorRegistry, input);
+        var result = _parser.Parse(input);
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
     }
@@ -69,7 +71,7 @@ public class ParserTests
     [Fact]
     public void Parse_ClearCommand_ShouldReturnCommandToken()
     {
-        var result = Parser.Parse(_operatorRegistry, "clear()");
+        var result = _parser.Parse("clear()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -78,7 +80,7 @@ public class ParserTests
     [Fact]
     public void Parse_PopCommand_ShouldReturnCommandToken()
     {
-        var result = Parser.Parse(_operatorRegistry, "pop()");
+        var result = _parser.Parse("pop()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -87,7 +89,7 @@ public class ParserTests
     [Fact]
     public void Parse_SwapCommand_ShouldReturnCommandToken()
     {
-        var result = Parser.Parse(_operatorRegistry, "swap()");
+        var result = _parser.Parse("swap()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -96,7 +98,7 @@ public class ParserTests
     [Fact]
     public void Parse_SumCommand_ShouldReturnCommandToken()
     {
-        var result = Parser.Parse(_operatorRegistry, "sum()");
+        var result = _parser.Parse("sum()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -105,7 +107,7 @@ public class ParserTests
     [Fact]
     public void Parse_SquareRootCommand_ShouldReturnCommandToken()
     {
-        var result = Parser.Parse(_operatorRegistry, "sqrt()");
+        var result = _parser.Parse("sqrt()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -114,7 +116,7 @@ public class ParserTests
     [Fact]
     public void Parse_PowCommand_ShouldReturnCommandToken()
     {
-        var result = Parser.Parse(_operatorRegistry, "pow()");
+        var result = _parser.Parse("pow()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -123,7 +125,7 @@ public class ParserTests
     [Fact]
     public void Parse_ReciprocalCommand_ShouldReturnCommandToken()
     {
-        var result = Parser.Parse(_operatorRegistry, "reciprocal()");
+        var result = _parser.Parse("reciprocal()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -132,7 +134,7 @@ public class ParserTests
     [Fact]
     public void Parse_UppercaseCommand_ShouldReturnCommandToken()
     {
-        var result = Parser.Parse(_operatorRegistry, "RECIPROCAL()");
+        var result = _parser.Parse("RECIPROCAL()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);

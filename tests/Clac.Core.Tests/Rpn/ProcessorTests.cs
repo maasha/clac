@@ -9,11 +9,12 @@ public class ProcessorTests
 {
     private readonly Processor _processor;
     private readonly OperatorRegistry _operatorRegistry;
-
+    private readonly Parser _parser;
     public ProcessorTests()
     {
         _operatorRegistry = new DefaultOperatorRegistry();
         _processor = new Processor(_operatorRegistry);
+        _parser = new Parser(_operatorRegistry);
     }
 
     [Fact]
@@ -30,7 +31,7 @@ public class ProcessorTests
     [Fact]
     public void Process_NumberToken_ShouldPushOntoStack()
     {
-        var tokens = Parser.Parse(_operatorRegistry, "1 2 3").Value;
+        var tokens = _parser.Parse("1 2 3").Value;
         var result = _processor.Process(tokens);
         Assert.True(result.IsSuccessful);
         Assert.Equal(3, _processor.Stack.Count);
@@ -40,7 +41,7 @@ public class ProcessorTests
     [Fact]
     public void Process_OperatorTokenWithLessThanTwoNumbers_ShouldReturnError()
     {
-        var tokens = Parser.Parse(_operatorRegistry, "1 +").Value;
+        var tokens = _parser.Parse("1 +").Value;
         var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
         Assert.Contains(StackHasLessThanTwoNumbers, result.Error.Message);
@@ -49,11 +50,11 @@ public class ProcessorTests
     [Fact]
     public void Process_OperatorTokenWithLessThanTwoNumbers_ShouldPreserveStackState()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "5 3 +").Value);
+        _processor.Process(_parser.Parse("5 3 +").Value);
         Assert.Single(_processor.Stack.ToArray());
         Assert.Equal(8, _processor.Stack.Peek().Value);
 
-        var tokens = Parser.Parse(_operatorRegistry, "+").Value;
+        var tokens = _parser.Parse("+").Value;
         var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
         Assert.Contains(StackHasLessThanTwoNumbers, result.Error.Message);
@@ -65,7 +66,7 @@ public class ProcessorTests
     [Fact]
     public void Process_OperatorToken_ShouldPopTwoNumbersAndPushResult()
     {
-        var tokens = Parser.Parse(_operatorRegistry, "1 2 +").Value;
+        var tokens = _parser.Parse("1 2 +").Value;
         var result = _processor.Process(tokens);
         Assert.True(result.IsSuccessful);
         Assert.Equal(1, _processor.Stack.Count);
@@ -75,7 +76,7 @@ public class ProcessorTests
     [Fact]
     public void Process_SimpleAddition_ShouldReturnCorrectResult()
     {
-        var tokens = Parser.Parse(_operatorRegistry, "2 3 +").Value;
+        var tokens = _parser.Parse("2 3 +").Value;
         var result = _processor.Process(tokens);
         Assert.True(result.IsSuccessful);
         Assert.Equal(5, result.Value);
@@ -84,7 +85,7 @@ public class ProcessorTests
     [Fact]
     public void Process_ComplexExpression_ShouldReturnCorrectResult()
     {
-        var tokens = Parser.Parse(_operatorRegistry, "5 3 - 2 *").Value;
+        var tokens = _parser.Parse("5 3 - 2 *").Value;
         var result = _processor.Process(tokens);
         Assert.True(result.IsSuccessful);
         Assert.Equal(4, result.Value);
@@ -93,7 +94,7 @@ public class ProcessorTests
     [Fact]
     public void Process_DivisionByZero_ShouldReturnError()
     {
-        var tokens = Parser.Parse(_operatorRegistry, "5 0 /").Value;
+        var tokens = _parser.Parse("5 0 /").Value;
         var result = _processor.Process(tokens);
         Assert.False(result.IsSuccessful);
         Assert.IsType<DivideByZeroException>(result.Error);
@@ -102,10 +103,10 @@ public class ProcessorTests
     [Fact]
     public void Process_ConsecutiveCalls_ShouldMaintainStack()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "1 2").Value);
+        _processor.Process(_parser.Parse("1 2").Value);
         Assert.Equal(2, _processor.Stack.Count);
 
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "+").Value);
+        var result = _processor.Process(_parser.Parse("+").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(3, result.Value);
         Assert.Equal(1, _processor.Stack.Count);
@@ -114,9 +115,9 @@ public class ProcessorTests
     [Fact]
     public void Process_ClearCommand_ShouldClearStack()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "1 2 3").Value);
+        _processor.Process(_parser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "clear()").Value);
+        var result = _processor.Process(_parser.Parse("clear()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(0, _processor.Stack.Count);
     }
@@ -124,9 +125,9 @@ public class ProcessorTests
     [Fact]
     public void Process_PopCommand_ShouldPopLastElementFromStack()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "1 2 3").Value);
+        _processor.Process(_parser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "pop()").Value);
+        var result = _processor.Process(_parser.Parse("pop()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(2, _processor.Stack.Count);
         Assert.Equal(3, result.Value);
@@ -136,9 +137,9 @@ public class ProcessorTests
     [Fact]
     public void Process_SwapCommand_ShouldSwapLastTwoNumbersOfStack()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "1 2 3").Value);
+        _processor.Process(_parser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "swap()").Value);
+        var result = _processor.Process(_parser.Parse("swap()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(3, _processor.Stack.Count);
         Assert.Equal([1, 3, 2], _processor.Stack.ToArray());
@@ -147,9 +148,9 @@ public class ProcessorTests
     [Fact]
     public void Process_SumCommand_ShouldClearStackAndPushSum()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "1 2 3").Value);
+        _processor.Process(_parser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "sum()").Value);
+        var result = _processor.Process(_parser.Parse("sum()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(1, _processor.Stack.Count);
         Assert.Equal(6, _processor.Stack.Peek().Value);
@@ -159,10 +160,10 @@ public class ProcessorTests
     [Fact]
     public void Process_SqrtCommand_ShouldCalculateSquareRootOfLastElementAndPushResult()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "4").Value);
+        _processor.Process(_parser.Parse("4").Value);
         Assert.Equal(1, _processor.Stack.Count);
         Assert.Equal(4, _processor.Stack.Peek().Value);
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "sqrt()").Value);
+        var result = _processor.Process(_parser.Parse("sqrt()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(2, result.Value);
         Assert.Equal(1, _processor.Stack.Count);
@@ -172,10 +173,10 @@ public class ProcessorTests
     [Fact]
     public void Process_SqrtCommand_WithNegativeNumber_ShouldReturnError()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "-1").Value);
+        _processor.Process(_parser.Parse("-1").Value);
         Assert.Equal(1, _processor.Stack.Count);
         Assert.Equal(-1, _processor.Stack.Peek().Value);
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "sqrt()").Value);
+        var result = _processor.Process(_parser.Parse("sqrt()").Value);
         Assert.False(result.IsSuccessful);
         Assert.Contains(InvalidNegativeSquareRoot, result.Error.Message);
     }
@@ -183,11 +184,11 @@ public class ProcessorTests
     [Fact]
     public void Process_PowCommand_ShouldCalculatePowerOfLastTwoNumbersAndPushResult()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "2 3").Value);
+        _processor.Process(_parser.Parse("2 3").Value);
         Assert.Equal(2, _processor.Stack.Count);
         Assert.Equal(2, _processor.Stack.ToArray()[0]);
         Assert.Equal(3, _processor.Stack.ToArray()[1]);
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "pow()").Value);
+        var result = _processor.Process(_parser.Parse("pow()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(8, result.Value);
         Assert.Equal(1, _processor.Stack.Count);
@@ -197,10 +198,10 @@ public class ProcessorTests
     [Fact]
     public void Process_ReciprocalCommand_ShouldCalculateReciprocalOfLastElementAndPushResult()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "4").Value);
+        _processor.Process(_parser.Parse("4").Value);
         Assert.Equal(1, _processor.Stack.Count);
         Assert.Equal(4, _processor.Stack.Peek().Value);
-        var result = _processor.Process(Parser.Parse(_operatorRegistry, "reciprocal()").Value);
+        var result = _processor.Process(_parser.Parse("reciprocal()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(0.25, result.Value);
         Assert.Equal(1, _processor.Stack.Count);
@@ -210,7 +211,7 @@ public class ProcessorTests
     [Fact]
     public void RestoreStack_ShouldReplaceStackFromGivenSnapshot()
     {
-        _processor.Process(Parser.Parse(_operatorRegistry, "1 2 3").Value);
+        _processor.Process(_parser.Parse("1 2 3").Value);
         var snapshot = new Stack();
         snapshot.Push(10);
         snapshot.Push(20);

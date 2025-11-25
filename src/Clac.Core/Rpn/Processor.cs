@@ -9,14 +9,17 @@ public class Processor
 {
     private readonly OperatorRegistry _operatorRegistry;
     private readonly Stack _stack = new();
+    private readonly Parser _parser;
 
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
 
     public OperatorRegistry OperatorRegistry => _operatorRegistry;
+    public Parser Parser => _parser;
 
     public Processor(OperatorRegistry? operatorRegistry = null)
     {
         _operatorRegistry = operatorRegistry ?? new DefaultOperatorRegistry();
+        _parser = new Parser(_operatorRegistry);
         _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
         {
             { CommandSymbol.Clear, HandleClear },
