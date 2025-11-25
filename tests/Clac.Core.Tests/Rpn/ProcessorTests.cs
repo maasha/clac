@@ -287,6 +287,8 @@ public class ProcessorTests
         [Theory]
         [InlineData("pop")]
         [InlineData("swap")]
+        [InlineData("sum")]
+        [InlineData("sqrt")]
         public void Process_ShouldHaveDefaultFunctionRegistry(string functionName)
         {
             var processor = new Processor();
