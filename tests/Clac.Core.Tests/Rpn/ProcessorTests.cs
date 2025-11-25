@@ -10,11 +10,13 @@ public class ProcessorTests
 {
     private readonly Processor _processor;
     private readonly OperatorRegistry _operatorRegistry;
+    private readonly CommandRegistry _commandRegistry;
     private readonly Parser _parser;
     public ProcessorTests()
     {
         _operatorRegistry = new DefaultOperatorRegistry();
-        _processor = new Processor(_operatorRegistry);
+        _commandRegistry = new DefaultCommandRegistry();
+        _processor = new Processor(_operatorRegistry, _commandRegistry);
         _parser = new Parser(_operatorRegistry);
     }
 
