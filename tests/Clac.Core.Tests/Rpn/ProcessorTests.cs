@@ -1,5 +1,6 @@
 using Clac.Core.Rpn;
 using Clac.Core.Operations;
+using Clac.Core.Commands;
 using static Clac.Core.ErrorMessages;
 using Xunit.Sdk;
 
@@ -221,37 +222,73 @@ public class ProcessorTests
         Assert.Equal([10, 20], _processor.Stack.ToArray());
     }
 
-    [Fact]
-    public void Process_WithEmptyRegistry_ShouldReturnErrorForOperator()
+    public class OperatorRegistryTests : ProcessorTests
     {
-        var registry = new OperatorRegistry();
-        var processor = new Processor(registry);
 
-        var result = processor.OperatorRegistry.IsValidOperator("+");
-        Assert.False(result.IsSuccessful);
-        Assert.Contains("Operator '+' not found", result.Error.Message);
+        [Fact]
+        public void Process_WithEmptyOperatorRegistry_ShouldReturnErrorForOperator()
+        {
+            var registry = new OperatorRegistry();
+            var processor = new Processor(registry);
+
+            var result = processor.OperatorRegistry.IsValidOperator("+");
+            Assert.False(result.IsSuccessful);
+            Assert.Contains("Operator '+' not found", result.Error.Message);
+        }
+
+        [Fact]
+        public void Process_WithOperatorRegistry_ShouldReturnTrueForOperator()
+        {
+            var registry = new OperatorRegistry();
+            registry.Register(new AddOperator());
+            var processor = new Processor(registry);
+
+            var result = processor.OperatorRegistry.IsValidOperator("+");
+            Assert.True(result.IsSuccessful);
+        }
+
+        [Theory]
+        [InlineData("+")]
+        [InlineData("-")]
+        [InlineData("*")]
+        [InlineData("/")]
+        public void Process_ShouldHaveDefaultOperatorRegistry(string symbol)
+        {
+            var processor = new Processor();
+            var result = processor.OperatorRegistry.IsValidOperator(symbol);
+            Assert.True(result.IsSuccessful);
+        }
     }
-
-    [Fact]
-    public void Process_WithRegistry_ShouldReturnTrueForOperator()
+    public class CommandRegistryTests : ProcessorTests
     {
-        var registry = new OperatorRegistry();
-        registry.Register(new AddOperator());
-        var processor = new Processor(registry);
+        [Fact]
+        public void Process_WithEmptyCommandRegistry_ShouldReturnErrorForCommand()
+        {
+            var registry = new CommandRegistry();
+            var processor = new Processor(null, registry);
 
-        var result = processor.OperatorRegistry.IsValidOperator("+");
-        Assert.True(result.IsSuccessful);
-    }
+            var result = processor.CommandRegistry.IsValidCommand("pop");
+            Assert.False(result.IsSuccessful);
+        }
 
-    [Theory]
-    [InlineData("+")]
-    [InlineData("-")]
-    [InlineData("*")]
-    [InlineData("/")]
-    public void Process_ShouldHaveDefaultRegistry(string symbol)
-    {
-        var processor = new Processor();
-        var result = processor.OperatorRegistry.IsValidOperator(symbol);
-        Assert.True(result.IsSuccessful);
+        [Fact]
+        public void Process_WithCommandRegistry_ShouldReturnTrueForCommand()
+        {
+            var registry = new CommandRegistry();
+            registry.Register(new PopCommand());
+            var processor = new Processor(null, registry);
+
+            var result = processor.CommandRegistry.IsValidCommand("pop");
+            Assert.True(result.IsSuccessful);
+        }
+
+        [Theory]
+        [InlineData("pop")]
+        public void Process_ShouldHaveDefaultCommandRegistry(string commandName)
+        {
+            var processor = new Processor();
+            var result = processor.CommandRegistry.IsValidCommand(commandName);
+            Assert.True(result.IsSuccessful);
+        }
     }
 }
