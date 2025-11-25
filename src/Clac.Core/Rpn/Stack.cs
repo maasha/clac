@@ -71,7 +71,10 @@ public class Stack
             return new Result<double>(result.Error);
 
         if (result.Value < 0)
+        {
+            Push(result.Value);
             return new Result<double>(new InvalidOperationException(InvalidNegativeSquareRoot));
+        }
 
         var sqrt = Math.Sqrt(result.Value);
         Push(sqrt);
