@@ -7,13 +7,6 @@ namespace Clac.Core.Tests.Commands;
 public class PopCommandTests
 {
     [Fact]
-    public void Symbol_ShouldBeCorrect()
-    {
-        var popCommand = new PopCommand();
-        Assert.Equal("pop()", popCommand.Symbol);
-    }
-
-    [Fact]
     public void Name_ShouldBeCorrect()
     {
         var popCommand = new PopCommand();

@@ -5,8 +5,6 @@ namespace Clac.Core.Commands;
 
 public class PopCommand : IStackCommand
 {
-    public string Symbol => "pop()";
-
     public string Name => "Pop";
 
     public string Description => "Removes the last number from the stack";
