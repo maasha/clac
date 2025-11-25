@@ -13,7 +13,12 @@ public class SqrtFunction : IFunction
     {
         var result = stack.Sqrt();
         if (!result.IsSuccessful)
-            return new Result<double>(new InvalidOperationException(InvalidNegativeSquareRoot));
+        {
+            if (result.Error is InvalidOperationException && result.Error.Message == InvalidNegativeSquareRoot)
+                return result;
+            else
+                return new Result<double>(0); /// Ignore error.
+        }
         return result.Value;
     }
 }
