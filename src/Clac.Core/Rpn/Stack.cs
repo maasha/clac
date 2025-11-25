@@ -8,6 +8,7 @@ public class Stack
     private readonly List<double> _stack = [];
 
     public double[] ToArray() => [.. _stack];
+    public int Count => _stack.Count;
 
     public Result<double> Peek()
     {
@@ -65,10 +66,16 @@ public class Stack
         if (_stack.Count == 0)
             return new Result<double>(new InvalidOperationException(StackEmpty));
 
-        if (_stack[^1] < 0)
+        var result = Pop();
+        if (!result.IsSuccessful)
+            return new Result<double>(result.Error);
+
+        if (result.Value < 0)
             return new Result<double>(new InvalidOperationException(InvalidNegativeSquareRoot));
 
-        return new Result<double>(Math.Sqrt(_stack[^1]));
+        var sqrt = Math.Sqrt(result.Value);
+        Push(sqrt);
+        return new Result<double>(sqrt);
     }
 
     public Result<double> Pow()
@@ -76,9 +83,14 @@ public class Stack
         if (_stack.Count < 2)
             return new Result<double>(new InvalidOperationException(StackHasLessThanTwoNumbers));
 
-        var exponent = _stack[^1];
-        var baseValue = _stack[^2];
-        return new Result<double>(Math.Pow(baseValue, exponent));
+        var result = PopTwo();
+        if (!result.IsSuccessful)
+            return new Result<double>(result.Error);
+
+        var (exponent, baseValue) = result.Value;
+        var pow = Math.Pow(baseValue, exponent);
+        Push(pow);
+        return new Result<double>(pow);
     }
 
     public Result<double> Reciprocal()
@@ -92,5 +104,16 @@ public class Stack
         return new Result<double>(1.0 / _stack[^1]);
     }
 
-    public int Count => _stack.Count;
+    private Result<(double first, double second)> PopTwo()
+    {
+        var first = Pop();
+        if (!first.IsSuccessful)
+            return new Result<(double, double)>(first.Error);
+
+        var second = Pop();
+        if (!second.IsSuccessful)
+            return new Result<(double, double)>(second.Error);
+
+        return new Result<(double, double)>((first.Value, second.Value));
+    }
 }

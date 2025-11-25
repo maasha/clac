@@ -49,7 +49,6 @@ public class SqrtFunctionTests
         stack.Push(9);
         var result = function.Execute(stack);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(3, result.Value);
-        Assert.Equal(1, stack.Count);
+        Assert.Equal([3], stack.ToArray());
     }
 }

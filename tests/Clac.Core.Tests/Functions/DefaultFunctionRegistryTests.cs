@@ -8,6 +8,7 @@ public class DefaultFunctionRegistryTests
     [InlineData("swap")]
     [InlineData("sum")]
     [InlineData("sqrt")]
+    [InlineData("pow")]
     public void CreateDefaultFunctionRegistry_ShouldHaveDefaultFunctions(string functionName)
     {
         var registry = new DefaultFunctionRegistry();

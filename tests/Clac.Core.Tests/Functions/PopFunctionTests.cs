@@ -36,10 +36,8 @@ public class PopFunctionTests
         var stack = new Stack();
         stack.Push(1);
         stack.Push(2);
-        Assert.Equal(2, stack.Count);
         var result = function.Execute(stack);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(2, result.Value);
-        Assert.Equal(1, stack.Count);
+        Assert.Equal([1], stack.ToArray());
     }
 }

@@ -8,5 +8,6 @@ public class DefaultFunctionRegistry : FunctionRegistry
         Register(new SwapFunction());
         Register(new SumFunction());
         Register(new SqrtFunction());
+        Register(new PowFunction());
     }
 }

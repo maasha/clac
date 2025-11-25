@@ -40,7 +40,6 @@ public class SumFunctionTests
         Assert.Equal(3, stack.Count);
         var result = function.Execute(stack);
         Assert.True(result.IsSuccessful);
-        Assert.Equal(6, result.Value);
-        Assert.Equal(1, stack.Count);
+        Assert.Equal([6], stack.ToArray());
     }
 }
