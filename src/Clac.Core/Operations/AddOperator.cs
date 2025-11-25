@@ -7,7 +7,7 @@ namespace Clac.Core.Operations;
 
 public class AddOperator : IOperator
 {
-    public OperatorSymbol Symbol => OperatorSymbol.Add;
+    public string Symbol => "+";
     public string Name => "Add";
     public string Description => "Adds two numbers";
     public int MinimumStackSize => 2;
