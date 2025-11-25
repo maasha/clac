@@ -7,6 +7,13 @@ namespace Clac.Core.Tests.Operations;
 public class MultiplyOperatorTests
 {
     [Fact]
+    public void Symbol_ShouldBeCorrect()
+    {
+        var multiplyOperator = new MultiplyOperator();
+        Assert.Equal("*", multiplyOperator.Symbol);
+    }
+
+    [Fact]
     public void Name_ShouldBeCorrect()
     {
         var multiplyOperator = new MultiplyOperator();

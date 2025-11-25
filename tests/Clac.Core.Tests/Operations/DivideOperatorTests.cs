@@ -7,6 +7,13 @@ namespace Clac.Core.Tests.Operations;
 public class DivideOperatorTests
 {
     [Fact]
+    public void Symbol_ShouldBeCorrect()
+    {
+        var divideOperator = new DivideOperator();
+        Assert.Equal("/", divideOperator.Symbol);
+    }
+
+    [Fact]
     public void Name_ShouldBeCorrect()
     {
         var divideOperator = new DivideOperator();

@@ -7,6 +7,13 @@ namespace Clac.Core.Tests.Operations;
 public class SubtractOperatorTests
 {
     [Fact]
+    public void Symbol_ShouldBeCorrect()
+    {
+        var subtractOperator = new SubtractOperator();
+        Assert.Equal("-", subtractOperator.Symbol);
+    }
+
+    [Fact]
     public void Name_ShouldBeCorrect()
     {
         var subtractOperator = new SubtractOperator();

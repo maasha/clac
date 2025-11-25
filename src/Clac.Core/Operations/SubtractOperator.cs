@@ -7,7 +7,7 @@ namespace Clac.Core.Operations;
 
 public class SubtractOperator : IOperator
 {
-    public OperatorSymbol Symbol => OperatorSymbol.Subtract;
+    public string Symbol => "-";
     public string Name => "Subtract";
     public string Description => "Subtracts two numbers";
     public int MinimumStackSize => 2;

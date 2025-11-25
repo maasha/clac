@@ -7,7 +7,7 @@ namespace Clac.Core.Operations;
 
 public class DivideOperator : IOperator
 {
-    public OperatorSymbol Symbol => OperatorSymbol.Divide;
+    public string Symbol => "/";
     public string Name => "Divide";
     public string Description => "Divides two numbers";
     public int MinimumStackSize => 2;

@@ -7,7 +7,7 @@ namespace Clac.Core.Operations;
 
 public class MultiplyOperator : IOperator
 {
-    public OperatorSymbol Symbol => OperatorSymbol.Multiply;
+    public string Symbol => "*";
     public string Name => "Multiply";
     public string Description => "Multiplies two numbers";
     public int MinimumStackSize => 2;
