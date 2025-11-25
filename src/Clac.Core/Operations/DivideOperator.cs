@@ -1,7 +1,6 @@
 using Clac.Core.Rpn;
 using DotNext;
 using static Clac.Core.ErrorMessages;
-using Clac.Core.Enums;
 
 namespace Clac.Core.Operations;
 

@@ -1,6 +1,7 @@
+using Clac.Core.Operations;
+
 namespace Clac.Core.Tests.Operations;
 
-using Clac.Core.Operations;
 public class OperatorRegistryTests
 {
     [Fact]

@@ -1,10 +1,9 @@
-namespace Clac.Core.Tests.Rpn;
-
 using Clac.Core.Rpn;
 using Clac.Core.Operations;
-using Xunit;
 using static Clac.Core.ErrorMessages;
 using Xunit.Sdk;
+
+namespace Clac.Core.Tests.Rpn;
 
 public class ProcessorTests
 {

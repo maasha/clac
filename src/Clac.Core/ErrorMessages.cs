@@ -1,5 +1,3 @@
-using Clac.Core.Enums;
-
 namespace Clac.Core;
 
 public static class ErrorMessages

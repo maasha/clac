@@ -1,5 +1,3 @@
-using Clac.Core.Operations;
-
 namespace Clac.Core.Operations;
 
 public class DefaultOperatorRegistry : OperatorRegistry

@@ -1,8 +1,7 @@
-namespace Clac.Core.Tests.Rpn;
-
 using Clac.Core.Rpn;
-using Xunit;
 using static Clac.Core.ErrorMessages;
+
+namespace Clac.Core.Tests.Rpn;
 
 public class StackTests
 {
