@@ -7,14 +7,16 @@ namespace Clac.Core.Rpn;
 
 public class Processor
 {
-    private const int MinimumStackSizeForBinaryOperation = 2;
-    private readonly Stack _stack = new();
     private readonly OperatorRegistry _operatorRegistry;
+    private readonly Stack _stack = new();
+
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
 
-    public Processor()
+    public OperatorRegistry OperatorRegistry => _operatorRegistry;
+
+    public Processor(OperatorRegistry? operatorRegistry = null)
     {
-        _operatorRegistry = CreateDefaultOperatorRegistry();
+        _operatorRegistry = operatorRegistry ?? CreateDefaultOperatorRegistry();
         _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
         {
             { CommandSymbol.Clear, HandleClear },
