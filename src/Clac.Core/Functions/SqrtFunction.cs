@@ -1,6 +1,6 @@
 using Clac.Core.Rpn;
 using DotNext;
-
+using static Clac.Core.ErrorMessages;
 namespace Clac.Core.Functions;
 
 public class SqrtFunction : IFunction
@@ -13,7 +13,7 @@ public class SqrtFunction : IFunction
     {
         var result = stack.Sqrt();
         if (!result.IsSuccessful)
-            return new Result<double>(0); /// Ignore error.
+            return new Result<double>(new InvalidOperationException(InvalidNegativeSquareRoot));
         return result.Value;
     }
 }

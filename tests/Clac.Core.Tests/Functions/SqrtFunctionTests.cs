@@ -1,5 +1,6 @@
 using Clac.Core.Functions;
 using Clac.Core.Rpn;
+using static Clac.Core.ErrorMessages;
 
 namespace Clac.Core.Tests.Functions;
 
@@ -30,7 +31,18 @@ public class SqrtFunctionTests
     }
 
     [Fact]
-    public void Execute_WithThreeNumbersOnStack_ShouldCalculateTheSquareRootOfTheLastNumber()
+    public void Execute_WithNegativeNumberOnStack_ShouldReturnError()
+    {
+        var function = new SqrtFunction();
+        var stack = new Stack();
+        stack.Push(-1);
+        var result = function.Execute(stack);
+        Assert.False(result.IsSuccessful);
+        Assert.Contains(result.Error.Message, InvalidNegativeSquareRoot);
+    }
+
+    [Fact]
+    public void Execute_WithPositiveNumberOnStack_ShouldCalculateTheSquareRootOfTheLastNumber()
     {
         var function = new SqrtFunction();
         var stack = new Stack();
