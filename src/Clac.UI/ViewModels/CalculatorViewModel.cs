@@ -10,7 +10,6 @@ using System.Linq;
 using DotNext;
 using Clac.Core.History;
 using Clac.Core.Rpn;
-using Clac.Core.Operations;
 using Clac.UI.Configuration;
 using Clac.UI.Helpers;
 using Clac.UI.Models;
@@ -320,8 +319,8 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             return false;
 
         var lastChar = _currentInput[_currentInput.Length - 1];
-        return Operator.IsValidOperator(lastChar.ToString())
-            && _currentInput[_currentInput.Length - 2] == ' ';
+        var validOperator = _processor.OperatorRegistry.GetOperator(lastChar.ToString());
+        return validOperator.IsSuccessful && _currentInput[_currentInput.Length - 2] == ' ';
     }
 
     private void RemoveLastChars()
@@ -333,7 +332,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private Result<List<Token>> ParseInput()
     {
-        var tokens = Parser.Parse(_currentInput);
+        var tokens = Parser.Parse(_processor.OperatorRegistry, _currentInput);
         if (!tokens.IsSuccessful)
             SetErrorMessageAndNotify(tokens.Error.Message);
         return tokens;
