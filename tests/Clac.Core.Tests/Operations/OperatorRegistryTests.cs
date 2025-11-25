@@ -23,7 +23,7 @@ public class OperatorRegistryTests
     }
 
     [Fact]
-    public void IsValidOperator_WithInValidOperator_ShouldReturnFalse()
+    public void IsValidOperator_WithUnRegisteredOperator_ShouldReturnFalse()
     {
         var operatorRegistry = new OperatorRegistry();
         var result = operatorRegistry.IsValidOperator("%");
@@ -35,7 +35,7 @@ public class OperatorRegistryTests
     [InlineData("-")]
     [InlineData("*")]
     [InlineData("/")]
-    public void IsValidOperator_WithValidOperator_ShouldReturnTrue(string symbol)
+    public void IsValidOperator_WithRegisteredOperator_ShouldReturnTrue(string symbol)
     {
         var operatorRegistry = new DefaultOperatorRegistry();
         var result = operatorRegistry.IsValidOperator(symbol);
