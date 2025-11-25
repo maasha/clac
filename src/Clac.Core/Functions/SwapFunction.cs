@@ -1,9 +1,9 @@
 using Clac.Core.Rpn;
 using DotNext;
 
-namespace Clac.Core.Commands;
+namespace Clac.Core.Functions;
 
-public class SwapCommand : IStackCommand
+public class SwapFunction : IFunction
 {
     public string Name => "Swap";
 

@@ -1,30 +1,30 @@
-using Clac.Core.Commands;
+using Clac.Core.Functions;
 using Clac.Core.Rpn;
 
-namespace Clac.Core.Tests.Commands;
+namespace Clac.Core.Tests.Functions;
 
-public class PopCommandTests
+public class PopFunctionTests
 {
     [Fact]
     public void Name_ShouldBeCorrect()
     {
-        var command = new PopCommand();
-        Assert.Equal("Pop", command.Name);
+        var function = new PopFunction();
+        Assert.Equal("Pop", function.Name);
     }
 
     [Fact]
     public void Description_ShouldBeCorrect()
     {
-        var command = new PopCommand();
-        Assert.Equal("Removes the last number from the stack", command.Description);
+        var function = new PopFunction();
+        Assert.Equal("Removes the last number from the stack", function.Description);
     }
 
     [Fact]
     public void Execute_WithEmptyStack_ShouldDoNothing()
     {
-        var command = new PopCommand();
+        var function = new PopFunction();
         var stack = new Stack();
-        var result = command.Execute(stack);
+        var result = function.Execute(stack);
         Assert.True(result.IsSuccessful);
         Assert.Equal(0, result.Value);
     }
@@ -32,12 +32,12 @@ public class PopCommandTests
     [Fact]
     public void Execute_WithNonEmptyStack_ShouldPopTheLastNumber()
     {
-        var command = new PopCommand();
+        var function = new PopFunction();
         var stack = new Stack();
         stack.Push(1);
         stack.Push(2);
         Assert.Equal(2, stack.Count);
-        var result = command.Execute(stack);
+        var result = function.Execute(stack);
         Assert.True(result.IsSuccessful);
         Assert.Equal(2, result.Value);
         Assert.Equal(1, stack.Count);

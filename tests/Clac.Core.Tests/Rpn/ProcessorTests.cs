@@ -1,6 +1,6 @@
 using Clac.Core.Rpn;
 using Clac.Core.Operations;
-using Clac.Core.Commands;
+using Clac.Core.Functions;
 using static Clac.Core.ErrorMessages;
 using Xunit.Sdk;
 
@@ -10,13 +10,13 @@ public class ProcessorTests
 {
     private readonly Processor _processor;
     private readonly OperatorRegistry _operatorRegistry;
-    private readonly CommandRegistry _commandRegistry;
+    private readonly FunctionRegistry _functionRegistry;
     private readonly Parser _parser;
     public ProcessorTests()
     {
         _operatorRegistry = new DefaultOperatorRegistry();
-        _commandRegistry = new DefaultCommandRegistry();
-        _processor = new Processor(_operatorRegistry, _commandRegistry);
+        _functionRegistry = new DefaultFunctionRegistry();
+        _processor = new Processor(_operatorRegistry, _functionRegistry);
         _parser = new Parser(_operatorRegistry);
     }
 
@@ -261,36 +261,36 @@ public class ProcessorTests
             Assert.True(result.IsSuccessful);
         }
     }
-    public class CommandRegistryTests : ProcessorTests
+    public class FunctionRegistryTests : ProcessorTests
     {
         [Fact]
-        public void Process_WithEmptyCommandRegistry_ShouldReturnErrorForCommand()
+        public void Process_WithEmptyFunctionRegistry_ShouldReturnErrorForFunction()
         {
-            var registry = new CommandRegistry();
+            var registry = new FunctionRegistry();
             var processor = new Processor(null, registry);
 
-            var result = processor.CommandRegistry.IsValidCommand("pop");
+            var result = processor.FunctionRegistry.IsValidFunction("pop");
             Assert.False(result.IsSuccessful);
         }
 
         [Fact]
-        public void Process_WithCommandRegistry_ShouldReturnTrueForCommand()
+        public void Process_WithFunctionRegistry_ShouldReturnTrueForFunction()
         {
-            var registry = new CommandRegistry();
-            registry.Register(new PopCommand());
+            var registry = new FunctionRegistry();
+            registry.Register(new PopFunction());
             var processor = new Processor(null, registry);
 
-            var result = processor.CommandRegistry.IsValidCommand("pop");
+            var result = processor.FunctionRegistry.IsValidFunction("pop");
             Assert.True(result.IsSuccessful);
         }
 
         [Theory]
         [InlineData("pop")]
         [InlineData("swap")]
-        public void Process_ShouldHaveDefaultCommandRegistry(string commandName)
+        public void Process_ShouldHaveDefaultFunctionRegistry(string functionName)
         {
             var processor = new Processor();
-            var result = processor.CommandRegistry.IsValidCommand(commandName);
+            var result = processor.FunctionRegistry.IsValidFunction(functionName);
             Assert.True(result.IsSuccessful);
         }
     }

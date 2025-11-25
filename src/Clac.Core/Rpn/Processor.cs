@@ -2,27 +2,27 @@ using DotNext;
 using Clac.Core.Enums;
 using static Clac.Core.ErrorMessages;
 using Clac.Core.Operations;
-using Clac.Core.Commands;
+using Clac.Core.Functions;
 
 namespace Clac.Core.Rpn;
 
 public class Processor
 {
     private readonly OperatorRegistry _operatorRegistry;
-    private readonly CommandRegistry _commandRegistry;
+    private readonly FunctionRegistry _functionRegistry;
     private readonly Stack _stack = new();
     private readonly Parser _parser;
 
     private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
 
     public OperatorRegistry OperatorRegistry => _operatorRegistry;
-    public CommandRegistry CommandRegistry => _commandRegistry;
+    public FunctionRegistry FunctionRegistry => _functionRegistry;
     public Parser Parser => _parser;
 
-    public Processor(OperatorRegistry? operatorRegistry = null, CommandRegistry? commandRegistry = null)
+    public Processor(OperatorRegistry? operatorRegistry = null, FunctionRegistry? functionRegistry = null)
     {
         _operatorRegistry = operatorRegistry ?? new DefaultOperatorRegistry();
-        _commandRegistry = commandRegistry ?? new DefaultCommandRegistry();
+        _functionRegistry = functionRegistry ?? new DefaultFunctionRegistry();
         _parser = new Parser(_operatorRegistry);
         _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
         {

@@ -1,31 +1,31 @@
-using Clac.Core.Commands;
+using Clac.Core.Functions;
 using Clac.Core.Rpn;
 using static Clac.Core.ErrorMessages;
 
-namespace Clac.Core.Tests.Commands;
+namespace Clac.Core.Tests.Functions;
 
-public class SwapCommandTests
+public class SwapFunctionTests
 {
     [Fact]
     public void Name_ShouldBeCorrect()
     {
-        var command = new SwapCommand();
-        Assert.Equal("Swap", command.Name);
+        var function = new SwapFunction();
+        Assert.Equal("Swap", function.Name);
     }
 
     [Fact]
     public void Description_ShouldBeCorrect()
     {
-        var command = new SwapCommand();
-        Assert.Equal("Swaps the last two numbers on the stack", command.Description);
+        var function = new SwapFunction();
+        Assert.Equal("Swaps the last two numbers on the stack", function.Description);
     }
 
     [Fact]
     public void Execute_WithEmptyStack_ShouldDoNothing()
     {
-        var command = new SwapCommand();
+        var function = new SwapFunction();
         var stack = new Stack();
-        var result = command.Execute(stack);
+        var result = function.Execute(stack);
         Assert.True(result.IsSuccessful);
         Assert.Equal(0, result.Value);
     }
@@ -33,10 +33,10 @@ public class SwapCommandTests
     [Fact]
     public void Execute_WithOneNumberOnStack_ShouldDoNothing()
     {
-        var command = new SwapCommand();
+        var function = new SwapFunction();
         var stack = new Stack();
         stack.Push(1);
-        var result = command.Execute(stack);
+        var result = function.Execute(stack);
         Assert.True(result.IsSuccessful);
         Assert.Equal(0, result.Value);
         Assert.Equal(1, stack.Count);
@@ -45,13 +45,13 @@ public class SwapCommandTests
     [Fact]
     public void Execute_WithThreeNumbersOnStack_ShouldSwapTheLastTwoNumbers()
     {
-        var command = new SwapCommand();
+        var function = new SwapFunction();
         var stack = new Stack();
         stack.Push(1);
         stack.Push(2);
         stack.Push(3);
         Assert.Equal(3, stack.Count);
-        var result = command.Execute(stack);
+        var result = function.Execute(stack);
         Assert.True(result.IsSuccessful);
         Assert.Equal([1, 3, 2], stack.ToArray());
     }

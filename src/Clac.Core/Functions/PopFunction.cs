@@ -1,9 +1,9 @@
 using Clac.Core.Rpn;
 using DotNext;
 
-namespace Clac.Core.Commands;
+namespace Clac.Core.Functions;
 
-public class PopCommand : IStackCommand
+public class PopFunction : IFunction
 {
     public string Name => "Pop";
 
