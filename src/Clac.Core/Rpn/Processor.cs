@@ -1,5 +1,4 @@
 using DotNext;
-using Clac.Core.Enums;
 using static Clac.Core.ErrorMessages;
 using Clac.Core.Operations;
 using Clac.Core.Functions;
@@ -22,7 +21,7 @@ public class Processor
     {
         _operatorRegistry = operatorRegistry ?? new DefaultOperatorRegistry();
         _functionRegistry = functionRegistry ?? new DefaultFunctionRegistry();
-        _parser = new Parser(_operatorRegistry);
+        _parser = new Parser(_operatorRegistry, _functionRegistry);
     }
 
     public Stack Stack => CloneStack();
@@ -32,30 +31,31 @@ public class Processor
         var processResult = ProcessTokens(tokens);
         if (!processResult.IsSuccessful)
             return new Result<double>(processResult.Error);
-        return GetFinalResult(processResult.Value.commandExecuted, processResult.Value.commandResult);
+        return GetFinalResult(processResult.Value.functionExecuted, processResult.Value.functionResult);
     }
-    private Result<(bool commandExecuted, double commandResult)> ProcessTokens(List<Token> tokens)
+
+    private Result<(bool functionExecuted, double functionResult)> ProcessTokens(List<Token> tokens)
     {
-        bool commandExecuted = false;
-        double commandResult = 0;
+        bool functionExecuted = false;
+        double functionResult = 0;
 
         foreach (var token in tokens)
         {
             var tokenResult = ProcessSingleToken(token);
             if (!tokenResult.IsSuccessful)
-                return new Result<(bool commandExecuted, double commandResult)>(tokenResult.Error);
+                return new Result<(bool functionExecuted, double functionResult)>(tokenResult.Error);
 
             if (tokenResult.Value.HasValue)
             {
-                commandExecuted = true;
-                commandResult = tokenResult.Value.Value.commandResult;
+                functionExecuted = true;
+                functionResult = tokenResult.Value.Value.functionResult;
             }
         }
 
-        return new Result<(bool commandExecuted, double commandResult)>((commandExecuted, commandResult));
+        return new Result<(bool functionExecuted, double functionResult)>((functionExecuted, functionResult));
     }
 
-    private Result<(bool commandExecuted, double commandResult)?> ProcessSingleToken(Token token)
+    private Result<(bool functionExecuted, double functionResult)?> ProcessSingleToken(Token token)
     {
         if (token is Token.NumberToken numberToken)
             return ProcessNumberToken(numberToken);
@@ -63,41 +63,41 @@ public class Processor
         if (token is Token.OperatorToken operatorToken)
             return ProcessOperatorToken(operatorToken);
 
-        if (token is Token.CommandToken commandToken)
-            return ProcessCommandToken(commandToken);
+        if (token is Token.FunctionToken functionToken)
+            return ProcessFunctionToken(functionToken);
 
-        return NoCommandExecuted();
+        return NoFunctionExecuted();
     }
 
-    private Result<(bool commandExecuted, double commandResult)?> ProcessNumberToken(Token.NumberToken numberToken)
+    private Result<(bool functionExecuted, double functionResult)?> ProcessNumberToken(Token.NumberToken numberToken)
     {
         _stack.Push(numberToken.Value);
-        return NoCommandExecuted();
+        return NoFunctionExecuted();
     }
 
-    private Result<(bool commandExecuted, double commandResult)?> ProcessOperatorToken(Token.OperatorToken operatorToken)
+    private Result<(bool functionExecuted, double functionResult)?> ProcessOperatorToken(Token.OperatorToken operatorToken)
     {
         var operatorResult = ProcessOperator(operatorToken);
         return ConvertOperatorResultToTokenResult(operatorResult);
     }
 
-    private static Result<(bool commandExecuted, double commandResult)?> ConvertOperatorResultToTokenResult(Result<double> operatorResult)
+    private static Result<(bool functionExecuted, double functionResult)?> ConvertOperatorResultToTokenResult(Result<double> operatorResult)
     {
         return operatorResult.IsSuccessful
-            ? NoCommandExecuted()
-            : new Result<(bool commandExecuted, double commandResult)?>(operatorResult.Error);
+            ? NoFunctionExecuted()
+            : new Result<(bool functionExecuted, double functionResult)?>(operatorResult.Error);
     }
 
-    private static Result<(bool commandExecuted, double commandResult)?> NoCommandExecuted()
+    private static Result<(bool functionExecuted, double functionResult)?> NoFunctionExecuted()
     {
-        (bool commandExecuted, double commandResult)? nullValue = null;
-        return new Result<(bool commandExecuted, double commandResult)?>(nullValue);
+        (bool functionExecuted, double functionResult)? nullValue = null;
+        return new Result<(bool functionExecuted, double functionResult)?>(nullValue);
     }
 
-    private Result<double> GetFinalResult(bool commandExecuted, double commandResult)
+    private Result<double> GetFinalResult(bool functionExecuted, double functionResult)
     {
-        if (commandExecuted)
-            return new Result<double>(commandResult);
+        if (functionExecuted)
+            return new Result<double>(functionResult);
 
         var finalResult = _stack.Peek();
         return finalResult.IsSuccessful
@@ -105,20 +105,20 @@ public class Processor
             : new Result<double>(new InvalidOperationException(NoResultOnStack));
     }
 
-    private Result<(bool commandExecuted, double commandResult)?> ProcessCommandToken(Token.CommandToken commandToken)
+    private Result<(bool functionExecuted, double functionResult)?> ProcessFunctionToken(Token.FunctionToken functionToken)
     {
-        var commandResult = ProcessCommand(commandToken.Command);
-        if (commandResult == null)
-            return NoCommandExecuted();
+        var result = ProcessFunction(functionToken);
+        if (result == null)
+            return NoFunctionExecuted();
 
-        return commandResult.Value.IsSuccessful
-            ? new Result<(bool commandExecuted, double commandResult)?>((true, commandResult.Value.Value))
-            : new Result<(bool commandExecuted, double commandResult)?>(commandResult.Value.Error);
+        return result.Value.IsSuccessful
+            ? new Result<(bool functionExecuted, double functionResult)?>((true, result.Value.Value))
+            : new Result<(bool functionExecuted, double functionResult)?>(result.Value.Error);
     }
 
-    private Result<double>? ProcessCommand(CommandSymbol command)
+    private Result<double>? ProcessFunction(Token.FunctionToken functionToken)
     {
-        var result = _functionRegistry.GetFunction(command.ToString());
+        var result = _functionRegistry.GetFunction(functionToken.FunctionName);
         if (!result.IsSuccessful)
             return new Result<double>(result.Error);
 

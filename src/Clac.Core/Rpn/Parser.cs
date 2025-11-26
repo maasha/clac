@@ -1,10 +1,11 @@
 using System.Globalization;
 using DotNext;
 using Clac.Core.Operations;
+using Clac.Core.Functions;
 
 namespace Clac.Core.Rpn;
 
-public class Parser(OperatorRegistry operatorRegistry)
+public class Parser(OperatorRegistry operatorRegistry, FunctionRegistry functionRegistry)
 {
     private readonly OperatorRegistry _operatorRegistry = operatorRegistry;
 
@@ -50,8 +51,8 @@ public class Parser(OperatorRegistry operatorRegistry)
         if (double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
             return new Result<Token>(Token.CreateNumber(number));
 
-        if (IsCommand(item))
-            return CreateCommandToken(item);
+        if (IsFunction(item))
+            return CreateFunctionToken(item);
 
         return CreateOperatorToken(item);
     }
@@ -86,18 +87,21 @@ public class Parser(OperatorRegistry operatorRegistry)
     {
         bool isNumber = IsNumber(item);
         bool isOperator = _operatorRegistry.GetOperator(item).IsSuccessful;
-        bool isCommand = IsCommand(item);
+        bool isFunction = IsFunction(item);
 
-        return !isNumber && !isOperator && !isCommand;
+        return !isNumber && !isOperator && !isFunction;
     }
 
-    private static bool IsCommand(string item)
+    private bool IsFunction(string item)
     {
         if (!item.EndsWith("()"))
             return false;
 
-        var commandName = ExtractCommandName(item);
-        return Command.IsValidCommand(commandName);
+        var functionName = ExtractFunctionName(item);
+        var result = functionRegistry.IsValidFunction(functionName);
+        if (!result.IsSuccessful)
+            return false;
+        return true;
     }
 
     private static bool IsNumber(string item)
@@ -105,13 +109,13 @@ public class Parser(OperatorRegistry operatorRegistry)
         return double.TryParse(item, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
     }
 
-    private static Result<Token> CreateCommandToken(string item)
+    private Result<Token> CreateFunctionToken(string item)
     {
-        var commandString = ExtractCommandName(item);
-        var commandResult = Command.GetCommandSymbol(commandString);
-        if (!commandResult.IsSuccessful)
-            return new Result<Token>(commandResult.Error);
-        return new Result<Token>(Token.CreateCommand(commandResult.Value));
+        var functionString = ExtractFunctionName(item);
+        var result = functionRegistry.GetFunction(functionString);
+        if (!result.IsSuccessful)
+            return new Result<Token>(result.Error);
+        return new Result<Token>(Token.CreateFunction(result.Value.Name));
     }
 
     private Result<Token> CreateOperatorToken(string item)
@@ -122,10 +126,10 @@ public class Parser(OperatorRegistry operatorRegistry)
         return new Result<Token>(Token.CreateOperator(operatorResult.Value.Symbol));
     }
 
-    private static string ExtractCommandName(string commandWithParentheses)
+    private static string ExtractFunctionName(string functionWithParentheses)
     {
-        // Remove "()" suffix and lowercase command name
-        return commandWithParentheses[..^2].ToLowerInvariant();
+        // Remove "()" suffix and lowercase function name
+        return functionWithParentheses[..^2].ToLowerInvariant();
     }
 
     private static string FormatInvalidInputMessage(List<string> errors)

@@ -1,7 +1,5 @@
 namespace Clac.Core.Rpn;
 
-using Clac.Core.Enums;
-
 public abstract record Token
 {
     private Token() { }
@@ -10,11 +8,11 @@ public abstract record Token
 
     public sealed record OperatorToken(string Symbol) : Token;
 
-    public static Token CreateNumber(double value) => new NumberToken(value);
+    public static Token CreateNumber(double Value) => new NumberToken(Value);
 
-    public static Token CreateOperator(string symbol) => new OperatorToken(symbol);
+    public static Token CreateOperator(string Symbol) => new OperatorToken(Symbol);
 
-    public sealed record CommandToken(CommandSymbol Command) : Token;
+    public sealed record FunctionToken(string FunctionName) : Token;
 
-    public static Token CreateCommand(CommandSymbol command) => new CommandToken(command);
+    public static Token CreateFunction(string FunctionName) => new FunctionToken(FunctionName);
 }

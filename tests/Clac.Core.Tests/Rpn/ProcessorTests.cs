@@ -17,7 +17,7 @@ public class ProcessorTests
         _operatorRegistry = new DefaultOperatorRegistry();
         _functionRegistry = new DefaultFunctionRegistry();
         _processor = new Processor(_operatorRegistry, _functionRegistry);
-        _parser = new Parser(_operatorRegistry);
+        _parser = new Parser(_operatorRegistry, _functionRegistry);
     }
 
     [Fact]
@@ -116,7 +116,7 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_ClearCommand_ShouldClearStack()
+    public void Process_ClearFunction_ShouldClearStack()
     {
         _processor.Process(_parser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
@@ -126,7 +126,7 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_PopCommand_ShouldPopLastElementFromStack()
+    public void Process_PopFunction_ShouldPopLastElementFromStack()
     {
         _processor.Process(_parser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
@@ -138,7 +138,7 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_SwapCommand_ShouldSwapLastTwoNumbersOfStack()
+    public void Process_SwapFunction_ShouldSwapLastTwoNumbersOfStack()
     {
         _processor.Process(_parser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
@@ -149,7 +149,7 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_SumCommand_ShouldClearStackAndPushSum()
+    public void Process_SumFunction_ShouldClearStackAndPushSum()
     {
         _processor.Process(_parser.Parse("1 2 3").Value);
         Assert.Equal(3, _processor.Stack.Count);
@@ -161,7 +161,7 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_SqrtCommand_ShouldCalculateSquareRootOfLastElementAndPushResult()
+    public void Process_SqrtFunction_ShouldCalculateSquareRootOfLastElementAndPushResult()
     {
         _processor.Process(_parser.Parse("4").Value);
         Assert.Equal(1, _processor.Stack.Count);
@@ -174,7 +174,7 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_SqrtCommand_WithNegativeNumber_ShouldReturnError()
+    public void Process_SqrtFunction_WithNegativeNumber_ShouldReturnError()
     {
         _processor.Process(_parser.Parse("-1").Value);
         Assert.Equal(1, _processor.Stack.Count);
@@ -185,7 +185,7 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_PowCommand_ShouldCalculatePowerOfLastTwoNumbersAndPushResult()
+    public void Process_PowFunction_ShouldCalculatePowerOfLastTwoNumbersAndPushResult()
     {
         _processor.Process(_parser.Parse("2 3").Value);
         Assert.Equal(2, _processor.Stack.Count);
@@ -199,7 +199,7 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_recipCommand_ShouldCalculaterecipOfLastElementAndPushResult()
+    public void Process_recipFunction_ShouldCalculateRecipOfLastElementAndPushResult()
     {
         _processor.Process(_parser.Parse("4").Value);
         Assert.Equal(1, _processor.Stack.Count);

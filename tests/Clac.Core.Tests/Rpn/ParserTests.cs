@@ -1,17 +1,20 @@
 using Clac.Core.Rpn;
 using Clac.Core.Operations;
+using Clac.Core.Functions;
 
 namespace Clac.Core.Tests.Rpn;
 
 public class ParserTests
 {
     private readonly OperatorRegistry _operatorRegistry;
+    private readonly FunctionRegistry _functionRegistry;
     private readonly Parser _parser;
 
     public ParserTests()
     {
         _operatorRegistry = new DefaultOperatorRegistry();
-        _parser = new Parser(_operatorRegistry);
+        _functionRegistry = new DefaultFunctionRegistry();
+        _parser = new Parser(_operatorRegistry, _functionRegistry);
     }
 
     [Fact]
@@ -69,74 +72,74 @@ public class ParserTests
     }
 
     [Fact]
-    public void Parse_ClearCommand_ShouldReturnCommandToken()
+    public void Parse_ClearFunction_ShouldReturnFunctionToken()
     {
         var result = _parser.Parse("clear()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
-        Assert.IsType<Token.CommandToken>(result.Value[0]);
+        Assert.IsType<Token.FunctionToken>(result.Value[0]);
     }
 
     [Fact]
-    public void Parse_PopCommand_ShouldReturnCommandToken()
+    public void Parse_PopFunction_ShouldReturnFunctionToken()
     {
         var result = _parser.Parse("pop()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
-        Assert.IsType<Token.CommandToken>(result.Value[0]);
+        Assert.IsType<Token.FunctionToken>(result.Value[0]);
     }
 
     [Fact]
-    public void Parse_SwapCommand_ShouldReturnCommandToken()
+    public void Parse_SwapFunction_ShouldReturnFunctionToken()
     {
         var result = _parser.Parse("swap()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
-        Assert.IsType<Token.CommandToken>(result.Value[0]);
+        Assert.IsType<Token.FunctionToken>(result.Value[0]);
     }
 
     [Fact]
-    public void Parse_SumCommand_ShouldReturnCommandToken()
+    public void Parse_SumFunction_ShouldReturnFunctionToken()
     {
         var result = _parser.Parse("sum()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
-        Assert.IsType<Token.CommandToken>(result.Value[0]);
+        Assert.IsType<Token.FunctionToken>(result.Value[0]);
     }
 
     [Fact]
-    public void Parse_SquareRootCommand_ShouldReturnCommandToken()
+    public void Parse_SquareRootFunction_ShouldReturnFunctionToken()
     {
         var result = _parser.Parse("sqrt()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
-        Assert.IsType<Token.CommandToken>(result.Value[0]);
+        Assert.IsType<Token.FunctionToken>(result.Value[0]);
     }
 
     [Fact]
-    public void Parse_PowCommand_ShouldReturnCommandToken()
+    public void Parse_PowFunction_ShouldReturnFunctionToken()
     {
         var result = _parser.Parse("pow()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
-        Assert.IsType<Token.CommandToken>(result.Value[0]);
+        Assert.IsType<Token.FunctionToken>(result.Value[0]);
     }
 
     [Fact]
-    public void Parse_recipCommand_ShouldReturnCommandToken()
+    public void Parse_recipFunction_ShouldReturnFunctionToken()
     {
         var result = _parser.Parse("recip()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
-        Assert.IsType<Token.CommandToken>(result.Value[0]);
+        Assert.IsType<Token.FunctionToken>(result.Value[0]);
     }
 
     [Fact]
-    public void Parse_UppercaseCommand_ShouldReturnCommandToken()
+    public void Parse_UppercaseFunction_ShouldReturnFunctionToken()
     {
         var result = _parser.Parse("recip()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
-        Assert.IsType<Token.CommandToken>(result.Value[0]);
+        Assert.IsType<Token.FunctionToken>(result.Value[0]);
     }
 }
