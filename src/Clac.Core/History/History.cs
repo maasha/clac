@@ -56,9 +56,9 @@ public class History<T>
         var result = Last();
         if (!result.IsSuccessful)
             return result;
-        var value = Last();
+        var value = result.Value;
         _history.RemoveAt(_history.Count - 1);
-        return value;
+        return new Result<T>(value);
     }
 
     public Result<T> Last()
