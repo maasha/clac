@@ -37,7 +37,11 @@ public class DivideOperator : IOperator
         var number1 = stack.Pop();
         var number2 = stack.Pop();
         if (number1.Value == 0)
+        {
+            stack.Push(number2.Value);
+            stack.Push(number1.Value);
             return new Result<double>(new DivideByZeroException(DivisionByZero));
+        }
         var result = number2.Value / number1.Value;
         return new Result<double>(result);
     }

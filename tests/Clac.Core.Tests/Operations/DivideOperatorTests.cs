@@ -121,5 +121,6 @@ public class DivideOperatorTests
         var result = divideOperator.Evaluate(stack);
         Assert.False(result.IsSuccessful);
         Assert.Contains(DivisionByZero, result.Error.Message);
+        Assert.Equal([6, 0], stack.ToArray());
     }
 }
