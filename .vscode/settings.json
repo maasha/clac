@@ -3,6 +3,7 @@
         "Avalonia",
         "CLAC",
         "pointerover",
+        "Recip",
         "xunit"
     ],
     "editor.formatOnSave": true,

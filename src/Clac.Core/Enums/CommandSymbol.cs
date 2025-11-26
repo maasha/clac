@@ -8,6 +8,6 @@ public enum CommandSymbol
     Sum,
     Sqrt,
     Pow,
-    Reciprocal
+    Recip
 }
 

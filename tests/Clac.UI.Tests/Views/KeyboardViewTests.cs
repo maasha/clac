@@ -343,17 +343,17 @@ public class KeyboardViewTests
     }
 
     [Fact]
-    public void KeyboardView_ShouldHaveReciprocalKey_WhenInitialized()
+    public void KeyboardView_ShouldHaverecipKey_WhenInitialized()
     {
         var _view = CreateView();
-        var reciprocalKeyView = _view.FindControl<KeyboardKeyView>("ReciprocalKeyView");
-        Assert.NotNull(reciprocalKeyView);
+        var recipKeyView = _view.FindControl<KeyboardKeyView>("recipKeyView");
+        Assert.NotNull(recipKeyView);
 
-        var reciprocalKey = reciprocalKeyView.DataContext as KeyboardKey;
-        Assert.NotNull(reciprocalKey);
-        Assert.Equal("1/x", reciprocalKey.Label);
-        Assert.Equal("reciprocal()", reciprocalKey.Value);
-        Assert.Equal(KeyType.Command, reciprocalKey.Type);
+        var recipKey = recipKeyView.DataContext as KeyboardKey;
+        Assert.NotNull(recipKey);
+        Assert.Equal("1/x", recipKey.Label);
+        Assert.Equal("recip()", recipKey.Value);
+        Assert.Equal(KeyType.Command, recipKey.Type);
     }
 }
 

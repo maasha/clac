@@ -96,15 +96,24 @@ public class Stack
         return new Result<double>(pow);
     }
 
-    public Result<double> Reciprocal()
+    public Result<double> Recip()
     {
         if (_stack.Count == 0)
             return new Result<double>(new InvalidOperationException(StackEmpty));
 
-        if (_stack[^1] == 0)
-            return new Result<double>(new InvalidOperationException(DivisionByZero));
+        var result = Pop();
+        if (!result.IsSuccessful)
+            return new Result<double>(result.Error);
 
-        return new Result<double>(1.0 / _stack[^1]);
+        if (result.Value == 0)
+        {
+            Push(result.Value);
+            return new Result<double>(new InvalidOperationException(DivisionByZero));
+        }
+
+        var recip = 1.0 / result.Value;
+        Push(recip);
+        return new Result<double>(recip);
     }
 
     private Result<(double first, double second)> PopTwo()

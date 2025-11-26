@@ -1073,7 +1073,7 @@ public class KeyboardKeyViewTests
     }
 
     [Fact]
-    public void ReciprocalKeyClick_ShouldCalculateReciprocalOfLastItem_WhenReciprocalKeyIsClicked()
+    public void recipKeyClick_ShouldCalculaterecipOfLastItem_WhenrecipKeyIsClicked()
     {
 
         _vm.CurrentInput = "4";
@@ -1087,7 +1087,7 @@ public class KeyboardKeyViewTests
         var key = new KeyboardKey
         {
             Label = "1/x",
-            Value = "reciprocal()",
+            Value = "recip()",
             Type = KeyType.Command
         };
         view.DataContext = key;
@@ -1105,7 +1105,7 @@ public class KeyboardKeyViewTests
     }
 
     [Fact]
-    public void ReciprocalKeyClick_ShouldDoNothing_WhenStackIsEmpty()
+    public void recipKeyClick_ShouldDoNothing_WhenStackIsEmpty()
     {
 
 
@@ -1117,7 +1117,7 @@ public class KeyboardKeyViewTests
         var key = new KeyboardKey
         {
             Label = "1/x",
-            Value = "reciprocal()",
+            Value = "recip()",
             Type = KeyType.Command
         };
         view.DataContext = key;
@@ -1134,7 +1134,7 @@ public class KeyboardKeyViewTests
     }
 
     [Fact]
-    public void ReciprocalKeyClick_ShouldShowError_WhenLastItemIsZero()
+    public void recipKeyClick_ShouldShowError_WhenLastItemIsZero()
     {
 
         _vm.CurrentInput = "0";
@@ -1149,7 +1149,7 @@ public class KeyboardKeyViewTests
         var key = new KeyboardKey
         {
             Label = "1/x",
-            Value = "reciprocal()",
+            Value = "recip()",
             Type = KeyType.Command
         };
         view.DataContext = key;
@@ -1168,7 +1168,7 @@ public class KeyboardKeyViewTests
     }
 
     [Fact]
-    public void ReciprocalKeyClick_ShouldCalculateReciprocalWithoutError_WhenInputContainsNumber()
+    public void recipKeyClick_ShouldCalculaterecipWithoutError_WhenInputContainsNumber()
     {
 
         _vm.CurrentInput = "4";
@@ -1184,7 +1184,7 @@ public class KeyboardKeyViewTests
         var key = new KeyboardKey
         {
             Label = "1/x",
-            Value = "reciprocal()",
+            Value = "recip()",
             Type = KeyType.Command
         };
         view.DataContext = key;

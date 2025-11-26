@@ -32,7 +32,7 @@ public class Processor
             { CommandSymbol.Sum, HandleSum },
             { CommandSymbol.Sqrt, HandleSqrt },
             { CommandSymbol.Pow, HandlePow },
-            { CommandSymbol.Reciprocal, HandleReciprocal }
+            { CommandSymbol.Recip, HandleRecip }
         };
     }
 
@@ -187,10 +187,10 @@ public class Processor
             shouldIgnoreError: error => IsStackEmptyError(error) || IsStackInsufficientNumbersError(error));
     }
 
-    private Result<double>? HandleReciprocal()
+    private Result<double>? HandleRecip()
     {
         return HandleStackOperation(
-            () => _stack.Reciprocal(),
+            () => _stack.Recip(),
             popCount: 1,
             shouldIgnoreError: IsStackEmptyError);
     }

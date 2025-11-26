@@ -15,7 +15,7 @@ public partial class KeyboardView : UserControl
 
         SqrtKeyView.DataContext = new KeyboardKey { Label = "√", Value = "sqrt()", Type = KeyType.Command };
         PowKeyView.DataContext = new KeyboardKey { Label = "xʸ", Value = "pow()", Type = KeyType.Command };
-        ReciprocalKeyView.DataContext = new KeyboardKey { Label = "1/x", Value = "reciprocal()", Type = KeyType.Command };
+        recipKeyView.DataContext = new KeyboardKey { Label = "1/x", Value = "recip()", Type = KeyType.Command };
         DivideKeyView.DataContext = new KeyboardKey { Label = "/", Value = "/", Type = KeyType.Operator };
         DeleteKeyView.DataContext = new KeyboardKey { Label = "DEL", Value = "del()", Type = KeyType.Command };
 
@@ -57,7 +57,7 @@ public partial class KeyboardView : UserControl
     {
         SqrtKeyView.ViewModel = viewModel;
         PowKeyView.ViewModel = viewModel;
-        ReciprocalKeyView.ViewModel = viewModel;
+        recipKeyView.ViewModel = viewModel;
         DivideKeyView.ViewModel = viewModel;
         DeleteKeyView.ViewModel = viewModel;
         Key7View.ViewModel = viewModel;

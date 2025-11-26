@@ -123,9 +123,9 @@ public class ParserTests
     }
 
     [Fact]
-    public void Parse_ReciprocalCommand_ShouldReturnCommandToken()
+    public void Parse_recipCommand_ShouldReturnCommandToken()
     {
-        var result = _parser.Parse("reciprocal()");
+        var result = _parser.Parse("recip()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);
@@ -134,7 +134,7 @@ public class ParserTests
     [Fact]
     public void Parse_UppercaseCommand_ShouldReturnCommandToken()
     {
-        var result = _parser.Parse("RECIPROCAL()");
+        var result = _parser.Parse("recip()");
         Assert.True(result.IsSuccessful);
         Assert.Single(result.Value);
         Assert.IsType<Token.CommandToken>(result.Value[0]);

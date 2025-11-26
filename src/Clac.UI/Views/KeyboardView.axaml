@@ -42,7 +42,7 @@
                 <views:KeyboardKeyView x:Name="PowKeyView"/>
             </Border>
             <Border BorderThickness="1" Grid.Row="0" Grid.Column="2">
-                <views:KeyboardKeyView x:Name="ReciprocalKeyView"/>
+                <views:KeyboardKeyView x:Name="recipKeyView"/>
             </Border>
             <Border BorderThickness="1" Grid.Row="0" Grid.Column="3">
                 <views:KeyboardKeyView x:Name="DivideKeyView"/>

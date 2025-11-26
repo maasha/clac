@@ -199,12 +199,12 @@ public class ProcessorTests
     }
 
     [Fact]
-    public void Process_ReciprocalCommand_ShouldCalculateReciprocalOfLastElementAndPushResult()
+    public void Process_recipCommand_ShouldCalculaterecipOfLastElementAndPushResult()
     {
         _processor.Process(_parser.Parse("4").Value);
         Assert.Equal(1, _processor.Stack.Count);
         Assert.Equal(4, _processor.Stack.Peek().Value);
-        var result = _processor.Process(_parser.Parse("reciprocal()").Value);
+        var result = _processor.Process(_parser.Parse("recip()").Value);
         Assert.True(result.IsSuccessful);
         Assert.Equal(0.25, result.Value);
         Assert.Equal(1, _processor.Stack.Count);
@@ -290,6 +290,7 @@ public class ProcessorTests
         [InlineData("sum")]
         [InlineData("sqrt")]
         [InlineData("pow")]
+        [InlineData("recip")]
         public void Process_ShouldHaveDefaultFunctionRegistry(string functionName)
         {
             var processor = new Processor();

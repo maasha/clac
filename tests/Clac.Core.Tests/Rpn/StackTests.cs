@@ -152,27 +152,27 @@ public class StackTests
     }
 
     [Fact]
-    public void Reciprocal_WithNonEmptyStack_ShouldReturnReciprocalOfLastElement()
+    public void recip_WithNonEmptyStack_ShouldReturnrecipOfLastElement()
     {
         _stack.Push(4);
-        var result = _stack.Reciprocal();
+        var result = _stack.Recip();
         Assert.True(result.IsSuccessful);
         Assert.Equal(0.25, result.Value);
     }
 
     [Fact]
-    public void Reciprocal_WithEmptyStack_ShouldReturnError()
+    public void recip_WithEmptyStack_ShouldReturnError()
     {
-        var result = _stack.Reciprocal();
+        var result = _stack.Recip();
         Assert.False(result.IsSuccessful);
         Assert.Contains(StackEmpty, result.Error.Message);
     }
 
     [Fact]
-    public void Reciprocal_WithZero_ShouldReturnError()
+    public void recip_WithZero_ShouldReturnError()
     {
         _stack.Push(0);
-        var result = _stack.Reciprocal();
+        var result = _stack.Recip();
         Assert.False(result.IsSuccessful);
         Assert.Contains(DivisionByZero, result.Error.Message);
     }

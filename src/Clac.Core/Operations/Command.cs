@@ -15,7 +15,7 @@ public static class Command
             "sum" => new Result<CommandSymbol>(CommandSymbol.Sum),
             "sqrt" => new Result<CommandSymbol>(CommandSymbol.Sqrt),
             "pow" => new Result<CommandSymbol>(CommandSymbol.Pow),
-            "reciprocal" => new Result<CommandSymbol>(CommandSymbol.Reciprocal),
+            "recip" => new Result<CommandSymbol>(CommandSymbol.Recip),
             _ => new Result<CommandSymbol>(new InvalidOperationException($"Invalid command: '{command}'"))
         };
     }
@@ -30,7 +30,7 @@ public static class Command
             "sum" => true,
             "sqrt" => true,
             "pow" => true,
-            "reciprocal" => true,
+            "recip" => true,
             _ => false
         };
     }
@@ -45,7 +45,7 @@ public static class Command
             CommandSymbol.Sum => "sum",
             CommandSymbol.Sqrt => "sqrt",
             CommandSymbol.Pow => "pow",
-            CommandSymbol.Reciprocal => "reciprocal",
+            CommandSymbol.Recip => "recip",
             _ => throw new InvalidOperationException($"Unknown command symbol: {symbol}")
         };
     }
