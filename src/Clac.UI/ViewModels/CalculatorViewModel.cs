@@ -275,6 +275,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
         OnPropertyChanged(nameof(WindowHeight));
+        OnPropertyChanged(nameof(WindowMinHeight));
     }
 
     private void ClearInputErrorsAndNotify()
@@ -285,6 +286,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
         OnPropertyChanged(nameof(WindowHeight));
+        OnPropertyChanged(nameof(WindowMinHeight));
     }
 
     private void SetCurrentInputAndClearErrors(string value)
@@ -296,6 +298,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
         OnPropertyChanged(nameof(WindowHeight));
+        OnPropertyChanged(nameof(WindowMinHeight));
     }
 
     private void ClearInputAndUpdateDisplay()
@@ -313,6 +316,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         OnPropertyChanged(nameof(HasError));
         OnPropertyChanged(nameof(ErrorMessage));
         OnPropertyChanged(nameof(WindowHeight));
+        OnPropertyChanged(nameof(WindowMinHeight));
     }
     private bool HasPrefixedSpace()
     {
