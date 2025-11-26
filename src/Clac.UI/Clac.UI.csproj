@@ -21,30 +21,10 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="22.0.16">
-      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
-      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="22.0.16" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Clac.Core\Clac.Core.csproj" />
   </ItemGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <!-- Trimming: Remove unused code from assemblies -->
-    <PublishTrimmed>true</PublishTrimmed>
-    <TrimMode>partial</TrimMode>
-    
-    <!-- Single file: Bundle all .NET assemblies into one executable -->
-    <PublishSingleFile>true</PublishSingleFile>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    
-    <!-- Remove globalization data (if you don't need localization) -->
-    <InvariantGlobalization>true</InvariantGlobalization>
-    
-    <!-- Remove debug symbols -->
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
 </Project>
