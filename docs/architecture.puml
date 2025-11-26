@@ -10,18 +10,30 @@ package "Clac.UI" {
     
     class MainWindow {
         +MainWindow(viewModel)
+        +MainWindow()
     }
     
     package "ViewModels" {
         class CalculatorViewModel {
             -Processor _processor
+            -IPersistence _persistence
             -StackAndInputHistory _history
             -string _currentInput
+            -string? _errorMessage
+            -Dictionary<string, List<string>> _errors
             +CurrentInput
+            +Stack
             +DisplayItems
+            +StackDisplay
+            +HasError
+            +ErrorMessage
+            +CanUndo
+            +ShowScrollBar
             +Enter()
             +Undo()
-            +CanUndo
+            +Clear()
+            +AppendToInput(value)
+            +DeleteFromInput()
         }
     }
     
@@ -34,45 +46,90 @@ package "Clac.UI" {
     }
     
     package "Models" {
-        class StackLineItem
-        class KeyboardKey
+        class StackLineItem {
+            +string LineNumber
+            +string Value
+        }
+        class KeyboardKey {
+            +string Value
+            +KeyType Type
+        }
     }
     
     package "Configuration" {
-        class SettingsManager
-        class UISettings
+        class SettingsManager {
+            {static}
+            +UISettings UI
+        }
+        class UISettings {
+            +int DisplayLines
+            +double LineHeight
+            +double WindowHeight
+            +double WindowWidth
+            +double BorderThickness
+        }
     }
     
     package "Helpers" {
-        class DisplayFormatter
+        class DisplayFormatter {
+            {static}
+            +FormatLineNumber(lineNum, totalLines)
+            +FormatValue(value, maxIntegerPartLength)
+            +GetMaxIntegerPartLength(values)
+        }
+    }
+    
+    package "Enums" {
+        enum KeyType {
+            Number
+            Operator
+            Command
+            Enter
+        }
     }
 }
 
 package "Clac.Core" {
     package "Rpn" {
         class Processor {
+            -OperatorRegistry _operatorRegistry
+            -FunctionRegistry _functionRegistry
             -Stack _stack
-            +Process(tokens)
+            -Parser _parser
+            +OperatorRegistry
+            +FunctionRegistry
+            +Parser
             +Stack
+            +Process(tokens)
+            +RestoreStack(stack)
         }
         
         class Stack {
             -List<double> _stack
             +Push(value)
             +Pop()
+            +Peek()
+            +Clear()
+            +Swap()
+            +Sum()
+            +Sqrt()
+            +Pow()
+            +Recip()
             +ToArray()
+            +Count
         }
         
         class Parser {
+            -OperatorRegistry _operatorRegistry
+            -FunctionRegistry _functionRegistry
             +Parse(input)
         }
         
-        class Evaluator {
-            +Evaluate(token, stack)
-        }
-        
-        class Token {
-            <<abstract>>
+        abstract class Token {
+            {static}
+            +CreateNumber(value)
+            +CreateOperator(symbol)
+            +CreateFunction(functionName)
         }
         
         class NumberToken {
@@ -80,29 +137,156 @@ package "Clac.Core" {
         }
         
         class OperatorToken {
-            +Operator Operator
+            +string Symbol
         }
         
-        class CommandToken {
-            +Command Command
+        class FunctionToken {
+            +string FunctionName
+        }
+    }
+    
+    package "Operations" {
+        interface IOperator {
+            +string Symbol
+            +string Name
+            +string Description
+            +int MinimumStackSize
+            +ValidateStackSize(stackSize)
+            +Evaluate(stack)
+        }
+        
+        class OperatorRegistry {
+            -Dictionary<string, IOperator> _operators
+            +Register(op)
+            +GetOperator(symbol)
+            +IsValidOperator(symbol)
+        }
+        
+        class DefaultOperatorRegistry {
+            +DefaultOperatorRegistry()
+        }
+        
+        class AddOperator {
+            +string Symbol
+            +string Name
+            +string Description
+            +int MinimumStackSize
+            +ValidateStackSize(stackSize)
+            +Evaluate(stack)
+        }
+        
+        class SubtractOperator {
+            +string Symbol
+            +string Name
+            +string Description
+            +int MinimumStackSize
+            +ValidateStackSize(stackSize)
+            +Evaluate(stack)
+        }
+        
+        class MultiplyOperator {
+            +string Symbol
+            +string Name
+            +string Description
+            +int MinimumStackSize
+            +ValidateStackSize(stackSize)
+            +Evaluate(stack)
+        }
+        
+        class DivideOperator {
+            +string Symbol
+            +string Name
+            +string Description
+            +int MinimumStackSize
+            +ValidateStackSize(stackSize)
+            +Evaluate(stack)
+        }
+    }
+    
+    package "Functions" {
+        interface IFunction {
+            +string Name
+            +string Description
+            +Execute(stack)
+        }
+        
+        class FunctionRegistry {
+            -Dictionary<string, IFunction> _functions
+            +Register(function)
+            +GetFunction(functionName)
+            +IsValidFunction(functionName)
+        }
+        
+        class DefaultFunctionRegistry {
+            +DefaultFunctionRegistry()
+        }
+        
+        class ClearFunction {
+            +string Name
+            +string Description
+            +Execute(stack)
+        }
+        
+        class PopFunction {
+            +string Name
+            +string Description
+            +Execute(stack)
+        }
+        
+        class SwapFunction {
+            +string Name
+            +string Description
+            +Execute(stack)
+        }
+        
+        class SumFunction {
+            +string Name
+            +string Description
+            +Execute(stack)
+        }
+        
+        class SqrtFunction {
+            +string Name
+            +string Description
+            +Execute(stack)
+        }
+        
+        class PowFunction {
+            +string Name
+            +string Description
+            +Execute(stack)
+        }
+        
+        class RecipFunction {
+            +string Name
+            +string Description
+            +Execute(stack)
         }
     }
     
     package "History" {
-        class History<T> {
-            -List<T> _history
+        class History {
+            -List _history
+            -Func _cloneFunc
+            -Func _validateFunc
             +Push(item)
             +Pop()
+            +Last()
             +CanUndo
+            +Count
             +ToArray()
         }
         
         class StackAndInputHistory {
-            -History<Stack> _stackHistory
-            -History<string> _inputHistory
+            -History _stackHistory
+            -History _inputHistory
             +Push(stack, input)
             +Pop()
+            +Last()
             +CanUndo
+            +IsEmpty
+            +StackHistory
+            +InputHistory
         }
         
         class HistoryComparer {
@@ -111,24 +295,20 @@ package "Clac.Core" {
         }
     }
     
-    package "Operations" {
-        class Operator {
-            +OperatorSymbol Symbol
-            +Evaluate(stack)
+    package "Services" {
+        interface IPersistence {
+            +Save(history)
+            +Load()
+            +HasError
+            +GetError()
+            +ClearError()
         }
         
-        class Command {
-            +CommandSymbol Symbol
-            +Execute(processor)
-        }
-    }
-    
-    package "Services" {
         class Persistence {
-            -StackAndInputHistory? _history
             -IFileSystem _fileSystem
-            +Save(filePath)
-            +Load(filePath)
+            -string _error
+            +Save(history)
+            +Load()
             +HasError
             +GetError()
             +ClearError()
@@ -142,38 +322,78 @@ package "Clac.Core" {
 
 ' Relationships
 CalculatorViewModel --> Processor : uses
+CalculatorViewModel --> IPersistence : uses
 CalculatorViewModel --> StackAndInputHistory : uses
 CalculatorViewModel --> DisplayFormatter : uses
 CalculatorViewModel --> StackLineItem : creates
+CalculatorViewModel --> SettingsManager : uses
 
 App --> MainWindow : creates
+App --> Persistence : creates
+App --> CalculatorViewModel : creates
 MainWindow --> CalculatorViewModel : uses
 MainWindow --> CalculatorView : contains
 CalculatorView --> DisplayView : contains
 CalculatorView --> InputView : contains
 CalculatorView --> KeyboardView : contains
 KeyboardView --> KeyboardKeyView : contains
+KeyboardKeyView --> KeyboardKey : uses
+KeyboardKey --> KeyType : uses
 
 Processor --> Stack : uses
-Processor --> Evaluator : uses
-Processor --> Operator : uses
-Processor --> Command : uses
+Processor --> OperatorRegistry : uses
+Processor --> FunctionRegistry : uses
+Processor --> Parser : creates/owns
+Processor --> Token : processes
+
 Parser --> Token : creates
-Parser --> NumberToken : creates
-Parser --> OperatorToken : creates
-Parser --> CommandToken : creates
-Evaluator --> Operator : uses
-Evaluator --> Stack : uses
+Parser --> OperatorRegistry : uses
+Parser --> FunctionRegistry : uses
+
+Token <|-- NumberToken
+Token <|-- OperatorToken
+Token <|-- FunctionToken
+
+OperatorRegistry --> IOperator : stores
+DefaultOperatorRegistry --> OperatorRegistry : extends
+DefaultOperatorRegistry --> AddOperator : registers
+DefaultOperatorRegistry --> SubtractOperator : registers
+DefaultOperatorRegistry --> MultiplyOperator : registers
+DefaultOperatorRegistry --> DivideOperator : registers
+
+AddOperator ..|> IOperator : implements
+SubtractOperator ..|> IOperator : implements
+MultiplyOperator ..|> IOperator : implements
+DivideOperator ..|> IOperator : implements
+
+IOperator --> Stack : uses
+
+FunctionRegistry --> IFunction : stores
+DefaultFunctionRegistry --> FunctionRegistry : extends
+DefaultFunctionRegistry --> ClearFunction : registers
+DefaultFunctionRegistry --> PopFunction : registers
+DefaultFunctionRegistry --> SwapFunction : registers
+DefaultFunctionRegistry --> SumFunction : registers
+DefaultFunctionRegistry --> SqrtFunction : registers
+DefaultFunctionRegistry --> PowFunction : registers
+DefaultFunctionRegistry --> RecipFunction : registers
+
+ClearFunction ..|> IFunction : implements
+PopFunction ..|> IFunction : implements
+SwapFunction ..|> IFunction : implements
+SumFunction ..|> IFunction : implements
+SqrtFunction ..|> IFunction : implements
+PowFunction ..|> IFunction : implements
+RecipFunction ..|> IFunction : implements
+
+IFunction --> Stack : uses
 
 StackAndInputHistory --> History : uses
 StackAndInputHistory --> Stack : uses
 HistoryComparer --> StackAndInputHistory : compares
 
+Persistence ..|> IPersistence : implements
 Persistence --> StackAndInputHistory : saves/loads
 Persistence --> IFileSystem : uses
 
-Operator --> Stack : uses
-Command --> Processor : uses
-
 @enduml
-
