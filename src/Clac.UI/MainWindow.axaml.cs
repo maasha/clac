@@ -15,5 +15,6 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         Width = SettingsManager.UI.WindowWidth;
+        MinWidth = SettingsManager.UI.WindowMinWidth;
     }
 }

@@ -7,7 +7,8 @@
         x:DataType="vm:CalculatorViewModel"
         Title="Clac - RPN Calculator"
         Width="{Binding Source={x:Static config:SettingsManager.UI}, Path=WindowWidth, Mode=TwoWay}"
-        Height="{Binding WindowHeight}">
+        Height="{Binding WindowHeight}"
+        MinWidth="{Binding Source={x:Static config:SettingsManager.UI}, Path=WindowMinWidth}">
     
     <views:CalculatorView />
 
