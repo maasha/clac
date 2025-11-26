@@ -28,118 +28,66 @@ public class DisplayFormatterTests
     }
 
     [Fact]
-    public void GetMaxIntegerPartLength_MixedValues_ReturnsMax()
+    public void GetMaxDecimalPartLength_MixedInteger_ReturnsZero()
     {
-        string[] values = ["1", "3.0", "4.2"];
+        string[] values = ["1", "2", "3"];
 
-        int result = DisplayFormatter.GetMaxIntegerPartLength(values);
-
-        Assert.Equal(1, result);
-    }
-
-    [Fact]
-    public void GetMaxIntegerPartLength_MultipleDigitInteger_ReturnsMax()
-    {
-        string[] values = ["1", "123", "4.2"];
-
-        int result = DisplayFormatter.GetMaxIntegerPartLength(values);
-
-        Assert.Equal(3, result);
-    }
-
-    [Fact]
-    public void GetMaxIntegerPartLength_DecimalWithoutIntegerPart_CountsAsZero()
-    {
-        string[] values = [".3"];
-
-        int result = DisplayFormatter.GetMaxIntegerPartLength(values);
+        int result = DisplayFormatter.GetMaxDecimalPartLength(values);
 
         Assert.Equal(0, result);
     }
 
     [Fact]
-    public void GetMaxIntegerPartLength_NegativeNumber_IncludesMinusSign()
+    public void GetMaxDecimalPartLength_MixedValues_ReturnsMax()
     {
-        string[] values = ["1", "-2"];
+        string[] values = ["1", "3.01", "4.2"];
 
-        int result = DisplayFormatter.GetMaxIntegerPartLength(values);
+        int result = DisplayFormatter.GetMaxDecimalPartLength(values);
 
         Assert.Equal(2, result);
-    }
-
-    [Fact]
-    public void GetMaxIntegerPartLength_NegativeDecimalWithoutIntegerPart_IncludesMinusSign()
-    {
-        string[] values = ["-.3"];
-
-        int result = DisplayFormatter.GetMaxIntegerPartLength(values);
-
-        Assert.Equal(1, result);
     }
 
     [Fact]
     public void FormatValue_IntegerWithMaxSameLength_NoPadding()
     {
         string value = "1";
-        int maxIntegerPartLength = 1;
+        int maxDecimalPartLength = 0;
 
-        string result = DisplayFormatter.FormatValue(value, maxIntegerPartLength);
+        string result = DisplayFormatter.FormatValue(value, maxDecimalPartLength);
 
         Assert.Equal("1", result);
     }
 
     [Fact]
-    public void FormatValue_IntegerShorterThanMax_PadsLeft()
+    public void FormatValue_IntegerOnly_PadsRightToMatchMaxDecimalPartLength()
     {
         string value = "1";
-        int maxIntegerPartLength = 2;
+        int maxDecimalPartLength = 2;
 
-        string result = DisplayFormatter.FormatValue(value, maxIntegerPartLength);
+        string result = DisplayFormatter.FormatValue(value, maxDecimalPartLength);
 
-        Assert.Equal(" 1", result);
+        Assert.Equal("1   ", result);
     }
 
     [Fact]
-    public void FormatValue_DecimalShorterThanMax_PadsLeftPreservesDecimal()
+    public void FormatValue_DecimalPartShorterThanMax_PadsRight()
     {
         string value = "3.0";
-        int maxIntegerPartLength = 2;
+        int maxDecimalPartLength = 2;
 
-        string result = DisplayFormatter.FormatValue(value, maxIntegerPartLength);
+        string result = DisplayFormatter.FormatValue(value, maxDecimalPartLength);
 
-        Assert.Equal(" 3.0", result);
+        Assert.Equal("3.0 ", result);
     }
 
     [Fact]
-    public void FormatValue_DecimalWithoutIntegerPart_PadsLeft()
+    public void FormatValue_WithEqualDecimalPartLength_NoPadding()
     {
-        string value = ".3";
-        int maxIntegerPartLength = 2;
+        string value = "3.0";
+        int maxDecimalPartLength = 1;
 
-        string result = DisplayFormatter.FormatValue(value, maxIntegerPartLength);
+        string result = DisplayFormatter.FormatValue(value, maxDecimalPartLength);
 
-        Assert.Equal("  .3", result);
-    }
-
-    [Fact]
-    public void FormatValue_NegativeValue_PadsCorrectly()
-    {
-        string value = "-2";
-        int maxIntegerPartLength = 3;
-
-        string result = DisplayFormatter.FormatValue(value, maxIntegerPartLength);
-
-        Assert.Equal(" -2", result);
-    }
-
-    [Fact]
-    public void FormatValue_NegativeDecimal_PadsCorrectly()
-    {
-        string value = "-2.0";
-        int maxIntegerPartLength = 3;
-
-        string result = DisplayFormatter.FormatValue(value, maxIntegerPartLength);
-
-        Assert.Equal(" -2.0", result);
+        Assert.Equal("3.0", result);
     }
 }

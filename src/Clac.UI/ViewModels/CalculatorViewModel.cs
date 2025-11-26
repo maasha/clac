@@ -199,7 +199,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
         return visibleValues.Length > 0
-            ? DisplayFormatter.GetMaxIntegerPartLength(visibleValues)
+            ? DisplayFormatter.GetMaxDecimalPartLength(visibleValues)
             : 0;
     }
 
