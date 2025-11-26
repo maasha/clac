@@ -13,7 +13,6 @@ public class Processor
     private readonly Stack _stack = new();
     private readonly Parser _parser;
 
-    private readonly Dictionary<CommandSymbol, Func<Result<double>?>> _commandHandlers;
 
     public OperatorRegistry OperatorRegistry => _operatorRegistry;
     public FunctionRegistry FunctionRegistry => _functionRegistry;
@@ -24,16 +23,6 @@ public class Processor
         _operatorRegistry = operatorRegistry ?? new DefaultOperatorRegistry();
         _functionRegistry = functionRegistry ?? new DefaultFunctionRegistry();
         _parser = new Parser(_operatorRegistry);
-        _commandHandlers = new Dictionary<CommandSymbol, Func<Result<double>?>>
-        {
-            { CommandSymbol.Clear, HandleClear },
-            { CommandSymbol.Pop, HandlePop },
-            { CommandSymbol.Swap, HandleSwap },
-            { CommandSymbol.Sum, HandleSum },
-            { CommandSymbol.Sqrt, HandleSqrt },
-            { CommandSymbol.Pow, HandlePow },
-            { CommandSymbol.Recip, HandleRecip }
-        };
     }
 
     public Stack Stack => CloneStack();
@@ -92,14 +81,14 @@ public class Processor
         return ConvertOperatorResultToTokenResult(operatorResult);
     }
 
-    private Result<(bool commandExecuted, double commandResult)?> ConvertOperatorResultToTokenResult(Result<double> operatorResult)
+    private static Result<(bool commandExecuted, double commandResult)?> ConvertOperatorResultToTokenResult(Result<double> operatorResult)
     {
         return operatorResult.IsSuccessful
             ? NoCommandExecuted()
             : new Result<(bool commandExecuted, double commandResult)?>(operatorResult.Error);
     }
 
-    private Result<(bool commandExecuted, double commandResult)?> NoCommandExecuted()
+    private static Result<(bool commandExecuted, double commandResult)?> NoCommandExecuted()
     {
         (bool commandExecuted, double commandResult)? nullValue = null;
         return new Result<(bool commandExecuted, double commandResult)?>(nullValue);
@@ -129,101 +118,11 @@ public class Processor
 
     private Result<double>? ProcessCommand(CommandSymbol command)
     {
-        if (_commandHandlers.TryGetValue(command, out var handler))
-            return handler();
-        return null;
-    }
-
-    /// This was introduced to silence the errors that would just cause
-    /// confusion in the calculator such as clicking pop() on an empty stack.
-    private static Result<double> SuccessWithZero()
-    {
-        return new Result<double>(0);
-    }
-
-    private Result<double>? HandleClear()
-    {
-        _stack.Clear();
-        return SuccessWithZero();
-    }
-
-    private Result<double>? HandlePop()
-    {
-        var result = _stack.Pop();
-        return result.IsSuccessful ? result : SuccessWithZero();
-    }
-
-    private Result<double>? HandleSwap()
-    {
-        var result = _stack.Swap();
-        return result.IsSuccessful ? result : SuccessWithZero();
-    }
-
-    private Result<double>? HandleSum()
-    {
-        var result = _stack.Sum();
-        if (result.IsSuccessful)
-        {
-            _stack.Clear();
-            _stack.Push(result.Value);
-            return result;
-        }
-        return SuccessWithZero();
-    }
-
-    private Result<double>? HandleSqrt()
-    {
-        return HandleStackOperation(
-            () => _stack.Sqrt(),
-            popCount: 1,
-            shouldIgnoreError: IsStackEmptyError);
-    }
-
-    private Result<double>? HandlePow()
-    {
-        return HandleStackOperation(
-            () => _stack.Pow(),
-            popCount: 2,
-            shouldIgnoreError: error => IsStackEmptyError(error) || IsStackInsufficientNumbersError(error));
-    }
-
-    private Result<double>? HandleRecip()
-    {
-        return HandleStackOperation(
-            () => _stack.Recip(),
-            popCount: 1,
-            shouldIgnoreError: IsStackEmptyError);
-    }
-
-    private bool IsStackEmptyError(Exception error)
-    {
-        return error is InvalidOperationException && error.Message == StackEmpty;
-    }
-
-    private bool IsStackInsufficientNumbersError(Exception error)
-    {
-        return error is InvalidOperationException && error.Message == StackHasLessThanTwoNumbers;
-    }
-
-    private Result<double>? HandleStackOperation(
-        Func<Result<double>> operation,
-        int popCount,
-        Func<Exception, bool> shouldIgnoreError)
-    {
-        var result = operation();
-
+        var result = _functionRegistry.GetFunction(command.ToString());
         if (!result.IsSuccessful)
-        {
-            if (shouldIgnoreError(result.Error))
-                return SuccessWithZero();
-            return result;
-        }
+            return new Result<double>(result.Error);
 
-        for (int i = 0; i < popCount; i++)
-            _stack.Pop();
-
-        _stack.Push(result.Value);
-        return result;
+        return result.Value.Execute(_stack);
     }
 
     private Result<double> ProcessOperator(Token.OperatorToken operatorToken)
