@@ -7,7 +7,7 @@
              VerticalAlignment="Top">
     
     <UserControl.Styles>
-        <Style Selector="TextBlock.stack-line">
+        <Style Selector="SelectableTextBlock.stack-line">
             <Setter Property="FontFamily" Value="Courier New, monospace"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -37,11 +37,11 @@
                                        Text="{Binding LineNumber}" 
                                        Grid.Column="0" 
                                        HorizontalAlignment="Right"/>
-                            <TextBlock Classes="stack-line" 
-                                       Text="{Binding FormattedValue}" 
-                                       Grid.Column="1" 
-                                       HorizontalAlignment="Right"
-                                       Margin="0,0,8,0"/>
+                            <SelectableTextBlock Classes="stack-line" 
+                                                 Text="{Binding FormattedValue}" 
+                                                 Grid.Column="1" 
+                                                 HorizontalAlignment="Right"
+                                                 Margin="0,0,8,0"/>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
