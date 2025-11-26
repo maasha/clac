@@ -106,6 +106,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
 
     private const double ErrorLineHeight = 50.0;
     public double WindowHeight => SettingsManager.UI.WindowHeight + (HasError ? ErrorLineHeight : 0);
+    public double WindowMinHeight => SettingsManager.UI.WindowMinHeight + (HasError ? ErrorLineHeight : 0);
 
     public static double DisplayHeight => (SettingsManager.UI.DisplayLines * SettingsManager.UI.LineHeight) + SettingsManager.UI.BorderThickness;
 

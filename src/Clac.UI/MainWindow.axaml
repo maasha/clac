@@ -8,7 +8,8 @@
         Title="Clac - RPN Calculator"
         Width="{Binding Source={x:Static config:SettingsManager.UI}, Path=WindowWidth, Mode=TwoWay}"
         Height="{Binding WindowHeight}"
-        MinWidth="{Binding Source={x:Static config:SettingsManager.UI}, Path=WindowMinWidth}">
+        MinWidth="{Binding Source={x:Static config:SettingsManager.UI}, Path=WindowMinWidth}"
+        MinHeight="{Binding WindowMinHeight}">
     
     <views:CalculatorView />
 
