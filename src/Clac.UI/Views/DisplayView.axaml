@@ -16,6 +16,11 @@
             <Setter Property="Foreground" Value="Black"/>
         </Style>
         <Style Selector="TextBlock.line-number">
+            <Setter Property="FontFamily" Value="Courier New, monospace"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
     </UserControl.Styles>
