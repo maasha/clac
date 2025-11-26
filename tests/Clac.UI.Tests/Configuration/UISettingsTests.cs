@@ -41,4 +41,16 @@ public class UISettingsTests
     {
         Assert.Equal(2, _settings.BorderThickness);
     }
+
+    [Fact]
+    public void UISettings_ShouldHaveDefaultWindowMinWidth()
+    {
+        Assert.Equal(350, _settings.WindowMinWidth);
+    }
+
+    [Fact]
+    public void UISettings_ShouldHaveDefaultWindowMinHeight()
+    {
+        Assert.Equal(450, _settings.WindowMinHeight);
+    }
 }
