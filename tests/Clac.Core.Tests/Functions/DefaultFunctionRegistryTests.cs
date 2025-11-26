@@ -10,6 +10,7 @@ public class DefaultFunctionRegistryTests
     [InlineData("sqrt")]
     [InlineData("pow")]
     [InlineData("recip")]
+    [InlineData("clear")]
     public void CreateDefaultFunctionRegistry_ShouldHaveDefaultFunctions(string functionName)
     {
         var registry = new DefaultFunctionRegistry();

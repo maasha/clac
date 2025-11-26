@@ -43,11 +43,14 @@ public class Stack
         if (_stack.Count < 2)
             return new Result<double>(new InvalidOperationException(StackHasLessThanTwoNumbers));
 
-        var last = _stack[^1];
-        var secondLast = _stack[^2];
-        _stack[^1] = secondLast;
-        _stack[^2] = last;
-        return new Result<double>(secondLast);
+        var result = PopTwo();
+        if (!result.IsSuccessful)
+            return new Result<double>(result.Error);
+
+        var (first, second) = result.Value;
+        Push(first);
+        Push(second);
+        return new Result<double>(second);
     }
 
     public Result<double> Sum()

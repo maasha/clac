@@ -10,5 +10,6 @@ public class DefaultFunctionRegistry : FunctionRegistry
         Register(new SqrtFunction());
         Register(new PowFunction());
         Register(new RecipFunction());
+        Register(new ClearFunction());
     }
 }
