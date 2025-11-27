@@ -145,9 +145,7 @@ public class Processor
         var copy = new Stack();
 
         foreach (var value in _stack.ToArray())
-        {
             copy.Push(value);
-        }
 
         return copy;
     }
