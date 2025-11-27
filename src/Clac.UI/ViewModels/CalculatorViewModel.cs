@@ -136,8 +136,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (!tokens.IsSuccessful)
             return;
 
-        var stackBeforeProcessing = _processor.Stack;
-        _history.Push(stackBeforeProcessing, _currentInput);
+        _history.Push(_processor.Stack, _currentInput);
         _persistence.Save(_history);
 
         var result = ProcessTokens(tokens.Value);
