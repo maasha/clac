@@ -181,21 +181,21 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         var stack = GetStackDisplay();
         int displayLines = SettingsManager.UI.DisplayLines;
-        int maxIntegerPartLength = GetMaxIntegerPartLength(stack);
+        int maxDecimalPartLength = GetMaxDecimalPartLength(stack);
         int totalLines = Math.Max(displayLines, stack.Length);
 
         var context = new DisplayItemContext
         {
             Stack = stack,
             TotalLines = totalLines,
-            MaxIntegerPartLength = maxIntegerPartLength
+            MaxDecimalPartLength = maxDecimalPartLength
         };
 
         PopulateDisplayItems(context);
         UpdateScrollBarVisibility(stack.Length, displayLines);
     }
 
-    private static int GetMaxIntegerPartLength(string[] stack)
+    private static int GetMaxDecimalPartLength(string[] stack)
     {
         var visibleValues = stack.Where(v => !string.IsNullOrEmpty(v)).ToArray();
         return visibleValues.Length > 0
@@ -215,7 +215,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         public string[] Stack { get; init; }
         public int TotalLines { get; init; }
-        public int MaxIntegerPartLength { get; init; }
+        public int MaxDecimalPartLength { get; init; }
     }
 
     private static string GetStackValue(string[] stack, int lineNum)
@@ -230,7 +230,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         string lineNumber = DisplayFormatter.FormatLineNumber(lineNum, context.TotalLines);
         string formattedValue = string.IsNullOrEmpty(value)
             ? ""
-            : DisplayFormatter.FormatValue(value, context.MaxIntegerPartLength);
+            : DisplayFormatter.FormatValue(value, context.MaxDecimalPartLength);
 
         DisplayItems.Add(new StackLineItem(lineNumber, formattedValue));
     }
