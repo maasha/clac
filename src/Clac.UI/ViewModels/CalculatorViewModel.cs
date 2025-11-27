@@ -211,7 +211,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
             AddDisplayItemForLine(context, lineNum);
     }
 
-    private struct DisplayItemContext
+    private readonly struct DisplayItemContext
     {
         public string[] Stack { get; init; }
         public int TotalLines { get; init; }
@@ -240,7 +240,7 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         ShowScrollBar = stackLength > displayLines;
     }
 
-    public bool HasErrors => _errors.Any();
+    public bool HasErrors => _errors.Count != 0;
 
     public IEnumerable GetErrors(string? propertyName)
     {
