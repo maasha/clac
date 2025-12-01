@@ -130,8 +130,6 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (string.IsNullOrWhiteSpace(_currentInput))
             return;
 
-        // ClearErrors(CurrentInputPropertyName);
-
         var tokens = ParseInput();
         if (!tokens.IsSuccessful)
             return;
