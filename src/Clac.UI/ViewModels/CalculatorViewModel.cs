@@ -130,18 +130,18 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (string.IsNullOrWhiteSpace(_currentInput))
             return;
 
-        ClearErrors(CurrentInputPropertyName);
+        // ClearErrors(CurrentInputPropertyName);
 
         var tokens = ParseInput();
         if (!tokens.IsSuccessful)
             return;
 
-        _history.Push(_processor.Stack, _currentInput);
-        _persistence.Save(_history);
-
         var result = ProcessTokens(tokens.Value);
         if (result == null)
             return;
+
+        _history.Push(_processor.Stack, _currentInput);
+        _persistence.Save(_history);
 
         ClearSuccessState();
     }

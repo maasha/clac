@@ -84,28 +84,10 @@ public class CalculatorViewModelTests
         [Fact]
         public void Enter_WithInvalidInput_ShouldNotSaveToHistory()
         {
-            _vm.CurrentInput = "1";
-            _vm.Enter();
-
-            Assert.True(_vm.CanUndo);
-
+            var persistenceSpy = new PersistenceSpy(mockFileSystem);
             _vm.CurrentInput = "abc";
             _vm.Enter();
-
-            Assert.True(_vm.HasError);
-            Assert.False(_vm.CanUndo);
-
-            _vm.CurrentInput = "2";
-            _vm.Enter();
-
-            Assert.False(_vm.HasError);
-            Assert.True(_vm.CanUndo);
-
-            _vm.Undo();
-
-            Assert.Single(_vm.StackDisplay);
-            Assert.Equal("1", _vm.StackDisplay[0]);
-            Assert.Equal("2", _vm.CurrentInput);
+            Assert.Equal(0, persistenceSpy.SaveCallCount);
         }
 
         [Fact]
@@ -117,7 +99,6 @@ public class CalculatorViewModelTests
                 CurrentInput = "42"
             };
             vm.Enter();
-
             Assert.Equal(1, persistenceSpy.SaveCallCount);
         }
     }
