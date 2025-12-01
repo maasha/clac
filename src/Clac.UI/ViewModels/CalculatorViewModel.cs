@@ -153,8 +153,12 @@ public class CalculatorViewModel : INotifyPropertyChanged, INotifyDataErrorInfo
         if (!result.IsSuccessful)
             return;
         _persistence.Save(_history);
-        SetCurrentInputAndClearErrors(result.Value.input);
-        _processor.RestoreStack(result.Value.stack);
+
+        var poppedInput = result.Value.input;
+        var previousState = _history.Last();
+        var stack = previousState.IsSuccessful ? previousState.Value.stack : new Core.Rpn.Stack();
+        _processor.RestoreStack(stack);
+        SetCurrentInputAndClearErrors(poppedInput);
         UpdateDisplayItems();
         OnPropertyChanged(nameof(StackDisplay));
     }
